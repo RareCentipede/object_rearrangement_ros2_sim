@@ -4,6 +4,19 @@ from setuptools import find_packages, setup
 
 package_name = 'mpnp_simulation'
 
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            file_path = os.path.join(path, filename)
+            install_path = os.path.join(
+                'share',
+                package_name,
+                path
+            )
+            paths.append((install_path, [file_path]))
+    return paths
+
 setup(
     name=package_name,
     version='0.0.0',
@@ -14,8 +27,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*')),
-        (os.path.join('share', package_name, 'models'), glob('models/*, recursive=True')),
-    ],
+    ] + package_files('models'),
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='root',
