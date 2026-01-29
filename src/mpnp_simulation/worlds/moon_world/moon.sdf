@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.9">
-  <world name="Garden">
+  <world name="moon">
     <!-- gravity of the moon -->
     <gravity>0 0 -1.62</gravity>
 
