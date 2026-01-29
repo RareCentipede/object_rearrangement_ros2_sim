@@ -12,3 +12,10 @@ mv kuka-omnirob-lwrs ..
 cd ..
 rm -r cogimon-gazebo-models
 ```
+
+# Download example world
+```bash
+curl -L -o moon_world.zip "https://fuel.gazebosim.org/1.0/anastasa/worlds/A%20base%20on%20the%20Moon.zip" && \
+unzip moon_world.zip -d moon_world \
+rm moon_world.zip
+```
