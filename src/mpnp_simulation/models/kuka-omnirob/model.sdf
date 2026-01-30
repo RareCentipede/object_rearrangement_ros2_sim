@@ -8,7 +8,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobB.dae</uri>
+                  <uri>meshes/omnirobB.dae</uri>
                </mesh>
             </geometry>
          </collision>
@@ -16,7 +16,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobB.dae</uri>
+                  <uri>meshes/omnirobB.dae</uri>
                </mesh>
             </geometry>
          </visual>
@@ -32,7 +32,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobFLWheel.dae</uri>
+                  <uri>meshes/omnirobFLWheel.dae</uri>
                </mesh>
             </geometry>
          </collision>
@@ -40,7 +40,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobFLWheel.dae</uri>
+                  <uri>meshes/omnirobFLWheel.dae</uri>
                </mesh>
             </geometry>
          </visual>
@@ -55,7 +55,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobFRWheel.dae</uri>
+                  <uri>meshes/omnirobFRWheel.dae</uri>
                </mesh>
             </geometry>
          </collision>
@@ -63,7 +63,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobFRWheel.dae</uri>
+                  <uri>meshes/omnirobFRWheel.dae</uri>
                </mesh>
             </geometry>
          </visual>
@@ -78,7 +78,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobBLWheel.dae</uri>
+                  <uri>meshes/omnirobBLWheel.dae</uri>
                </mesh>
             </geometry>
          </collision>
@@ -86,7 +86,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobBLWheel.dae</uri>
+                  <uri>meshes/omnirobBLWheel.dae</uri>
                </mesh>
             </geometry>
          </visual>
@@ -101,7 +101,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobBRWheel.dae</uri>
+                  <uri>meshes/omnirobBRWheel.dae</uri>
                </mesh>
             </geometry>
          </collision>
@@ -109,7 +109,7 @@
             <geometry>
                <mesh>
                   <scale>1 1 1</scale>
-                  <uri>model://kuka-omnirob/meshes/omnirobBRWheel.dae</uri>
+                  <uri>meshes/omnirobBRWheel.dae</uri>
                </mesh>
             </geometry>
          </visual>

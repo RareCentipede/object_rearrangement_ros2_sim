@@ -10,13 +10,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
 			<!--<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
 			</geometry> -->
 			<origin rpy="0 0 0" xyz="0 0 0.35" />
 			<geometry>
@@ -36,13 +36,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</collision>
 	</link>
@@ -92,13 +92,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</collision>
 	</link>
@@ -149,7 +149,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0.037 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -207,7 +207,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 -0.0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -263,7 +263,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 -0.0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -319,7 +319,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0.0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
+				<mesh filename="kuka-omnirob/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>

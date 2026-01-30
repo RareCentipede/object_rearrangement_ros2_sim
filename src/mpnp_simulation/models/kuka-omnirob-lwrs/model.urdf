@@ -37,13 +37,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
 			<!--<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
 			</geometry> -->
 			<origin rpy="0 0 0" xyz="0 0 0.35" />
 			<geometry>
@@ -63,13 +63,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</collision>
 	</link>
@@ -119,13 +119,13 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
 			</geometry>
 		</collision>
 	</link>
@@ -176,7 +176,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0.037 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -234,7 +234,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 -0.0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -290,7 +290,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 -0.0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -346,7 +346,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0.0 0" />
 			<geometry>
-				<mesh filename="model://kuka-omnirob/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
+				<mesh filename="../kuka-omnirob/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -405,14 +405,14 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_base.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_base.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0.01" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_base_convex.stl" scale="0.9 0.9 0.9" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_base_convex.stl" scale="0.9 0.9 0.9" />
             </geometry>
         </collision>
     </link>
@@ -446,14 +446,14 @@
         <visual>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -487,14 +487,14 @@
         <visual>
             <origin rpy="3.14159265359 0 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="3.14159265359 0 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -528,14 +528,14 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -569,14 +569,14 @@
         <visual>
             <origin rpy="0 3.14159265359 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 3.14159265359 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -610,14 +610,14 @@
         <visual>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry name="left_lwr_arm_5_geom">
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_last.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_last.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_last_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_last_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -651,14 +651,14 @@
         <visual>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_wrist.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_wrist.dae" scale="100 100 100" />
             </geometry>
             <material name="Grey" />
         </visual>
         <collision>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_wrist_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_wrist_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -692,15 +692,15 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
             </geometry>
             <material name="Grey" />
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <!--mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_flanche_convex.stl" scale="1.0 1.0 1.0"/-->
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
+                <!--mesh filename="../kuka-lwr-4plus/meshes/convex/arm_flanche_convex.stl" scale="1.0 1.0 1.0"/-->
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
             </geometry>
             <surface>
                 <friction>
@@ -738,7 +738,7 @@
 			<collision name="tool_collision">
 				<origin rpy="0 0 0" xyz="0 0 -0.045" />
 				<geometry>
-					<mesh filename="model://kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
+					<mesh filename="../kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
 				</geometry>
             <surface>
                 <friction>
@@ -752,7 +752,7 @@
 			<visual name="tool_visual">
 				<origin rpy="0 0 0" xyz="0 0 -0.045" />
 				<geometry>
-					<mesh filename="model://kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
+					<mesh filename="../kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
 				</geometry>
 			</visual>
 			<inertial>
@@ -789,14 +789,14 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_base.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_base.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0.01" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_base_convex.stl" scale="0.9 0.9 0.9" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_base_convex.stl" scale="0.9 0.9 0.9" />
             </geometry>
         </collision>
     </link>
@@ -830,14 +830,14 @@
         <visual>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -871,14 +871,14 @@
         <visual>
             <origin rpy="3.14159265359 0 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="3.14159265359 0 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -912,14 +912,14 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_a.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_a_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -953,14 +953,14 @@
         <visual>
             <origin rpy="0 3.14159265359 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_b.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 3.14159265359 3.14159265359" xyz="0 0 0.2" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_b_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -994,14 +994,14 @@
         <visual>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry name="right_lwr_arm_5_geom">
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_segment_last.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_segment_last.dae" scale="100 100 100" />
             </geometry>
             <material name="Orange" />
         </visual>
         <collision>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_segment_last_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_segment_last_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -1035,14 +1035,14 @@
         <visual>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_wrist.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_wrist.dae" scale="100 100 100" />
             </geometry>
             <material name="Grey" />
         </visual>
         <collision>
             <origin rpy="0 0 3.14159265359" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_wrist_convex.stl" scale="1.0 1.0 1.0" />
+                <mesh filename="../kuka-lwr-4plus/meshes/convex/arm_wrist_convex.stl" scale="1.0 1.0 1.0" />
             </geometry>
         </collision>
     </link>
@@ -1076,15 +1076,15 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
             </geometry>
             <material name="Grey" />
         </visual>
         <collision>
             <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
-                <!--mesh filename="model://kuka-lwr-4plus/meshes/convex/arm_flanche_convex.stl" scale="1.0 1.0 1.0"/-->
-                <mesh filename="model://kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
+                <!--mesh filename="../kuka-lwr-4plus/meshes/convex/arm_flanche_convex.stl" scale="1.0 1.0 1.0"/-->
+                <mesh filename="../kuka-lwr-4plus/meshes/arm_flanche.dae" scale="100 100 100" />
             </geometry>
             <surface>
                 <friction>
@@ -1122,7 +1122,7 @@
 			<collision name="tool_collision">
 				<origin rpy="0 0 0" xyz="0 0 -0.045" />
 				<geometry>
-					<mesh filename="model://kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
+					<mesh filename="../kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
 				</geometry>
             <surface>
                 <friction>
@@ -1136,7 +1136,7 @@
 			<visual name="tool_visual">
 				<origin rpy="0 0 0" xyz="0 0 -0.045" />
 				<geometry>
-					<mesh filename="model://kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
+					<mesh filename="../kuka-lwr-4plus-triangle/TriangleFoot.stl" scale="0.01 0.01 0.01" />
 				</geometry>
 			</visual>
 			<inertial>

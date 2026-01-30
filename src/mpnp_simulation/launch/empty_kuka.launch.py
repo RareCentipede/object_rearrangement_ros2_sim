@@ -12,11 +12,11 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description() -> LaunchDescription:
     world = 'empty'
-    robot = 'kuka-omnirob'
+    robot = 'kuka-omnirob-lwrs'
 
     package_dir = get_package_share_directory('mpnp_simulation')
     world_path = PathJoinSubstitution([package_dir, 'worlds', world + '.sdf'])
-    model_path = os.path.join(package_dir, 'models', robot, 'model.sdf')
+    model_path = os.path.join(package_dir, 'models', robot, 'model.urdf')
 
     with open(model_path, 'r') as f:
         robot_desc = f.read()
@@ -60,6 +60,7 @@ def generate_launch_description() -> LaunchDescription:
         name='GZ_SIM_RESOURCE_PATH',
         value=os.pathsep.join([
             package_dir,
+            'models',
             os.environ.get('GZ_SIM_RESOURCE_PATH', '')
         ])
     )
