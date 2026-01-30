@@ -2,3 +2,6 @@ build/
 install/
 log/
 .vscode/
+.devcontainer/
+__pycache__/
+*.pyc
