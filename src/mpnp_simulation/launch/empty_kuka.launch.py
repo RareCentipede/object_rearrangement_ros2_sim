@@ -1,5 +1,7 @@
 import os
 
+from enum import Enum
+
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, RegisterEventHandler, ExecuteProcess
@@ -16,7 +18,10 @@ def generate_launch_description() -> LaunchDescription:
 
     package_dir = get_package_share_directory('mpnp_simulation')
     world_path = PathJoinSubstitution([package_dir, 'worlds', world + '.sdf'])
-    model_path = os.path.join(package_dir, 'models', robot, 'model.urdf')
+    if robot != 'kuka-omnirob-lwrs':
+        model_path = os.path.join(package_dir, 'models', robot, 'urdf', robot + '.urdf')
+    else:
+        model_path = os.path.join(package_dir, 'models', robot, 'model.urdf')
 
     with open(model_path, 'r') as f:
         robot_desc = f.read()
