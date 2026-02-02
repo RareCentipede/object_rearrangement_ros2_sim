@@ -30,6 +30,15 @@ def generate_launch_description() -> LaunchDescription:
     gz_sim_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_sim.launch.py'])
     gz_model_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_spawn_model.launch.py'])
 
+    models = SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=os.pathsep.join([
+            package_dir,
+            'models',
+            os.environ.get('GZ_SIM_RESOURCE_PATH', '')
+        ])
+    )
+
     world_launch_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(gz_sim_launch_path),
         launch_arguments={
@@ -61,13 +70,11 @@ def generate_launch_description() -> LaunchDescription:
                      'robot_description': robot_desc}]
     )
 
-    models = SetEnvironmentVariable(
-        name='GZ_SIM_RESOURCE_PATH',
-        value=os.pathsep.join([
-            package_dir,
-            'models',
-            os.environ.get('GZ_SIM_RESOURCE_PATH', '')
-        ])
+    joint_state_publisher_gui = Node(
+        package="joint_state_publisher_gui",
+        executable="joint_state_publisher_gui",
+        name="joint_state_publisher_gui",
+        output="log",
     )
 
     ld = LaunchDescription(
@@ -76,6 +83,7 @@ def generate_launch_description() -> LaunchDescription:
             world_launch_description,
             spawn_robot,
             robot_state_publisher,
+            joint_state_publisher_gui,
         ]
     )
 
