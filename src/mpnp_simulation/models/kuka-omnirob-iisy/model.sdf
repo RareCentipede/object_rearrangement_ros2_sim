@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <sdf version='1.11'>
   <model name='kuka-omnirob-iisy'>
 
@@ -93,7 +94,7 @@
         </geometry>
       </visual>
       <visual name='base_link_fixed_joint_lump__m_base_link_visual_3'>
-        <pose>-0.29999999999999999 0 0.59999999999999998 0 0 0</pose>
+        <pose>-0.29999999999999999 0 0.59999999999999998 0 0 3.14</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -387,8 +388,8 @@
       </visual>
     </link>
     <joint name='joint_1' type='revolute'>
-      <pose relative_to='base_link'>-0.29999999999999999 0 0.59999999999999998 -3.1415926535897931 0 0</pose>
-      <parent>base_link</parent>
+      <pose relative_to='m_base_link'>-0 0 0 -3.1415926535897931 0 0</pose>
+      <parent>m_base_link</parent>
       <child>link_1</child>
       <axis>
         <xyz>0 0 1</xyz>
