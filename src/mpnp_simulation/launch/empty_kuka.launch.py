@@ -14,14 +14,16 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description() -> LaunchDescription:
     world = 'empty'
-    robot = 'mobilePanda'
+    robot = 'kuka-omnirob-iisy'
 
     package_dir = get_package_share_directory('mpnp_simulation')
     world_path = PathJoinSubstitution([package_dir, 'worlds', world + '.sdf'])
-    if robot != 'kuka-omnirob-lwrs':
-        model_path = os.path.join(package_dir, 'models', robot, 'urdf', robot + '.urdf')
-    else:
+    if robot == 'kuka-omnirob-lwrs' or robot == 'kuka-omnirob':
         model_path = os.path.join(package_dir, 'models', robot, 'model.urdf')
+    elif robot == 'kuka-omnirob-iisy':
+        model_path = os.path.join(package_dir, 'models', robot, 'lbr_iisy15_r930.urdf')
+    else:
+        model_path = os.path.join(package_dir, 'models', robot, 'urdf', robot + '.urdf')
 
     with open(model_path, 'r') as f:
         robot_desc = f.read()
