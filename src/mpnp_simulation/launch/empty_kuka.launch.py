@@ -14,7 +14,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description() -> LaunchDescription:
     world = 'empty'
-    robot = 'kuka-omnirob-lwrs'
+    robot = 'mobilePanda'
 
     package_dir = get_package_share_directory('mpnp_simulation')
     world_path = PathJoinSubstitution([package_dir, 'worlds', world + '.sdf'])
@@ -61,6 +61,13 @@ def generate_launch_description() -> LaunchDescription:
             'yaw': '0.0',}.items(),
     )
 
+    gazebo_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
+        output="screen",
+    )
+
     robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -80,6 +87,7 @@ def generate_launch_description() -> LaunchDescription:
     ld = LaunchDescription(
         [
             models,
+            gazebo_bridge,
             world_launch_description,
             spawn_robot,
             robot_state_publisher,
