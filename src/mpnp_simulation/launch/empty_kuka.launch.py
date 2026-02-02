@@ -18,10 +18,8 @@ def generate_launch_description() -> LaunchDescription:
 
     package_dir = get_package_share_directory('mpnp_simulation')
     world_path = PathJoinSubstitution([package_dir, 'worlds', world + '.sdf'])
-    if robot == 'kuka-omnirob-lwrs' or robot == 'kuka-omnirob':
-        model_path = os.path.join(package_dir, 'models', robot, 'model.urdf')
-    elif robot == 'kuka-omnirob-iisy':
-        model_path = os.path.join(package_dir, 'models', robot, 'lbr_iisy15_r930.urdf')
+    if robot == 'kuka-omnirob-lwrs' or robot == 'kuka-omnirob' or robot == 'kuka-omnirob-iisy':
+        model_path = os.path.join(package_dir, 'models', robot, 'model.sdf')
     else:
         model_path = os.path.join(package_dir, 'models', robot, 'urdf', robot + '.urdf')
 
@@ -93,7 +91,7 @@ def generate_launch_description() -> LaunchDescription:
             world_launch_description,
             spawn_robot,
             robot_state_publisher,
-            joint_state_publisher_gui,
+            # joint_state_publisher_gui,
         ]
     )
 
