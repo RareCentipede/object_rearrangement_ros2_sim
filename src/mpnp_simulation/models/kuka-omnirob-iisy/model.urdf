@@ -366,51 +366,7 @@
 	<gazebo reference="fl_wheel_joint">
 	</gazebo>
 
-	<!-- ros2 control -->
-  <ros2_control name="lbr_iisy15_r930" type="system">
-    <hardware>
-      <plugin>kuka_rsi_driver::KukaRSIHardwareInterface</plugin>
-    </hardware>
-    <!-- define joints and command/state interfaces for each joint -->
-    <joint name="joint_1">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-    </joint>
-    <joint name="joint_2">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">-1.5708</param>
-      </state_interface>
-    </joint>
-    <joint name="joint_3">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">1.5708</param>
-      </state_interface>
-    </joint>
-    <joint name="joint_4">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-    </joint>
-    <joint name="joint_5">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-    </joint>
-    <joint name="joint_6">
-      <command_interface name="position"/>
-      <state_interface name="position">
-        <param name="initial_value">0.0</param>
-      </state_interface>
-    </joint>
-    <gpio name="gpio"/>
-  </ros2_control>
-  <!-- links - main serial chain -->
+  <!-- ARM LINKS -->
   <link name="m_base_link">
     <collision>
       <geometry>
@@ -566,11 +522,6 @@
     </visual>
   </link>
   <!-- joints - main serial chain -->
-  <joint name="m_base_link_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="m_base_link"/>
-    <origin rpy="0 0 0" xyz="-0.3 0 0.6"/>
-  </joint>
   <joint name="joint_1" type="revolute">
     <axis xyz="0.0 0.0 1.0"/>
     <child link="link_1"/>
@@ -614,25 +565,6 @@
     <parent link="link_5"/>
   </joint>
   <!-- ROS-Industrial 'base' frame - equivalent of 'KUKA ROBROOT'-->
-  <link name="base"/>
-  <joint name="m_base_link-base" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="m_base_link"/>
-    <child link="base"/>
-  </joint>
   <!-- ROS-Industrial 'flange' frame - attachment point for EEF models -->
-  <link name="flange"/>
-  <joint name="link6-flange" type="fixed">
-    <child link="flange"/>
-    <origin rpy="0 1.5707963267948966 -0.0" xyz="0.0 0.0 -0.178"/>
-    <parent link="link_6"/>
-  </joint>
   <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
-  <link name="tool0"/>
-  <joint name="link6-tool0" type="fixed">
-    <child link="tool0"/>
-    <origin rpy="0 3.141592653589793 -0.0" xyz="0.0 0.0 -0.178"/>
-    <parent link="link_6"/>
-  </joint>
-
 </robot>
