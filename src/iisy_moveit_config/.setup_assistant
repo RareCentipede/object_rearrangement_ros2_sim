@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: mpnp_simulation
+    relative_path: models/kuka-omnirob-iisy/lbr_iisy15_r930.urdf
+  srdf:
+    relative_path: config/lbr_iisy15_r930.srdf
+  package_settings:
+    author_name: ""
+    author_email: ""
+    generated_timestamp: 1770140818
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

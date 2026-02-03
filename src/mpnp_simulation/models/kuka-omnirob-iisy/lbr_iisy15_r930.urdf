@@ -203,12 +203,6 @@
     <parent link="link_5"/>
   </joint>
   <!-- ROS-Industrial 'base' frame - equivalent of 'KUKA ROBROOT'-->
-  <link name="base"/>
-  <joint name="base_link-base" type="fixed">
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <parent link="base_link"/>
-    <child link="base"/>
-  </joint>
   <!-- ROS-Industrial 'flange' frame - attachment point for EEF models -->
   <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
 </robot>
