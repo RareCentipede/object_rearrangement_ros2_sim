@@ -5,9 +5,9 @@ moveit_setup_assistant_config:
   srdf:
     relative_path: config/lbr_iisy15_r930.srdf
   package_settings:
-    author_name: ""
-    author_email: ""
-    generated_timestamp: 1770140818
+    author_name: Zhengyang Lu
+    author_email: stevenlu176@gmail.com
+    generated_timestamp: 1770219347
   control_xacro:
     command:
       - position
