@@ -1,18 +1,16 @@
-<?xml version="1.0" ?>
 <sdf version='1.11'>
   <model name='kuka-omnirob-iisy'>
-
     <link name='base_link'>
       <inertial>
-        <pose>-0.010050022034435569 0 0.25205224635272111 0 0 0</pose>
-        <mass>258.68599999999998</mass>
+        <pose>-0.0067005327333317872 0 0.2537360921033302 0 0 0</pose>
+        <mass>258.666</mass>
         <inertia>
-          <ixx>29.858778268207629</ixx>
-          <ixy>0.0036979140000000001</ixy>
-          <ixz>0.90459456993219556</ixz>
-          <iyy>58.642870718604513</iyy>
+          <ixx>28.178809440591341</ixx>
+          <ixy>0</ixy>
+          <ixz>0.68680460516650821</ixz>
+          <iyy>56.540016077257931</iyy>
           <iyz>0</iyz>
-          <izz>62.558278450396877</izz>
+          <izz>60.131036636666593</izz>
         </inertia>
       </inertial>
       <collision name='base_link_collision'>
@@ -23,42 +21,8 @@
           </box>
         </geometry>
       </collision>
-      <collision name='base_link_fixed_joint_lump__bl_laser_link_collision_1'>
-        <pose>-0.56028999999999995 0.33000000000000002 0.13936999999999999 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/hokuyo.dae</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-      <collision name='base_link_fixed_joint_lump__fr_laser_link_collision_2'>
-        <pose>0.56028999999999995 -0.33000000000000002 0.13936999999999999 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/hokuyo.dae</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-      <collision name='base_link_fixed_joint_lump__m_base_link_collision_3'>
-        <pose>-0.29999999999999999 0 0.59999999999999998 0 0 0</pose>
+      <collision name='base_link_fixed_joint_lump__m_base_link_collision_1'>
+        <pose>-0.20000000000000001 0 0.65000000000000002 0 0 3.1400000000000001</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -71,30 +35,12 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/omnirobBaseRot.dae</uri>
+            <uri>model://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBaseRot.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <visual name='base_link_fixed_joint_lump__bl_laser_link_visual_1'>
-        <pose>-0.56028999999999995 0.33000000000000002 0.13936999999999999 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/hokuyo.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <visual name='base_link_fixed_joint_lump__fr_laser_link_visual_2'>
-        <pose>0.56028999999999995 -0.33000000000000002 0.13936999999999999 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/hokuyo.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-      <visual name='base_link_fixed_joint_lump__m_base_link_visual_3'>
-        <pose>-0.29999999999999999 0 0.59999999999999998 0 0 3.14</pose>
+      <visual name='base_link_fixed_joint_lump__m_base_link_visual_1'>
+        <pose>-0.20000000000000001 0 0.65000000000000002 0 0 3.1400000000000001</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -106,58 +52,6 @@
           <ambient>1 1 1 1</ambient>
         </material>
       </visual>
-      <sensor name='laser_back' type='ray'>
-        <visualize>false</visualize>
-        <update_rate>40</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>350</samples>
-              <resolution>1</resolution>
-              <min_angle>0</min_angle>
-              <max_angle>4.7123900000000001</max_angle>
-            </horizontal>
-          </scan>
-          <range>
-            <min>0.10000000000000001</min>
-            <max>30</max>
-            <resolution>0.01</resolution>
-          </range>
-          <noise>
-            <type>gaussian</type>
-            <mean>0</mean>
-            <stddev>0.01</stddev>
-          </noise>
-        </ray>
-        <plugin name='bl_laser_link' filename='libRayPlugin.so'/>
-        <pose>-0.56028999999999995 0.33000000000000002 0.13936999999999999 0 0 0</pose>
-      </sensor>
-      <sensor name='laser_front' type='ray'>
-        <visualize>false</visualize>
-        <update_rate>40</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>350</samples>
-              <resolution>1</resolution>
-              <min_angle>-3.1415929999999999</min_angle>
-              <max_angle>1.5707960000000001</max_angle>
-            </horizontal>
-          </scan>
-          <range>
-            <min>0.10000000000000001</min>
-            <max>30</max>
-            <resolution>0.01</resolution>
-          </range>
-          <noise>
-            <type>gaussian</type>
-            <mean>0</mean>
-            <stddev>0.01</stddev>
-          </noise>
-        </ray>
-        <plugin name='fr_laser_link' filename='libRayPlugin.so'/>
-        <pose>0.56028999999999995 -0.33000000000000002 0.13936999999999999 0 0 0</pose>
-      </sensor>
     </link>
     <joint name='bl_wheel_joint' type='revolute'>
       <pose relative_to='base_link'>-0.34699999999999998 0.24199999999999999 0.13 3.1415926535897931 2.6535897933558441e-06 3.1415926535897931</pose>
@@ -211,7 +105,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/omnirobBLWheelRot.dae</uri>
+            <uri>model://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBLWheelRot.dae</uri>
           </mesh>
         </geometry>
       </visual>
@@ -268,128 +162,14 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/omnirobBRWheelRot.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    <joint name='fl_wheel_joint' type='revolute'>
-      <pose relative_to='base_link'>0.34699999999999998 0.24199999999999999 0.13 0 0 0</pose>
-      <parent>base_link</parent>
-      <child>fl_wheel</child>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>-inf</lower>
-          <upper>inf</upper>
-        </limit>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-      <physics>
-        <ode>
-          <limit>
-            <cfm>0</cfm>
-            <erp>0.20000000000000001</erp>
-          </limit>
-        </ode>
-      </physics>
-    </joint>
-    <link name='fl_wheel'>
-      <pose relative_to='fl_wheel_joint'>0 0 0 0 0 0</pose>
-      <inertial>
-        <pose>0 0 0 0 0 0</pose>
-        <mass>0.40000000000000002</mass>
-        <inertia>
-          <ixx>0.012411999999999999</ixx>
-          <ixy>-0.00071199999999999996</ixy>
-          <ixz>0.00050299999999999997</ixz>
-          <iyy>0.015218000000000001</iyy>
-          <iyz>-3.9999999999999998e-06</iyz>
-          <izz>0.011764</izz>
-        </inertia>
-      </inertial>
-      <collision name='fl_wheel_collision'>
-        <pose>0 0 0 1.5708 0 0</pose>
-        <geometry>
-          <cylinder>
-            <length>0.0050000000000000001</length>
-            <radius>0.125</radius>
-          </cylinder>
-        </geometry>
-      </collision>
-      <visual name='fl_wheel_visual'>
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/omnirobFLWheelRot.dae</uri>
-          </mesh>
-        </geometry>
-      </visual>
-    </link>
-    <joint name='fr_wheel_joint' type='revolute'>
-      <pose relative_to='base_link'>0.34699999999999998 -0.24199999999999999 0.13 0 0 0</pose>
-      <parent>base_link</parent>
-      <child>fr_wheel</child>
-      <axis>
-        <xyz>0 1 0</xyz>
-        <limit>
-          <lower>-inf</lower>
-          <upper>inf</upper>
-        </limit>
-        <dynamics>
-          <spring_reference>0</spring_reference>
-          <spring_stiffness>0</spring_stiffness>
-        </dynamics>
-      </axis>
-      <physics>
-        <ode>
-          <limit>
-            <cfm>0</cfm>
-            <erp>0.20000000000000001</erp>
-          </limit>
-        </ode>
-      </physics>
-    </joint>
-    <link name='fr_wheel'>
-      <pose relative_to='fr_wheel_joint'>0 0 0 0 0 0</pose>
-      <inertial>
-        <pose>0 0 0 0 0 0</pose>
-        <mass>0.40000000000000002</mass>
-        <inertia>
-          <ixx>0.012411999999999999</ixx>
-          <ixy>-0.00071199999999999996</ixy>
-          <ixz>0.00050299999999999997</ixz>
-          <iyy>0.015218000000000001</iyy>
-          <iyz>-3.9999999999999998e-06</iyz>
-          <izz>0.011764</izz>
-        </inertia>
-      </inertial>
-      <collision name='fr_wheel_collision'>
-        <pose>0 0 0 1.5708 0 0</pose>
-        <geometry>
-          <cylinder>
-            <length>0.0050000000000000001</length>
-            <radius>0.125</radius>
-          </cylinder>
-        </geometry>
-      </collision>
-      <visual name='fr_wheel_visual'>
-        <pose>0 0 0 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>../kuka-omnirob/meshes/omnirobFRWheelRot.dae</uri>
+            <uri>model://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBRWheelRot.dae</uri>
           </mesh>
         </geometry>
       </visual>
     </link>
     <joint name='joint_1' type='revolute'>
-      <pose relative_to='m_base_link'>-0 0 0 -3.1415926535897931 0 0</pose>
-      <parent>m_base_link</parent>
+      <pose relative_to='base_link'>-0.20000000000000001 0 0.65000000000000002 -3.1415926535897931 2.4074124304840448e-35 -0.0031853071795862279</pose>
+      <parent>base_link</parent>
       <child>link_1</child>
       <axis>
         <xyz>0 0 1</xyz>
@@ -717,40 +497,124 @@
         </material>
       </visual>
     </link>
-    <frame name='bl_laser_joint' attached_to='base_link'>
-      <pose>-0.56028999999999995 0.33000000000000002 0.13936999999999999 0 0 0</pose>
+    <joint name='fl_wheel_joint' type='revolute'>
+      <pose relative_to='base_link'>0.34699999999999998 0.24199999999999999 0.13 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>fl_wheel</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+    <link name='fl_wheel'>
+      <pose relative_to='fl_wheel_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.40000000000000002</mass>
+        <inertia>
+          <ixx>0.012411999999999999</ixx>
+          <ixy>-0.00071199999999999996</ixy>
+          <ixz>0.00050299999999999997</ixz>
+          <iyy>0.015218000000000001</iyy>
+          <iyz>-3.9999999999999998e-06</iyz>
+          <izz>0.011764</izz>
+        </inertia>
+      </inertial>
+      <collision name='fl_wheel_collision'>
+        <pose>0 0 0 1.5708 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.0050000000000000001</length>
+            <radius>0.125</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='fl_wheel_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFLWheelRot.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='fr_wheel_joint' type='revolute'>
+      <pose relative_to='base_link'>0.34699999999999998 -0.24199999999999999 0.13 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>fr_wheel</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+    <link name='fr_wheel'>
+      <pose relative_to='fr_wheel_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.40000000000000002</mass>
+        <inertia>
+          <ixx>0.012411999999999999</ixx>
+          <ixy>-0.00071199999999999996</ixy>
+          <ixz>0.00050299999999999997</ixz>
+          <iyy>0.015218000000000001</iyy>
+          <iyz>-3.9999999999999998e-06</iyz>
+          <izz>0.011764</izz>
+        </inertia>
+      </inertial>
+      <collision name='fr_wheel_collision'>
+        <pose>0 0 0 1.5708 0 0</pose>
+        <geometry>
+          <cylinder>
+            <length>0.0050000000000000001</length>
+            <radius>0.125</radius>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name='fr_wheel_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFRWheelRot.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <frame name='fixed_base_joint' attached_to='base_link'>
+      <pose>-0.20000000000000001 0 0.65000000000000002 0 0 3.1400000000000001</pose>
     </frame>
-    <frame name='bl_laser_link' attached_to='bl_laser_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='fr_laser_joint' attached_to='base_link'>
-      <pose>0.56028999999999995 -0.33000000000000002 0.13936999999999999 0 0 0</pose>
-    </frame>
-    <frame name='fr_laser_link' attached_to='fr_laser_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='m_base_link-base' attached_to='m_base_link'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='base' attached_to='m_base_link-base'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='m_base_link_joint' attached_to='base_link'>
-      <pose>-0.29999999999999999 0 0.59999999999999998 0 0 0</pose>
-    </frame>
-    <frame name='m_base_link' attached_to='m_base_link_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='link6-flange' attached_to='link_6'>
-      <pose>0 0 -0.17799999999999999 0 1.5707963267948966 0</pose>
-    </frame>
-    <frame name='flange' attached_to='link6-flange'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='link6-tool0' attached_to='link_6'>
-      <pose>0 0 -0.17799999999999999 3.1415926535897931 1.224646799147353e-16 3.1415926535897931</pose>
-    </frame>
-    <frame name='tool0' attached_to='link6-tool0'>
+    <frame name='m_base_link' attached_to='fixed_base_joint'>
       <pose>0 0 0 0 0 0</pose>
     </frame>
     <pose>0 0 0 0 0 0</pose>

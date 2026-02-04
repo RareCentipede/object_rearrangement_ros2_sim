@@ -10,14 +10,10 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0 0" />
 			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBaseRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
-			<!--<origin rpy="0 0 0" xyz="0 0 0" />
-			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/omnirobBaseRot.dae" scale="1 1 1" />
-			</geometry> -->
 			<origin rpy="0 0 0" xyz="0 0 0.35" />
 			<geometry>
 				<box size="0.915855 0.547 0.585000"/>
@@ -26,119 +22,6 @@
 	</link>
     <gazebo reference="base_link">
     </gazebo>
-
-	<link name="fr_laser_link">
-		<inertial>
-			<mass value="0.01" />
-			<origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
-			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-		</inertial>
-		<visual>
-			<origin rpy="0 0 0" xyz="0 0 0" />
-			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
-			</geometry>
-		</visual>
-		<collision>
-			<origin rpy="0 0 0" xyz="0 0 0" />
-			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
-			</geometry>
-		</collision>
-	</link>
-	<gazebo reference="fr_laser_link">
-      <sensor type="ray" name="laser_front">
-        <pose>0 0 0 0 0 0</pose>
-        <visualize>false</visualize>
-        <update_rate>40</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>350</samples>
-              <resolution>1</resolution>
-              <min_angle>-3.141593</min_angle>
-              <max_angle>1.570796</max_angle>
-            </horizontal>
-          </scan>
-          <range>
-            <min>0.10</min>
-            <max>30.0</max>
-            <resolution>0.01</resolution>
-          </range>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.01</stddev>
-          </noise>
-        </ray>
-		<plugin name="fr_laser_link" filename="libRayPlugin.so" />
-      </sensor>
-    </gazebo>
-
-	<joint name="fr_laser_joint" type="fixed">
-		<origin rpy="0 0 0" xyz="0.56029 -0.33 0.13937" />
-		<parent link="base_link" />
-		<child link="fr_laser_link" />
-	</joint>
-	<gazebo reference="fr_laser_joint">
-	</gazebo>
-
-	<link name="bl_laser_link">
-		<inertial>
-			<mass value="0.01" />
-			<origin rpy="0 0 -1.570796" xyz="0.0 0.0 0.0" />
-			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
-		</inertial>
-		<visual>
-			<origin rpy="0 0 0" xyz="0 0 0" />
-			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
-			</geometry>
-		</visual>
-		<collision>
-			<origin rpy="0 0 0" xyz="0 0 0" />
-			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/hokuyo.dae" scale="1 1 1" />
-			</geometry>
-		</collision>
-	</link>
-	<gazebo reference="bl_laser_link">
-      <sensor type="ray" name="laser_back">
-        <pose>0 0 0 0 0 0</pose>
-        <visualize>false</visualize>
-        <update_rate>40</update_rate>
-        <ray>
-          <scan>
-            <horizontal>
-              <samples>350</samples>
-              <resolution>1</resolution>
-              <min_angle>0</min_angle>
-              <max_angle>4.71239</max_angle>
-            </horizontal>
-          </scan>
-          <range>
-            <min>0.10</min>
-            <max>30.0</max>
-            <resolution>0.01</resolution>
-          </range>
-          <noise>
-            <type>gaussian</type>
-            <mean>0.0</mean>
-            <stddev>0.01</stddev>
-          </noise>
-        </ray>
-		<plugin name="bl_laser_link" filename="libRayPlugin.so" />
-      </sensor>
-    </gazebo> 
-
-	<joint name="bl_laser_joint" type="fixed">
-		<origin rpy="0 0 0" xyz="-0.56029 0.33 0.13937" />
-		<parent link="base_link" />
-		<child link="bl_laser_link" />
-	</joint>
-	<gazebo reference="bl_laser_joint">
-	</gazebo>
-
 
   <link name="bl_wheel">
 		<inertial>
@@ -149,7 +32,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0.037 0" />
 			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -207,7 +90,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 -0.0 0" />
 			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -263,7 +146,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 -0.0 0" />
 			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -319,7 +202,7 @@
 		<visual>
 			<origin rpy="0 0 0" xyz="0 0.0 0" />
 			<geometry>
-				<mesh filename="../kuka-omnirob/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
 			</geometry>
 		</visual>
 		<collision>
@@ -521,12 +404,18 @@
       </material>
     </visual>
   </link>
+
   <!-- joints - main serial chain -->
+  <joint name="fixed_base_joint" type="fixed">
+	<child link="m_base_link"/>
+	<origin rpy="0.0 0.0 3.14" xyz="-0.2 0.0 0.65"/>
+	<parent link="base_link"/>
+  </joint>
   <joint name="joint_1" type="revolute">
     <axis xyz="0.0 0.0 1.0"/>
     <child link="link_1"/>
     <limit effort="398.011277" lower="-3.2288591161895095E0" upper="3.2288591161895095E0" velocity="3.490656"/>
-    <origin rpy="-3.141592653589793 0.0 -0.0" xyz="0.0 0.0 0.0"/>
+    <origin rpy="-3.141592653589793 0.0 3.14" xyz="0.0 0.0 0.0"/>
     <parent link="m_base_link"/>
   </joint>
   <joint name="joint_2" type="revolute">
@@ -568,3 +457,117 @@
   <!-- ROS-Industrial 'flange' frame - attachment point for EEF models -->
   <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
 </robot>
+
+ <!-- GAZEBO and LASER for perception -->
+  <!--
+	<link name="fr_laser_link">
+		<inertial>
+			<mass value="0.01" />
+			<origin rpy="0 0 0" xyz="0.0 0.0 0.0" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/hokuyo.dae" scale="1 1 1" />
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/hokuyo.dae" scale="1 1 1" />
+			</geometry>
+		</collision>
+	</link>
+	<gazebo reference="fr_laser_link">
+      <sensor type="ray" name="laser_front">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>350</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.141593</min_angle>
+              <max_angle>1.570796</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+		<plugin name="fr_laser_link" filename="libRayPlugin.so" />
+      </sensor>
+    </gazebo>
+
+	<joint name="fr_laser_joint" type="fixed">
+		<origin rpy="0 0 0" xyz="0.56029 -0.33 0.13937" />
+		<parent link="base_link" />
+		<child link="fr_laser_link" />
+	</joint>
+	<gazebo reference="fr_laser_joint">
+	</gazebo>
+
+	<link name="bl_laser_link">
+		<inertial>
+			<mass value="0.01" />
+			<origin rpy="0 0 -1.570796" xyz="0.0 0.0 0.0" />
+			<inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+		</inertial>
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/hokuyo.dae" scale="1 1 1" />
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/hokuyo.dae" scale="1 1 1" />
+			</geometry>
+		</collision>
+	</link>
+	<gazebo reference="bl_laser_link">
+      <sensor type="ray" name="laser_back">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>350</samples>
+              <resolution>1</resolution>
+              <min_angle>0</min_angle>
+              <max_angle>4.71239</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.10</min>
+            <max>30.0</max>
+            <resolution>0.01</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+          </noise>
+        </ray>
+		<plugin name="bl_laser_link" filename="libRayPlugin.so" />
+      </sensor>
+    </gazebo> 
+
+	<joint name="bl_laser_joint" type="fixed">
+		<origin rpy="0 0 0" xyz="-0.56029 0.33 0.13937" />
+		<parent link="base_link" />
+		<child link="bl_laser_link" />
+	</joint>
+	<gazebo reference="bl_laser_joint">
+	</gazebo> -->

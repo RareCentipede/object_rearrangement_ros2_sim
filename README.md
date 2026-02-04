@@ -1,5 +1,14 @@
 # Object rearrangement ros2 simulation
 
+# Reference repositories
+## Kuka descriptions:
+```bash
+kroshu/kuka_descriptions
+```
+
+## Kuka mobile base
+[cogimon gazebo models](https://github.com/corlab/cogimon-gazebo-models.git)
+
 # To pull the urdf models
 ```bash
 git clone --filter=blob:none --no-checkout https://github.com/corlab/cogimon-gazebo-models.git

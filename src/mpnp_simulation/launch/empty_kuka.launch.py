@@ -2,12 +2,12 @@ import os
 
 from enum import Enum
 
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory, get_package_prefix
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, RegisterEventHandler, ExecuteProcess
+from launch.actions import IncludeLaunchDescription, AppendEnvironmentVariable
 from launch.substitutions import PathJoinSubstitution
 
-from launch_ros.substitutions import FindPackageShare
+from launch_ros.substitutions import FindPackageShare, FindPackage
 from launch_ros.actions import Node
 
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -30,13 +30,9 @@ def generate_launch_description() -> LaunchDescription:
     gz_sim_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_sim.launch.py'])
     gz_model_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_spawn_model.launch.py'])
 
-    models = SetEnvironmentVariable(
+    models = AppendEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
-        value=os.pathsep.join([
-            package_dir,
-            'models',
-            os.environ.get('GZ_SIM_RESOURCE_PATH', '')
-        ])
+        value=os.path.join(get_package_prefix('mpnp_simulation'), 'share')
     )
 
     world_launch_description = IncludeLaunchDescription(
