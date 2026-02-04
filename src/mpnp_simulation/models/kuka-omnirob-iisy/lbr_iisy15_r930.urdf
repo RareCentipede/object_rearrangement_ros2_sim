@@ -5,7 +5,7 @@
 <!-- =================================================================================== -->
 <robot name="lbr_iisy15_r930">
   <!-- links - main serial chain -->
-  <link name="base_link">
+  <link name="arm_base_link">
     <collision>
       <geometry>
         <mesh filename="package://kuka_lbr_iisy_support/meshes/lbr_iisy15_r930/collision/base_link.stl"/>
@@ -165,7 +165,7 @@
     <child link="link_1"/>
     <limit effort="398.011277" lower="-3.2288591161895095E0" upper="3.2288591161895095E0" velocity="3.490656"/>
     <origin rpy="-3.141592653589793 0.0 -0.0" xyz="0.0 0.0 0.0"/>
-    <parent link="base_link"/>
+    <parent link="arm_base_link"/>
   </joint>
   <joint name="joint_2" type="revolute">
     <axis xyz="0.0 0.0 1.0"/>
