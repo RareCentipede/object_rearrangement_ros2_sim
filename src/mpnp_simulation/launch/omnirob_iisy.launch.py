@@ -1,11 +1,10 @@
 import os
-
-from enum import Enum
+import subprocess
 
 from ament_index_python.packages import get_package_prefix
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, AppendEnvironmentVariable
-from launch.substitutions import PathJoinSubstitution, FindExecutable, Command
+from launch.substitutions import PathJoinSubstitution
 
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
@@ -19,9 +18,15 @@ def generate_launch_description() -> LaunchDescription:
 
     mpnp_package_dir = FindPackageShare('mpnp_simulation')
     world_path = PathJoinSubstitution([mpnp_package_dir, 'worlds', world + '.sdf'])
+    robot_xacro = PathJoinSubstitution([mpnp_package_dir, 'models', robot, robot + '.urdf.xacro'])
     robot_model_path = PathJoinSubstitution([mpnp_package_dir, 'models', robot, robot + '.urdf'])
 
-    with open(robot_model_path.perform(LaunchContext()), 'r') as file:
+    robot_xacro_path_str = robot_xacro.perform(LaunchContext())
+    robot_model_path_str = robot_model_path.perform(LaunchContext())
+    # Generate URDF from XACRO
+    subprocess.run(['xacro', robot_xacro_path_str, '-o', robot_model_path_str])
+
+    with open(robot_model_path_str, 'r') as file:
         robot_description = file.read()
 
     ros_gz_sim_pkg_path = FindPackageShare('ros_gz_sim')
@@ -45,7 +50,7 @@ def generate_launch_description() -> LaunchDescription:
         PythonLaunchDescriptionSource(gz_model_launch_path),
         launch_arguments={
             'world': world,
-            'file': robot_model_path,
+            'file': robot_model_path_str,
             'entity_name': robot,
             'x': '0.0',
             'y': '0.0',
