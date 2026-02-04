@@ -1,0 +1,234 @@
+<?xml version="1.0" ?>
+<robot name="omnirob" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Helper xacros -->
+	<xacro:macro name="omnirob">
+		<!--static>true</static-->
+		<link name="platform_base_link">
+			<inertial>
+				<mass value="250" />
+				<origin rpy="0 .0 0" xyz="0 -0.00000 0.24" />
+				<inertia ixx="25.77086" ixy="-0.0" ixz="-0.0" iyy="53.79704" iyz="-0.0" izz="58.79601" />
+			</inertial>
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0 0" />
+				<geometry>
+					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="0 0 0" xyz="0 0 0.35" />
+				<geometry>
+					<box size="0.915855 0.547 0.585000"/>
+				</geometry>
+			</collision>
+		</link>
+
+		<link name="bl_wheel">
+			<inertial>
+				<origin rpy="0 0 0" xyz="0 0 0" />
+				<inertia ixx="0.012412" ixy="-0.000712" ixz="0.000503" iyy="0.015218" iyz="-0.000004" izz="0.011764" />
+				<mass value="0.400000" />
+			</inertial>
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0.037 0" />
+				<geometry>
+					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="1.5708 0 0" xyz="0 0 0" />
+				<geometry>
+					<cylinder length="0.005" radius="0.125"/>
+				</geometry>
+				<surface>
+				<friction>
+					<ode>
+					<mu>0</mu>
+					<mu2>0</mu2>
+					<fdir1>0 0 0</fdir1>
+					<slip1>0</slip1>
+					<slip2>0</slip2>
+					</ode>
+				</friction>
+				<bounce>
+					<restitution_coefficient>0</restitution_coefficient>
+					<threshold>0</threshold>
+				</bounce>
+				<contact>
+					<ode>
+					<soft_cfm>0</soft_cfm>
+					<soft_erp>0.200000</soft_erp>
+					<kp>10000000000000.000000</kp>
+					<kd>100000000000.000000</kd>
+					<min_depth>0</min_depth>
+					</ode>
+				</contact>
+				</surface>
+				<laser_retro>0</laser_retro>
+			</collision>
+		</link>
+
+		<joint name="bl_wheel_joint" type="continuous">
+			<origin rpy="0 3.14159 0" xyz="-0.347000 0.242000 0.130000" />
+			<axis xyz="0 1 0" />
+			<parent link="platform_base_link" />
+			<child link="bl_wheel" />
+		</joint>
+
+		<link name="br_wheel">
+			<inertial>
+				<origin rpy="0 0 0" xyz="0 0 0" />
+				<inertia ixx="0.012412" ixy="-0.000712" ixz="0.000503" iyy="0.015218" iyz="-0.000004" izz="0.011764" />
+				<mass value="0.400000" />
+			</inertial>
+			<visual>
+				<origin rpy="0 0 0" xyz="0 -0.0 0" />
+				<geometry>
+					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="1.5708 0 0" xyz="0 0 0" />
+				<geometry>
+					<cylinder length="0.005" radius="0.125"/>
+				</geometry>
+				<surface>
+				<friction>
+					<ode>
+					<mu>0</mu>
+					<mu2>0</mu2>
+					<fdir1>0 0 0</fdir1>
+					<slip1>0</slip1>
+					<slip2>0</slip2>
+					</ode>
+				</friction>
+				<bounce>
+					<restitution_coefficient>0</restitution_coefficient>
+					<threshold>0</threshold>
+				</bounce>
+				<contact>
+					<ode>
+					<soft_cfm>0</soft_cfm>
+					<soft_erp>0.200000</soft_erp>
+					<kp>10000000000000.000000</kp>
+					<kd>100000000000.000000</kd>
+					<min_depth>0</min_depth>
+					</ode>
+				</contact>
+				</surface>
+				<laser_retro>0</laser_retro>
+			</collision>
+		</link>
+
+		<joint name="br_wheel_joint" type="continuous">
+			<origin rpy="0 0 0" xyz="-0.347000 -0.242000 0.130000" />
+			<axis xyz="0 1 0" />
+			<parent link="platform_base_link" />
+			<child link="br_wheel" />
+		</joint>
+
+		<link name="fr_wheel">
+			<inertial>
+				<origin rpy="0 0 0" xyz="0 0 0" />
+				<inertia ixx="0.012412" ixy="-0.000712" ixz="0.000503" iyy="0.015218" iyz="-0.000004" izz="0.011764" />
+				<mass value="0.400000" />
+			</inertial>
+			<visual>
+				<origin rpy="0 0 0" xyz="0 -0.0 0" />
+				<geometry>
+					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="1.5708 0 0" xyz="0 0 0" />
+				<geometry>
+					<cylinder length="0.005" radius="0.125"/>
+				</geometry>
+				<surface>
+				<friction>
+					<ode>
+					<mu>0</mu>
+					<mu2>0</mu2>
+					<fdir1>0 0 0</fdir1>
+					<slip1>0</slip1>
+					<slip2>0</slip2>
+					</ode>
+				</friction>
+				<bounce>
+					<restitution_coefficient>0</restitution_coefficient>
+					<threshold>0</threshold>
+				</bounce>
+				<contact>
+					<ode>
+					<soft_cfm>0</soft_cfm>
+					<soft_erp>0.200000</soft_erp>
+					<kp>10000000000000.000000</kp>
+					<kd>100000000000.000000</kd>
+					<min_depth>0</min_depth>
+					</ode>
+				</contact>
+				</surface>
+				<laser_retro>0</laser_retro>
+			</collision>
+		</link>
+
+		<joint name="fr_wheel_joint" type="continuous">
+			<origin rpy="0 0 0" xyz="0.347000 -0.242000 0.130000" />
+			<axis xyz="0 1 0" />
+			<parent link="platform_base_link" />
+			<child link="fr_wheel" />
+		</joint>
+
+		<link name="fl_wheel">
+			<inertial>
+				<origin rpy="0 0 0" xyz="0 0 0" />
+				<inertia ixx="0.012412" ixy="-0.000712" ixz="0.000503" iyy="0.015218" iyz="-0.000004" izz="0.011764" />
+				<mass value="0.400000" />
+			</inertial>
+			<visual>
+				<origin rpy="0 0 0" xyz="0 0.0 0" />
+				<geometry>
+					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
+				</geometry>
+			</visual>
+			<collision>
+				<origin rpy="1.5708 0 0" xyz="0 0 0" />
+				<geometry>
+					<cylinder length="0.005" radius="0.125"/>
+				</geometry>
+				<surface>
+				<friction>
+					<ode>
+					<mu>0</mu>
+					<mu2>0</mu2>
+					<fdir1>0 0 0</fdir1>
+					<slip1>0</slip1>
+					<slip2>0</slip2>
+					</ode>
+				</friction>
+				<bounce>
+					<restitution_coefficient>0</restitution_coefficient>
+					<threshold>0</threshold>
+				</bounce>
+				<contact>
+					<ode>
+					<soft_cfm>0</soft_cfm>
+					<soft_erp>0.200000</soft_erp>
+					<kp>10000000000000.000000</kp>
+					<kd>100000000000.000000</kd>
+					<min_depth>0</min_depth>
+					</ode>
+				</contact>
+				</surface>
+				<laser_retro>0</laser_retro>
+			</collision>
+		</link>
+
+		<joint name="fl_wheel_joint" type="continuous">
+			<origin rpy="0 0 0" xyz="0.347000 0.242000 0.130000" />
+			<axis xyz="0 1 0" />
+			<parent link="platform_base_link" />
+			<child link="fl_wheel" />
+		</joint>
+	</xacro:macro>
+</robot>

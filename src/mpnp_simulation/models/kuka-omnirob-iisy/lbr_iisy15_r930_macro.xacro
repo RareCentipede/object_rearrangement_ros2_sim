@@ -4,7 +4,6 @@
   <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
   <xacro:macro name="kuka_lbr_iisy15_r930_robot" params="prefix *origin package_name">
     <!-- links - main serial chain -->
-    <link name="world"/>
     <link name="${prefix}base_link">
       <collision>
         <geometry>
@@ -146,11 +145,6 @@
       </visual>
     </link>
     <!-- joints - main serial chain -->
-    <joint name="${prefix}world-base_link" type="fixed">
-      <parent link="world"/>
-      <child link="${prefix}base_link"/>
-      <xacro:insert_block name="origin"/>
-    </joint>
     <joint name="${prefix}joint_1" type="revolute">
       <axis xyz="0.0 0.0 1.0"/>
       <child link="${prefix}link_1"/>
@@ -192,27 +186,6 @@
       <limit effort="15.927568" lower="-3.839724354387525E0" upper="3.839724354387525E0" velocity="7.504909"/>
       <origin rpy="${pi/2.0} 0.0 -0.0" xyz="0.0 0.0 0.0"/>
       <parent link="${prefix}link_5"/>
-    </joint>
-    <!-- ROS-Industrial 'base' frame - equivalent of 'KUKA ROBROOT'-->
-    <link name="${prefix}base"/>
-    <joint name="${prefix}base_link-base" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <parent link="${prefix}base_link"/>
-      <child link="${prefix}base"/>
-    </joint>
-    <!-- ROS-Industrial 'flange' frame - attachment point for EEF models -->
-    <link name="${prefix}flange"/>
-    <joint name="${prefix}link6-flange" type="fixed">
-      <child link="${prefix}flange"/>
-      <origin rpy="0 ${pi/2} -0.0" xyz="0.0 0.0 -0.178"/>
-      <parent link="${prefix}link_6"/>
-    </joint>
-    <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
-    <link name="${prefix}tool0"/>
-    <joint name="${prefix}link6-tool0" type="fixed">
-      <child link="${prefix}tool0"/>
-      <origin rpy="0 ${pi} -0.0" xyz="0.0 0.0 -0.178"/>
-      <parent link="${prefix}link_6"/>
     </joint>
   </xacro:macro>
 </robot>
