@@ -1,13 +1,13 @@
 moveit_setup_assistant_config:
   urdf:
     package: mpnp_simulation
-    relative_path: models/kuka-omnirob-iisy/lbr_iisy15_r930.urdf
+    relative_path: models/kuka-omnirob-iisy/kuka-omnirob-iisy.urdf.xacro
   srdf:
-    relative_path: config/lbr_iisy15_r930.srdf
+    relative_path: config/kuka-omnirob-iisy.srdf
   package_settings:
     author_name: Zhengyang Lu
     author_email: stevenlu176@gmail.com
-    generated_timestamp: 1770219347
+    generated_timestamp: 1770630013
   control_xacro:
     command:
       - position

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>iisy_moveit_config</name>
+  <name>omnirob_iisy_moveit_config</name>
   <version>0.3.0</version>
   <description>
-     An automatically generated package with all the configuration and launch files for using the lbr_iisy15_r930 with the MoveIt Motion Planning Framework
+     An automatically generated package with all the configuration and launch files for using the kuka-omnirob-iisy with the MoveIt Motion Planning Framework
   </description>
   <maintainer email="stevenlu176@gmail.com">Zhengyang Lu</maintainer>
 
