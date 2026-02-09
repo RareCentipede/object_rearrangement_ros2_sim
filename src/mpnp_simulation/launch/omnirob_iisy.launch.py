@@ -16,10 +16,11 @@ def generate_launch_description() -> LaunchDescription:
     world = 'empty'
     robot = 'kuka-omnirob-iisy'
 
-    mpnp_package_dir = FindPackageShare('mpnp_simulation')
-    world_path = PathJoinSubstitution([mpnp_package_dir, 'worlds', world + '.sdf'])
-    robot_xacro = PathJoinSubstitution([mpnp_package_dir, 'models', robot, robot + '.urdf.xacro'])
-    robot_model_path = PathJoinSubstitution([mpnp_package_dir, 'models', robot, robot + '.urdf'])
+    omnirob_iisy_moveit_config_dir = FindPackageShare('omnirob_iisy_moveit_config')
+    mpnp_simulation_dir = FindPackageShare('mpnp_simulation')
+    world_path = PathJoinSubstitution([mpnp_simulation_dir, 'worlds', world + '.sdf'])
+    robot_xacro = PathJoinSubstitution([omnirob_iisy_moveit_config_dir, 'config', robot + '.urdf.xacro'])
+    robot_model_path = PathJoinSubstitution([omnirob_iisy_moveit_config_dir, 'config', robot + '.urdf'])
 
     robot_xacro_path_str = robot_xacro.perform(LaunchContext())
     robot_model_path_str = robot_model_path.perform(LaunchContext())
@@ -67,14 +68,14 @@ def generate_launch_description() -> LaunchDescription:
         output="screen",
     )
 
-    robot_state_publisher = Node(
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        name='robot_state_publisher',
-        output='screen',
-        parameters=[{'use_sim_time': True,
-                     'robot_description': robot_description}]
-    )
+    # robot_state_publisher = Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     name='robot_state_publisher',
+    #     output='screen',
+    #     parameters=[{'use_sim_time': True,
+    #                  'robot_description': robot_description}]
+    # )
 
     joint_state_publisher_gui = Node(
         package="joint_state_publisher_gui",
@@ -89,7 +90,7 @@ def generate_launch_description() -> LaunchDescription:
             gazebo_bridge,
             world_launch_description,
             spawn_robot,
-            robot_state_publisher,
+            # robot_state_publisher,
             # joint_state_publisher_gui,
         ]
     )
