@@ -76,14 +76,6 @@ def generate_launch_description():
         ]
     )
 
-    static_tf = Node(
-        package="tf2_ros",
-        executable="static_transform_publisher",
-        name="static_transform_publisher",
-        output="screen",
-        arguments=["--frame-id", "world", "--child-frame-id", "base_link"]
-    )
-
     omnirob_gz_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution(
@@ -96,7 +88,6 @@ def generate_launch_description():
         [
             rviz_config_arg,
             rviz_node,
-            static_tf,
             run_move_group_node,
             omnirob_gz_launch,
         ]

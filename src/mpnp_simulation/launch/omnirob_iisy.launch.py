@@ -85,8 +85,8 @@ def generate_launch_description() -> LaunchDescription:
         executable="parameter_bridge",
         output="screen",
         arguments=[
-            # "/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model",
-            # "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
+            "/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model",
+            "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
         ],
     )
