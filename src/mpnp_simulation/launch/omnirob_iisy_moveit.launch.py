@@ -15,9 +15,9 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
     launch_arguments = {
         "robot_ip": "xxx.yyy.zzz.www",
-        "use_fake_hardware": "true",
+        "use_fake_hardware": "false",
         "dof": "6",
-        # "use_gazebo": "true"
+        "use_gazebo": "true"
     }
 
     # Load the robot configuration
@@ -84,64 +84,20 @@ def generate_launch_description():
         arguments=["--frame-id", "world", "--child-frame-id", "base_link"]
     )
 
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        name="robot_state_publisher",
-        output="both",
-        parameters=[{'use_sim_time': True,
-                     'robot_description': moveit_config.robot_description}]
+    omnirob_gz_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [FindPackageShare("mpnp_simulation"), "launch", "omnirob_iisy.launch.py"]
+            )
+        )
     )
-
-    joint_state_publisher_node = Node(
-        package="joint_state_publisher",
-        executable="joint_state_publisher",
-        name="joint_state_publisher",
-        output="both",
-        parameters=[{'use_sim_time': True,
-                     'use_gazebo': True}]
-    )
-
-    ros2_controller_path = os.path.join(
-        get_package_share_directory("omnirob_iisy_moveit_config"),
-        "config",
-        "ros2_controllers.yaml",
-    )
-    ros2_control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[ros2_controller_path],
-        remappings=[
-            ("/controller_manager/robot_description", "/robot_description"),
-        ],
-        output="screen",
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-        output="screen",
-    )
-
-    omnirob_iisy_arm_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["arm_controller", "--controller-manager", "/controller_manager"],
-        output="screen",
-    )
-
 
     return LaunchDescription(
         [
             rviz_config_arg,
             rviz_node,
             static_tf,
-            robot_state_publisher,
-            joint_state_publisher_node,
             run_move_group_node,
-            ros2_control_node,
-            joint_state_broadcaster_spawner,
-            omnirob_iisy_arm_controller_spawner,
+            omnirob_gz_launch,
         ]
     )
