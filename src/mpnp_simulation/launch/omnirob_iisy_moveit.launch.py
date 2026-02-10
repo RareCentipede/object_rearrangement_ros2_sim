@@ -4,7 +4,7 @@ from moveit_configs_utils import MoveItConfigsBuilder
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, ExecuteProcess
 from launch_ros.actions import Node
 
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -41,7 +41,14 @@ def generate_launch_description():
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
-        parameters=[moveit_config.to_dict()]
+        parameters=[moveit_config.to_dict(),
+                        {"publish_planning_scene_hz": 30.0},
+                        {"allow_trajectory_execution": True},
+                        {"use_sim_time": True},
+                        {"publish_planning_scene": True},
+                        {"publish_state_updates": True},
+                        {"publish_transforms_updates": True}
+                    ]
     )
 
     rviz_config_arg = DeclareLaunchArgument(
@@ -86,6 +93,15 @@ def generate_launch_description():
                      'robot_description': moveit_config.robot_description}]
     )
 
+    joint_state_publisher_node = Node(
+        package="joint_state_publisher",
+        executable="joint_state_publisher",
+        name="joint_state_publisher",
+        output="both",
+        parameters=[{'use_sim_time': True,
+                     'use_gazebo': True}]
+    )
+
     ros2_controller_path = os.path.join(
         get_package_share_directory("omnirob_iisy_moveit_config"),
         "config",
@@ -115,23 +131,14 @@ def generate_launch_description():
         output="screen",
     )
 
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("mpnp_simulation"),
-                "launch",
-                "omnirob_iisy.launch.py",
-            )
-        )
-    )
 
     return LaunchDescription(
         [
-            gazebo,
             rviz_config_arg,
             rviz_node,
             static_tf,
             robot_state_publisher,
+            joint_state_publisher_node,
             run_move_group_node,
             ros2_control_node,
             joint_state_broadcaster_spawner,
