@@ -1,98 +1,122 @@
 import os
-import subprocess
 
-from ament_index_python.packages import get_package_prefix
+from ament_index_python import get_package_prefix
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, AppendEnvironmentVariable
-from launch.substitutions import PathJoinSubstitution
-
-from launch_ros.substitutions import FindPackageShare
-from launch_ros.actions import Node
-
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, AppendEnvironmentVariable
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.launch_context import LaunchContext
+from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+
+from launch_ros.actions import Node
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description() -> LaunchDescription:
-    world = 'empty'
-    robot = 'kuka-omnirob-iisy'
+    ld = LaunchDescription()
 
-    omnirob_iisy_moveit_config_dir = FindPackageShare('omnirob_iisy_moveit_config')
-    mpnp_simulation_dir = FindPackageShare('mpnp_simulation')
-    world_path = PathJoinSubstitution([mpnp_simulation_dir, 'worlds', world + '.sdf'])
-    robot_xacro = PathJoinSubstitution([omnirob_iisy_moveit_config_dir, 'config', robot + '.urdf.xacro'])
-    robot_model_path = PathJoinSubstitution([omnirob_iisy_moveit_config_dir, 'config', robot + '.urdf'])
+    omnirob_iisy_moveit_pkg_share = FindPackageShare("omnirob_iisy_moveit_config")
 
-    robot_xacro_path_str = robot_xacro.perform(LaunchContext())
-    robot_model_path_str = robot_model_path.perform(LaunchContext())
-    # Generate URDF from XACRO
-    subprocess.run(['xacro', robot_xacro_path_str, '-o', robot_model_path_str])
-
-    with open(robot_model_path_str, 'r') as file:
-        robot_description = file.read()
-
-    ros_gz_sim_pkg_path = FindPackageShare('ros_gz_sim')
-    gz_sim_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_sim.launch.py'])
-    gz_model_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, 'launch', 'gz_spawn_model.launch.py'])
-
+    # GZ resources
     models = AppendEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
         value=os.path.join(get_package_prefix('mpnp_simulation'), 'share')
     )
 
-    world_launch_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(gz_sim_launch_path),
-        launch_arguments={
-            'gz_args': [world_path],
-            'on_exit_shutdown': 'True'
-        }.items(),
+    # Get URDF via xacro
+    robot_description_content = Command(
+            [FindExecutable(name="xacro"), 
+             ' ',
+             PathJoinSubstitution(
+                 [omnirob_iisy_moveit_pkg_share, 
+                  "config", "kuka-omnirob-iisy.urdf.xacro"]
+                 )
+             ]
+        )
+    robot_description = {'robot_description': robot_description_content}
+
+    # Run all nodes
+    robot_controllers = PathJoinSubstitution(
+        [
+            omnirob_iisy_moveit_pkg_share,
+            "config",
+            "ros2_controllers.yaml"
+        ]
     )
 
-    spawn_robot = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(gz_model_launch_path),
-        launch_arguments={
-            'world': world,
-            'file': robot_model_path_str,
-            'entity_name': robot,
-            'x': '0.0',
-            'y': '0.0',
-            'z': '0.0',
-            'roll': '0.0',
-            'pitch': '0.0',
-            'yaw': '0.0',}.items(),
+    robot_state_publisher_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        output="screen",
+        parameters=[robot_description]
     )
 
-    gazebo_bridge = Node(
-        package="ros_gz_bridge",
-        executable="parameter_bridge",
-        arguments=["/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock"],
+    gz_spawn_entity = Node(
+        package="ros_gz_sim",
+        executable="create",
+        output="screen",
+        arguments=[
+            '-topic', 'robot_description',
+            '-name', 'kuka-omnirob-iisy',
+            '-allow_renaming', 'true'
+        ]
+    )
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster",
+                   "--controller-manager", "/controller_manager",
+                   "--param-file", robot_controllers],
         output="screen",
     )
 
-    # robot_state_publisher = Node(
-    #     package='robot_state_publisher',
-    #     executable='robot_state_publisher',
-    #     name='robot_state_publisher',
-    #     output='screen',
-    #     parameters=[{'use_sim_time': True,
-    #                  'robot_description': robot_description}]
-    # )
-
-    joint_state_publisher_gui = Node(
-        package="joint_state_publisher_gui",
-        executable="joint_state_publisher_gui",
-        name="joint_state_publisher_gui",
-        output="log",
+    arm_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["arm_controller",
+                   "--controller-manager", "/controller_manager",
+                   "--param-file", robot_controllers],
+        output="screen",
     )
 
-    ld = LaunchDescription(
-        [
-            models,
-            gazebo_bridge,
-            world_launch_description,
-            spawn_robot,
-            # robot_state_publisher,
-            # joint_state_publisher_gui,
-        ]
+    # Bridge
+    bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        output="screen",
+        arguments=[
+            # "/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model",
+            # "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
+        ],
     )
+
+    ros_gz_sim_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution(
+                [FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"]
+            )        ),
+        launch_arguments=[('gz_args', [' -r -v 1 empty.sdf'])])
+
+    spawner_event_handler = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=gz_spawn_entity,
+            on_exit=[joint_state_broadcaster_spawner],
+        )
+    )
+    joint_state_broadcaster_spawner_event_handler = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[arm_controller_spawner],
+        )
+    )
+
+    ld.add_action(models)
+    ld.add_action(ros_gz_sim_launch)
+    ld.add_action(spawner_event_handler)
+    ld.add_action(joint_state_broadcaster_spawner_event_handler)
+    ld.add_action(bridge)
+    ld.add_action(robot_state_publisher_node)
+    ld.add_action(gz_spawn_entity)
 
     return ld
