@@ -2,6 +2,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kuka-omnirob-iisy">
   <xacro:include filename="$(find omnirob_description)/urdf/omnirob_macro.xacro"/>
 
-  <xacro:omnirob/>
+  <xacro:omnirob prefix="omnirob" package_name="omnirob_description"/>
 
 </robot>
