@@ -1,10 +1,11 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument, RegisterEventHandler, IncludeLaunchDescription
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import Command, LaunchConfiguration, FindExecutable, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-import os
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
     pkg_share = FindPackageShare(package='omnirob_description')
@@ -24,6 +25,7 @@ def generate_launch_description():
         executable='robot_state_publisher',
         parameters=[robot_description]
     )
+
     joint_state_publisher_node = Node(
         package='joint_state_publisher',
         executable='joint_state_publisher',
@@ -31,12 +33,14 @@ def generate_launch_description():
         parameters=[robot_description],
         condition=UnlessCondition(LaunchConfiguration('gui'))
     )
+
     joint_state_publisher_gui_node = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
         name='joint_state_publisher_gui',
         condition=IfCondition(LaunchConfiguration('gui'))
     )
+
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
