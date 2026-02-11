@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kuka-omnirob-iisy">
-  <xacro:include filename="$(find mpnp_simulation)/models/kuka-omnirob-iisy/omnirob_macro.xacro"/>
+  <xacro:include filename="$(find omnirob_description)/urdf/omnirob_macro.xacro"/>
   <xacro:include filename="$(find mpnp_simulation)/models/kuka-omnirob-iisy/lbr_iisy15_r930_macro.xacro"/>
 
   <xacro:arg name="driver_version" default="rsi_only"/>
@@ -21,7 +21,7 @@
   <xacro:arg name="pitch" default="0"/>
   <xacro:arg name="yaw" default="0"/>
 
-  <xacro:omnirob/>
+  <xacro:omnirob prefix="platform" package_name="omnirob_description"/>
   <xacro:kuka_lbr_iisy15_r930_robot prefix="arm_" package_name="kuka_lbr_iisy_support">
     <origin xyz="$(arg x) $(arg y) $(arg z)" rpy="$(arg roll) $(arg pitch) $(arg yaw)"/>
   </xacro:kuka_lbr_iisy15_r930_robot>

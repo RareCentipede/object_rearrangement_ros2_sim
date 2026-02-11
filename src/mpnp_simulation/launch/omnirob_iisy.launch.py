@@ -18,7 +18,7 @@ def generate_launch_description() -> LaunchDescription:
     # GZ resources
     models = AppendEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
-        value=os.path.join(get_package_prefix('mpnp_simulation'), 'share')
+        value=os.path.join(get_package_prefix('omnirob_description'), 'share')
     )
 
     # Get URDF via xacro
@@ -78,6 +78,15 @@ def generate_launch_description() -> LaunchDescription:
         output="screen",
     )
 
+    omnirob_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["omnirob_controller_with_rotation",
+                   "--controller-manager", "/controller_manager",
+                   "--param-file", robot_controllers],
+        output="screen",
+    )
+
     # Bridge
     bridge = Node(
         package="ros_gz_bridge",
@@ -109,10 +118,17 @@ def generate_launch_description() -> LaunchDescription:
             on_exit=[arm_controller_spawner],
         )
     )
+    arm_controller_spawner_event_handler = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=arm_controller_spawner,
+            on_exit=[omnirob_controller_spawner],
+        )
+    )
 
     ld.add_action(models)
     ld.add_action(ros_gz_sim_launch)
     ld.add_action(spawner_event_handler)
+    ld.add_action(arm_controller_spawner_event_handler)
     ld.add_action(joint_state_broadcaster_spawner_event_handler)
     ld.add_action(bridge)
     ld.add_action(robot_state_publisher_node)
