@@ -3,7 +3,7 @@
     <!-- Helper xacros -->
 	<xacro:macro name="omnirob">
 		<!--static>true</static-->
-		<link name="platform_base_link">
+		<link name="base_link">
 			<inertial>
 				<mass value="250" />
 				<origin rpy="0 .0 0" xyz="0 -0.00000 0.24" />
@@ -12,7 +12,7 @@
 			<visual>
 				<origin rpy="0 0 0" xyz="0 0 0" />
 				<geometry>
-					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBaseRot.dae" scale="1 1 1" />
+					<mesh filename="package://omnirob_description/meshes/omnirobBaseRot.dae" scale="1 1 1" />
 				</geometry>
 			</visual>
 			<collision>
@@ -32,7 +32,7 @@
 			<visual>
 				<origin rpy="0 0 0" xyz="0 0.037 0" />
 				<geometry>
-					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
+					<mesh filename="package://omnirob_description/meshes/omnirobBLWheelRot.dae" scale="1 1 1" />
 				</geometry>
 			</visual>
 			<collision>
@@ -71,7 +71,7 @@
 		<joint name="bl_wheel_joint" type="continuous">
 			<origin rpy="0 3.14159 0" xyz="-0.347000 0.242000 0.130000" />
 			<axis xyz="0 1 0" />
-			<parent link="platform_base_link" />
+			<parent link="base_link" />
 			<child link="bl_wheel" />
 		</joint>
 
@@ -84,7 +84,7 @@
 			<visual>
 				<origin rpy="0 0 0" xyz="0 -0.0 0" />
 				<geometry>
-					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
+					<mesh filename="package://omnirob_description/meshes/omnirobBRWheelRot.dae" scale="1 1 1" />
 				</geometry>
 			</visual>
 			<collision>
@@ -123,7 +123,7 @@
 		<joint name="br_wheel_joint" type="continuous">
 			<origin rpy="0 0 0" xyz="-0.347000 -0.242000 0.130000" />
 			<axis xyz="0 1 0" />
-			<parent link="platform_base_link" />
+			<parent link="base_link" />
 			<child link="br_wheel" />
 		</joint>
 
@@ -136,7 +136,7 @@
 			<visual>
 				<origin rpy="0 0 0" xyz="0 -0.0 0" />
 				<geometry>
-					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
+					<mesh filename="package://omnirob_description/meshes/omnirobFRWheelRot.dae" scale="1 1 1" />
 				</geometry>
 			</visual>
 			<collision>
@@ -175,7 +175,7 @@
 		<joint name="fr_wheel_joint" type="continuous">
 			<origin rpy="0 0 0" xyz="0.347000 -0.242000 0.130000" />
 			<axis xyz="0 1 0" />
-			<parent link="platform_base_link" />
+			<parent link="base_link" />
 			<child link="fr_wheel" />
 		</joint>
 
@@ -188,7 +188,7 @@
 			<visual>
 				<origin rpy="0 0 0" xyz="0 0.0 0" />
 				<geometry>
-					<mesh filename="package://mpnp_simulation/models/kuka-omnirob-iisy/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
+					<mesh filename="package://omnirob_description/meshes/omnirobFLWheelRot.dae" scale="1 1 1" />
 				</geometry>
 			</visual>
 			<collision>
@@ -227,7 +227,7 @@
 		<joint name="fl_wheel_joint" type="continuous">
 			<origin rpy="0 0 0" xyz="0.347000 0.242000 0.130000" />
 			<axis xyz="0 1 0" />
-			<parent link="platform_base_link" />
+			<parent link="base_link" />
 			<child link="fl_wheel" />
 		</joint>
 	</xacro:macro>
