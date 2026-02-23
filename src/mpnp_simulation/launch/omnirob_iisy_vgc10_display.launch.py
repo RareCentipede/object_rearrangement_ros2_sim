@@ -9,8 +9,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
     pkg_share = FindPackageShare(package='mpnp_simulation')
-    default_model_path = PathJoinSubstitution([pkg_share, 'models', 'kuka_iisy_vgc10.urdf.xacro'])
-    default_rviz_config_path = PathJoinSubstitution([pkg_share, 'rviz', 'kuka_iisy_vgc10_config.rviz'])
+    default_model_path = PathJoinSubstitution([pkg_share, 'models', 'kuka_omnirob_iisy_vgc10.urdf.xacro'])
+    default_rviz_config_path = PathJoinSubstitution([pkg_share, 'rviz', 'kuka_omnirob_iisy_vgc10_config.rviz'])
 
     robot_description_content = Command(
             [FindExecutable(name="xacro"), 
