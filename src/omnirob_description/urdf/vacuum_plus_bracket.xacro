@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="holder">
+
+  <xacro:macro name="ee_vacuum" params="rpy:='0 0 0' xyz:='0 0 0' arm_id:='panda' gazebo:=true package_name:='${package_name}'">
+    <material name="white">
+      <color rgba="0.8 0.8 0.8 1.0" />
+    </material>
+
+    <!-- ee link -->
+    <link name="${arm_id}_hand">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+        <geometry>
+          <mesh filename="package://${package_name}/meshes/vacuum_plus_bracket.dae" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="white" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 ${pi}" />
+        <geometry>
+          <mesh filename="package://${package_name}/meshes/vacuum_plus_bracket.dae" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+      <!-- same inertia as gripper (copied from franka_ros) -->
+      <xacro:if value="${gazebo}">
+        <inertial>
+          <mass value="0.73" />
+          <origin xyz="-0.01 0 0.03" />
+          <inertia ixx="0.001" ixy="0"      ixz="0"
+                               iyy="0.0025" iyz="0"
+                                            izz="0.0017" />
+        </inertial>
+      </xacro:if>
+    </link>
+
+    <joint name="${arm_id}_vacuum_joint" type="fixed">
+      <parent link="${arm_id}_hand" />
+      <child link="${arm_id}_vacuum" />
+      <origin xyz="0 0 0.33" rpy="0 0 0" />
+    </joint>
+
+    <gazebo reference="${arm_id}_vacuum_joint">
+      <disableFixedJointLumping>true</disableFixedJointLumping> 
+      <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+
+    <joint name="${arm_id}_vacuum_joint_2" type="fixed">
+      <parent link="${arm_id}_hand" />
+      <child link="${arm_id}_vacuum_2" />
+      <origin xyz="0 0 0.25" rpy="0 0 0" />
+    </joint>
+
+    <link name="${arm_id}_vacuum">
+      <inertial>
+        <origin xyz='0.0 0.0 0.0' rpy='0.0 0.0 0.0'/>
+        <mass value='0.001'/>
+        <inertia ixx='0.001' ixy='0.0' ixz='0.0'
+                 iyy='0.001' iyz='0.0' izz='0.001'/>
+      </inertial>
+    </link>
+
+    <link name="${arm_id}_vacuum_2">
+    </link>
+
+  </xacro:macro>
+</robot>
