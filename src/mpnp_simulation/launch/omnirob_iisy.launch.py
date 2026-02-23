@@ -125,7 +125,7 @@ def generate_launch_description() -> LaunchDescription:
         )
     )
 
-    ld.add_action(models)
+    # ld.add_action(models)
     ld.add_action(ros_gz_sim_launch)
     ld.add_action(spawner_event_handler)
     ld.add_action(arm_controller_spawner_event_handler)
