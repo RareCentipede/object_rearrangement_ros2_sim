@@ -5,7 +5,7 @@ moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControll
 moveit_simple_controller_manager:
   controller_names:
     - arm_controller_controller
-    - vacuum_controller
+    # - vacuum_controller
 
   arm_controller_controller:
     type: FollowJointTrajectory
@@ -17,9 +17,9 @@ moveit_simple_controller_manager:
       - arm_joint_5
       - arm_joint_6
       - arm_link6-flange
-  vacuum_controller:
-    type: GripperCommand
-    joints:
-      []
-    action_ns: gripper_cmd
-    default: true
+  # vacuum_controller:
+  #   type: GripperCommand
+  #   joints:
+  #     []
+  #   action_ns: gripper_cmd
+  #   default: true

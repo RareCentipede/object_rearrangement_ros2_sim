@@ -41,14 +41,7 @@ def generate_launch_description():
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
-        parameters=[moveit_config.to_dict(),
-                        {"publish_planning_scene_hz": 30.0},
-                        {"allow_trajectory_execution": True},
-                        {"use_sim_time": True},
-                        {"publish_planning_scene": True},
-                        {"publish_state_updates": True},
-                        {"publish_transforms_updates": True}
-                    ]
+        parameters=[moveit_config.to_dict()]
     )
 
     rviz_config_arg = DeclareLaunchArgument(
@@ -58,10 +51,7 @@ def generate_launch_description():
         ),
         description="Path to the RViz config file"
     )
-    rviz_base = LaunchConfiguration("rviz_config")
-    rviz_config = PathJoinSubstitution(
-        [FindPackageShare("omnirob_iisy_vgc10_moveit_config"), "config", rviz_base]
-    )
+    rviz_config = LaunchConfiguration("rviz_config")
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
