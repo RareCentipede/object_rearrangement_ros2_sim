@@ -22,6 +22,12 @@ cd ..
 rm -r cogimon-gazebo-models
 ```
 
+## Kuka description
+From https://github.com/kroshu/kuka_robot_descriptions.
+
+## Gripper
+https://github.com/UOsaka-Harada-Laboratory/onrobot/tree/main.
+
 # Download example world
 ```bash
 curl -L -o moon_world.zip "https://fuel.gazebosim.org/1.0/anastasa/worlds/A%20base%20on%20the%20Moon.zip" && \
