@@ -3,7 +3,7 @@
     <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
 
     <!-- Import kuka-omnirob-iisy urdf file -->
-    <xacro:include filename="$(find mpnp_simulation)/models/kuka-omnirob-iisy/kuka-omnirob-iisy.urdf.xacro" />
+    <xacro:include filename="$(find mpnp_simulation)/models/kuka-omnirob-iisy.urdf.xacro" />
 
     <!-- Import control_xacro -->
     <xacro:include filename="kuka-omnirob-iisy.ros2_control.xacro"/>
