@@ -144,6 +144,8 @@
         <xacro:material_kuka_ral_pure_white/>
       </visual>
     </link>
+    <link name="${prefix}flange"/>
+
     <!-- joints - main serial chain -->
     <joint name="${prefix}joint_1" type="revolute">
       <axis xyz="0.0 0.0 1.0"/>
@@ -186,6 +188,12 @@
       <limit effort="15.927568" lower="-3.839724354387525E0" upper="3.839724354387525E0" velocity="7.504909"/>
       <origin rpy="${pi/2.0} 0.0 -0.0" xyz="0.0 0.0 0.0"/>
       <parent link="${prefix}link_5"/>
+    </joint>
+
+    <joint name="${prefix}link6-flange" type="fixed">
+      <child link="${prefix}flange"/>
+      <origin rpy="0 ${pi/2} -0.0" xyz="0.0 0.0 -0.178"/>
+      <parent link="${prefix}link_6"/>
     </joint>
   </xacro:macro>
 </robot>
