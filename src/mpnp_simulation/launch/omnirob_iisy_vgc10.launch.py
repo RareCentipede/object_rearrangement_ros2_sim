@@ -13,34 +13,24 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description() -> LaunchDescription:
     ld = LaunchDescription()
 
-    iisy_vgc10_moveit_pkg_share = FindPackageShare("iisy_vgc10_moveit_config")
-    mpnp_simulation_pkg_share = FindPackageShare("mpnp_simulation")
-    omnirob_description_pkg_share = FindPackageShare("omnirob_description")
+    omnirob_iisy_vgc10_moveit_pkg_share = FindPackageShare("omnirob_iisy_vgc10_moveit_config")
 
     # Get URDF via xacro
     robot_description_content = Command(
             [FindExecutable(name="xacro"), 
              ' ',
              PathJoinSubstitution(
-                 [mpnp_simulation_pkg_share, 
-                  "models", "kuka_omnirob_iisy_vgc10.urdf.xacro"]
+                 [omnirob_iisy_vgc10_moveit_pkg_share, 
+                  "config", "kuka_omnirob_iisy_vgc10.urdf.xacro"]
                  )
              ]
         )
     robot_description = {'robot_description': robot_description_content}
 
     # Run all nodes
-    iisy_vgc10_controllers = PathJoinSubstitution(
+    robot_controllers = PathJoinSubstitution(
         [
-            iisy_vgc10_moveit_pkg_share,
-            "config",
-            "ros2_controllers.yaml"
-        ]
-    )
-
-    omnirob_controllers = PathJoinSubstitution(
-        [
-            omnirob_description_pkg_share,
+            omnirob_iisy_vgc10_moveit_pkg_share,
             "config",
             "ros2_controllers.yaml"
         ]
@@ -64,21 +54,12 @@ def generate_launch_description() -> LaunchDescription:
         ]
     )
 
-    arm_joint_state_broadcaster_spawner = Node(
+    joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_state_broadcaster",
                    "--controller-manager", "/controller_manager",
-                   "--param-file", iisy_vgc10_controllers],
-        output="screen",
-    )
-
-    omnirob_joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster",
-                   "--controller-manager", "/controller_manager",
-                   "--param-file", omnirob_controllers],
+                   "--param-file", robot_controllers],
         output="screen",
     )
 
@@ -87,7 +68,7 @@ def generate_launch_description() -> LaunchDescription:
         executable="spawner",
         arguments=["arm_controller",
                    "--controller-manager", "/controller_manager",
-                   "--param-file", iisy_vgc10_controllers],
+                   "--param-file", robot_controllers],
         output="screen",
     )
 
@@ -96,7 +77,7 @@ def generate_launch_description() -> LaunchDescription:
         executable="spawner",
         arguments=["omnirob_controller_with_rotation",
                    "--controller-manager", "/controller_manager",
-                   "--param-file", omnirob_controllers],
+                   "--param-file", robot_controllers],
         output="screen",
     )
 
@@ -122,13 +103,13 @@ def generate_launch_description() -> LaunchDescription:
     spawner_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=gz_spawn_entity,
-            on_exit=[arm_joint_state_broadcaster_spawner],
+            on_exit=[joint_state_broadcaster_spawner],
         )
     )
-    omnirob_joint_state_broadcaster_spawner_event_handler = RegisterEventHandler(
+    joint_state_broadcaster_spawner_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
-            target_action=arm_joint_state_broadcaster_spawner,
-            on_exit=[omnirob_joint_state_broadcaster_spawner],
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[arm_controller_spawner],
         )
     )
     arm_controller_spawner_event_handler = RegisterEventHandler(
@@ -141,7 +122,7 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(ros_gz_sim_launch)
     ld.add_action(spawner_event_handler)
     ld.add_action(arm_controller_spawner_event_handler)
-    ld.add_action(omnirob_joint_state_broadcaster_spawner_event_handler)
+    ld.add_action(joint_state_broadcaster_spawner_event_handler)
     ld.add_action(bridge)
     ld.add_action(robot_state_publisher_node)
     ld.add_action(gz_spawn_entity)

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iisy_vgc10">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kuka_omnirob_iisy_vgc10">
   <xacro:include filename="$(find omnirob_description)/urdf/omnirob_macro.xacro"/>
   <xacro:include filename="$(find kuka_iisy_description)/urdf/lbr_iisy15_r930_macro.xacro"/>
   <xacro:include filename="$(find onrobot_vg_description)/urdf/onrobot_vgc10_4cups_macro.xacro"/>
