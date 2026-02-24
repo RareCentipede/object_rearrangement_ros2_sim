@@ -35,11 +35,7 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="screen",
-        parameters=[robot_description, {'use_sim_time': True}],
-        remappings=[
-            ('/tf', 'tf'),
-            ('/tf_static', 'tf_static')
-        ]
+        parameters=[robot_description],
     )
 
     gz_spawn_entity = Node(
@@ -51,9 +47,6 @@ def generate_launch_description():
             '-name', 'omnirob',
             '-allow_renaming', 'true'
         ],
-        parameters=[
-            {'use_sim_time': True},
-        ]
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -65,14 +58,14 @@ def generate_launch_description():
         output="screen"
     )
 
-    # omnirob_controller_spawner = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["omnirob_controller_with_rotation",
-    #                "--controller-manager", "/controller_manager",
-    #                "--param-file", omnirob_controllers],
-    #     output="screen"
-    # )
+    omnirob_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["omnirob_controller",
+                   "--controller-manager", "/controller_manager",
+                   "--param-file", omnirob_controllers],
+        output="screen"
+    )
 
     # Bridge
     bridge = Node(
@@ -86,9 +79,6 @@ def generate_launch_description():
             "/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist",
             "/odom@nav_msgs/msg/Odometry@gz.msgs.Odometry",
         ],
-        parameters=[
-            {'use_sim_time': True},
-        ]
     )
 
     ros_gz_sim_launch = IncludeLaunchDescription(
@@ -107,18 +97,27 @@ def generate_launch_description():
         )
     )
 
-    # joint_state_broadcaster_spawner_event_handler = RegisterEventHandler(
-    #     event_handler=OnProcessExit(
-    #         target_action=joint_state_broadcaster_spawner,
-    #         on_exit=[omnirob_controller_spawner]
-    #     )
-    # )
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', PathJoinSubstitution([pkg_share, 'rviz', 'config.rviz'])],
+    )
+
+    joint_state_broadcaster_spawner_event_handler = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[omnirob_controller_spawner]
+        )
+    )
 
     ld.add_action(ros_gz_sim_launch)
-    # ld.add_action(robot_spawner_event_handler)
-    # ld.add_action(joint_state_broadcaster_spawner_event_handler)
+    ld.add_action(robot_spawner_event_handler)
+    ld.add_action(joint_state_broadcaster_spawner_event_handler)
     ld.add_action(bridge)
-    ld.add_action(gz_spawn_entity)
     ld.add_action(robot_state_publisher_node)
+    ld.add_action(gz_spawn_entity)
+    ld.add_action(rviz_node)
 
     return ld
