@@ -41,28 +41,28 @@
 					<cylinder length="0.005" radius="0.125"/>
 				</geometry>
 				<surface>
-				<friction>
-					<ode>
-					<mu>0</mu>
-					<mu2>0</mu2>
-					<fdir1>0 0 0</fdir1>
-					<slip1>0</slip1>
-					<slip2>0</slip2>
-					</ode>
-				</friction>
-				<bounce>
-					<restitution_coefficient>0</restitution_coefficient>
-					<threshold>0</threshold>
-				</bounce>
-				<contact>
-					<ode>
-					<soft_cfm>0</soft_cfm>
-					<soft_erp>0.200000</soft_erp>
-					<kp>10000000000000.000000</kp>
-					<kd>100000000000.000000</kd>
-					<min_depth>0</min_depth>
-					</ode>
-				</contact>
+					<friction>
+						<ode>
+							<mu>1.5</mu>
+							<mu2>0.1</mu2>
+							<fdir1>1 1 0</fdir1>
+							<slip1>0</slip1>
+							<slip2>0</slip2>
+						</ode>
+					</friction>
+					<bounce>
+						<restitution_coefficient>0</restitution_coefficient>
+						<threshold>0</threshold>
+					</bounce>
+					<contact>
+						<ode>
+							<soft_cfm>0</soft_cfm>
+							<soft_erp>0.200000</soft_erp>
+							<kp>10000000000000.000000</kp>
+							<kd>100000000000.000000</kd>
+							<min_depth>0</min_depth>
+						</ode>
+					</contact>
 				</surface>
 				<laser_retro>0</laser_retro>
 			</collision>
@@ -93,28 +93,28 @@
 					<cylinder length="0.005" radius="0.125"/>
 				</geometry>
 				<surface>
-				<friction>
-					<ode>
-					<mu>0</mu>
-					<mu2>0</mu2>
-					<fdir1>0 0 0</fdir1>
-					<slip1>0</slip1>
-					<slip2>0</slip2>
-					</ode>
-				</friction>
-				<bounce>
-					<restitution_coefficient>0</restitution_coefficient>
-					<threshold>0</threshold>
-				</bounce>
-				<contact>
-					<ode>
-					<soft_cfm>0</soft_cfm>
-					<soft_erp>0.200000</soft_erp>
-					<kp>10000000000000.000000</kp>
-					<kd>100000000000.000000</kd>
-					<min_depth>0</min_depth>
-					</ode>
-				</contact>
+					<friction>
+						<ode>
+							<mu>1.5</mu>
+							<mu2>0.1</mu2>
+							<fdir1>1 -1 0</fdir1>
+							<slip1>0</slip1>
+							<slip2>0</slip2>
+						</ode>
+					</friction>
+					<bounce>
+						<restitution_coefficient>0</restitution_coefficient>
+						<threshold>0</threshold>
+					</bounce>
+					<contact>
+						<ode>
+							<soft_cfm>0</soft_cfm>
+							<soft_erp>0.200000</soft_erp>
+							<kp>10000000000000.000000</kp>
+							<kd>100000000000.000000</kd>
+							<min_depth>0</min_depth>
+						</ode>
+					</contact>
 				</surface>
 				<laser_retro>0</laser_retro>
 			</collision>
@@ -145,28 +145,28 @@
 					<cylinder length="0.005" radius="0.125"/>
 				</geometry>
 				<surface>
-				<friction>
-					<ode>
-					<mu>0</mu>
-					<mu2>0</mu2>
-					<fdir1>0 0 0</fdir1>
-					<slip1>0</slip1>
-					<slip2>0</slip2>
-					</ode>
-				</friction>
-				<bounce>
-					<restitution_coefficient>0</restitution_coefficient>
-					<threshold>0</threshold>
-				</bounce>
-				<contact>
-					<ode>
-					<soft_cfm>0</soft_cfm>
-					<soft_erp>0.200000</soft_erp>
-					<kp>10000000000000.000000</kp>
-					<kd>100000000000.000000</kd>
-					<min_depth>0</min_depth>
-					</ode>
-				</contact>
+					<friction>
+						<ode>
+							<mu>1.5</mu>
+							<mu2>0.1</mu2>
+							<fdir1>1 1 0</fdir1>
+							<slip1>0</slip1>
+							<slip2>0</slip2>
+						</ode>
+					</friction>
+					<bounce>
+						<restitution_coefficient>0</restitution_coefficient>
+						<threshold>0</threshold>
+					</bounce>
+					<contact>
+						<ode>
+							<soft_cfm>0</soft_cfm>
+							<soft_erp>0.200000</soft_erp>
+							<kp>10000000000000.000000</kp>
+							<kd>100000000000.000000</kd>
+							<min_depth>0</min_depth>
+						</ode>
+					</contact>
 				</surface>
 				<laser_retro>0</laser_retro>
 			</collision>
@@ -197,28 +197,28 @@
 					<cylinder length="0.005" radius="0.125"/>
 				</geometry>
 				<surface>
-				<friction>
-					<ode>
-					<mu>0</mu>
-					<mu2>0</mu2>
-					<fdir1>0 0 0</fdir1>
-					<slip1>0</slip1>
-					<slip2>0</slip2>
-					</ode>
-				</friction>
-				<bounce>
-					<restitution_coefficient>0</restitution_coefficient>
-					<threshold>0</threshold>
-				</bounce>
-				<contact>
-					<ode>
-					<soft_cfm>0</soft_cfm>
-					<soft_erp>0.200000</soft_erp>
-					<kp>10000000000000.000000</kp>
-					<kd>100000000000.000000</kd>
-					<min_depth>0</min_depth>
-					</ode>
-				</contact>
+					<friction>
+						<ode>
+							<mu>1.5</mu>
+							<mu2>0.1</mu2>
+							<fdir1>1 -1 0</fdir1>
+							<slip1>0</slip1>
+							<slip2>0</slip2>
+						</ode>
+					</friction>
+					<bounce>
+						<restitution_coefficient>0</restitution_coefficient>
+						<threshold>0</threshold>
+					</bounce>
+					<contact>
+						<ode>
+							<soft_cfm>0</soft_cfm>
+							<soft_erp>0.200000</soft_erp>
+							<kp>10000000000000.000000</kp>
+							<kd>100000000000.000000</kd>
+							<min_depth>0</min_depth>
+						</ode>
+					</contact>
 				</surface>
 				<laser_retro>0</laser_retro>
 			</collision>

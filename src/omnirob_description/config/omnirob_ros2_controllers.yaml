@@ -22,8 +22,8 @@ omnirob_controller:
 
     kinematics:
       base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
-      wheels_radius: 0.5
-      sum_of_robot_center_projection_on_X_Y_axis: 1.0
+      wheels_radius: 0.125
+      sum_of_robot_center_projection_on_X_Y_axis: 0.589
 
     base_frame_id: "omnirob_base_link"
     odom_frame_id: "odom"

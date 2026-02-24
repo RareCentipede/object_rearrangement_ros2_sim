@@ -14,11 +14,6 @@ def generate_launch_description():
     pkg_share = FindPackageShare(package='omnirob_description')
     default_model_path = PathJoinSubstitution([pkg_share, 'urdf', 'omnirob.urdf.xacro'])
 
-    models = AppendEnvironmentVariable(
-        name='GZ_SIM_RESOURCE_PATH',
-        value=os.path.join(get_package_prefix('omnirob_description'), 'share')
-    )
-
     robot_description_content = Command(
             [FindExecutable(name="xacro"), 
              ' ',
@@ -66,7 +61,7 @@ def generate_launch_description():
     omnirob_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["omnirob_controller_with_rotation",
+        arguments=["omnirob_controller",
                    "--controller-manager", "/controller_manager",
                    "--param-file", omnirob_controllers],
         output="screen"
@@ -107,7 +102,6 @@ def generate_launch_description():
         )
     )
 
-    ld.add_action(models)
     ld.add_action(ros_gz_sim_launch)
     ld.add_action(robot_spawner_event_handler)
     ld.add_action(joint_state_broadcaster_spawner_event_handler)
