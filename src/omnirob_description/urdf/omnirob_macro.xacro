@@ -1,12 +1,19 @@
 <?xml version="1.0" ?>
-<robot name="omnirob" xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller" xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface" xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="omnirob" xmlns:xacro="http://www.ros.org/wiki/xacro" xmlns:gz="http://gazebosim.org/schema">
     <!-- Helper xacros -->
 	<xacro:macro name="omnirob" params="prefix package_name">
-		<!--static>true</static-->
+		<link name="base_footprint"/>
+
+		<joint name="base_footprint_joint" type="fixed">
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<parent link="base_footprint" />
+			<child link="${prefix}_base_link" />
+		</joint>
+
 		<link name="${prefix}_base_link">
 			<inertial>
 				<mass value="250" />
-				<origin rpy="0 .0 0" xyz="0 -0.00000 0.24" />
+				<origin rpy="0 0 0.1" xyz="0 -0.00000 0.24" />
 				<inertia ixx="25.77086" ixy="-0.0" ixz="-0.0" iyy="53.79704" iyz="-0.0" izz="58.79601" />
 			</inertial>
 			<visual>
@@ -36,43 +43,19 @@
 				</geometry>
 			</visual>
 			<collision>
-				<origin rpy="1.5708 0 0" xyz="0 0 0" />
 				<geometry>
-					<cylinder length="0.005" radius="0.125"/>
+					<sphere radius="0.1"/>
 				</geometry>
-				<surface>
-					<friction>
-						<ode>
-							<mu>1.5</mu>
-							<mu2>0.1</mu2>
-							<fdir1>1 1 0</fdir1>
-							<slip1>0</slip1>
-							<slip2>0</slip2>
-						</ode>
-					</friction>
-					<bounce>
-						<restitution_coefficient>0</restitution_coefficient>
-						<threshold>0</threshold>
-					</bounce>
-					<contact>
-						<ode>
-							<soft_cfm>0</soft_cfm>
-							<soft_erp>0.200000</soft_erp>
-							<kp>10000000000000.000000</kp>
-							<kd>100000000000.000000</kd>
-							<min_depth>0</min_depth>
-						</ode>
-					</contact>
-				</surface>
-				<laser_retro>0</laser_retro>
 			</collision>
 		</link>
 
 		<joint name="bl_wheel_joint" type="continuous">
-			<origin rpy="0 3.14159 0" xyz="-0.347000 0.242000 0.130000" />
-			<axis xyz="0 1 0" />
+			<origin rpy="0 0 0" xyz="-0.347000 0.242000 0.130000" />
+			<axis xyz="0 0 1" />
 			<parent link="${prefix}_base_link" />
 			<child link="bl_wheel" />
+			<limit effort="10000" velocity="10"/>
+    		<dynamics damping="1.0" friction="1.0"/>
 		</joint>
 
 		<link name="br_wheel">
@@ -88,43 +71,19 @@
 				</geometry>
 			</visual>
 			<collision>
-				<origin rpy="1.5708 0 0" xyz="0 0 0" />
 				<geometry>
-					<cylinder length="0.005" radius="0.125"/>
+					<sphere radius="0.1"/>
 				</geometry>
-				<surface>
-					<friction>
-						<ode>
-							<mu>1.5</mu>
-							<mu2>0.1</mu2>
-							<fdir1>1 -1 0</fdir1>
-							<slip1>0</slip1>
-							<slip2>0</slip2>
-						</ode>
-					</friction>
-					<bounce>
-						<restitution_coefficient>0</restitution_coefficient>
-						<threshold>0</threshold>
-					</bounce>
-					<contact>
-						<ode>
-							<soft_cfm>0</soft_cfm>
-							<soft_erp>0.200000</soft_erp>
-							<kp>10000000000000.000000</kp>
-							<kd>100000000000.000000</kd>
-							<min_depth>0</min_depth>
-						</ode>
-					</contact>
-				</surface>
-				<laser_retro>0</laser_retro>
 			</collision>
 		</link>
 
 		<joint name="br_wheel_joint" type="continuous">
 			<origin rpy="0 0 0" xyz="-0.347000 -0.242000 0.130000" />
-			<axis xyz="0 1 0" />
+			<axis xyz="0 0 1" />
 			<parent link="${prefix}_base_link" />
 			<child link="br_wheel" />
+			<limit effort="10000" velocity="10"/>
+    		<dynamics damping="1.0" friction="1.0"/>
 		</joint>
 
 		<link name="fr_wheel">
@@ -140,43 +99,19 @@
 				</geometry>
 			</visual>
 			<collision>
-				<origin rpy="1.5708 0 0" xyz="0 0 0" />
 				<geometry>
-					<cylinder length="0.005" radius="0.125"/>
+					<sphere radius="0.1"/>
 				</geometry>
-				<surface>
-					<friction>
-						<ode>
-							<mu>1.5</mu>
-							<mu2>0.1</mu2>
-							<fdir1>1 1 0</fdir1>
-							<slip1>0</slip1>
-							<slip2>0</slip2>
-						</ode>
-					</friction>
-					<bounce>
-						<restitution_coefficient>0</restitution_coefficient>
-						<threshold>0</threshold>
-					</bounce>
-					<contact>
-						<ode>
-							<soft_cfm>0</soft_cfm>
-							<soft_erp>0.200000</soft_erp>
-							<kp>10000000000000.000000</kp>
-							<kd>100000000000.000000</kd>
-							<min_depth>0</min_depth>
-						</ode>
-					</contact>
-				</surface>
-				<laser_retro>0</laser_retro>
 			</collision>
 		</link>
 
 		<joint name="fr_wheel_joint" type="continuous">
 			<origin rpy="0 0 0" xyz="0.347000 -0.242000 0.130000" />
-			<axis xyz="0 1 0" />
+			<axis xyz="0 0 1" />
 			<parent link="${prefix}_base_link" />
 			<child link="fr_wheel" />
+			<limit effort="10000" velocity="10"/>
+    		<dynamics damping="1.0" friction="1.0"/>
 		</joint>
 
 		<link name="fl_wheel">
@@ -192,43 +127,82 @@
 				</geometry>
 			</visual>
 			<collision>
-				<origin rpy="1.5708 0 0" xyz="0 0 0" />
 				<geometry>
-					<cylinder length="0.005" radius="0.125"/>
+					<sphere radius="0.1"/>
 				</geometry>
-				<surface>
-					<friction>
-						<ode>
-							<mu>1.5</mu>
-							<mu2>0.1</mu2>
-							<fdir1>1 -1 0</fdir1>
-							<slip1>0</slip1>
-							<slip2>0</slip2>
-						</ode>
-					</friction>
-					<bounce>
-						<restitution_coefficient>0</restitution_coefficient>
-						<threshold>0</threshold>
-					</bounce>
-					<contact>
-						<ode>
-							<soft_cfm>0</soft_cfm>
-							<soft_erp>0.200000</soft_erp>
-							<kp>10000000000000.000000</kp>
-							<kd>100000000000.000000</kd>
-							<min_depth>0</min_depth>
-						</ode>
-					</contact>
-				</surface>
-				<laser_retro>0</laser_retro>
 			</collision>
 		</link>
 
 		<joint name="fl_wheel_joint" type="continuous">
 			<origin rpy="0 0 0" xyz="0.347000 0.242000 0.130000" />
-			<axis xyz="0 1 0" />
+			<axis xyz="0 0 1" />
 			<parent link="${prefix}_base_link" />
 			<child link="fl_wheel" />
+			<limit effort="10000" velocity="10"/>
+    		<dynamics damping="1.0" friction="1.0"/>
 		</joint>
+
+		<!-- Gazebo frictions -->
+		<gazebo reference='fl_wheel'>
+			<collision>
+			<surface>
+				<friction>
+				<ode>
+					<mu>1.5</mu>
+					<mu2>0.0</mu2>
+					<fdir1 gz:expressed_in="base_footprint">1 -1 0</fdir1>
+				</ode>
+				</friction>
+			</surface>
+			</collision>
+		</gazebo>
+
+		<gazebo reference='bl_wheel'>
+			<collision>
+			<surface>
+				<friction>
+				<ode>
+					<mu>1.5</mu>
+					<mu2>0.0</mu2>
+					<fdir1 gz:expressed_in="base_footprint">1 1 0</fdir1>
+				</ode>
+				</friction>
+			</surface>
+			</collision>
+		</gazebo>
+
+		<gazebo reference='fr_wheel'>
+			<collision>
+			<surface>
+				<friction>
+				<ode>
+					<mu>1.5</mu>
+					<mu2>0.0</mu2>
+					<fdir1 gz:expressed_in="base_footprint">1 1 0</fdir1>
+				</ode>
+				</friction>
+			</surface>
+			</collision>
+		</gazebo>
+
+		<gazebo reference='br_wheel'>
+			<collision>
+			<surface>
+				<friction>
+				<ode>
+					<mu>1.5</mu>
+					<mu2>0.0</mu2>
+					<fdir1 gz:expressed_in="base_footprint">1 -1 0</fdir1>
+				</ode>
+				</friction>
+			</surface>
+			</collision>
+		</gazebo>
+
+		<gazebo reference="${prefix}_base_link">
+			<mu1>0.000002</mu1>
+			<mu2>0.000002</mu2>
+		</gazebo>
+
 	</xacro:macro>
 </robot>

@@ -75,7 +75,7 @@ def generate_launch_description() -> LaunchDescription:
     omnirob_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["omnirob_controller_with_rotation",
+        arguments=["omnirob_controller",
                    "--controller-manager", "/controller_manager",
                    "--param-file", robot_controllers],
         output="screen",
