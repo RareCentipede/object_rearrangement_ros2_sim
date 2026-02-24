@@ -2,8 +2,10 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kuka-omnirob-iisy">
   <xacro:include filename="$(find omnirob_description)/urdf/omnirob_macro.xacro"/>
 
+  <!-- Gazebo plugin-->
+  <xacro:include filename="$(find omnirob_description)/urdf/omnirob.gazebo" />
   <!-- Import omnirob urdf file -->
-  <xacro:omnirob prefix="omnirob" package_name="omnirob_description"/>
+  <xacro:omnirob prefix="platform" package_name="omnirob_description"/>
 
   <!-- Import control_xacro -->
   <!-- <xacro:include filename="$(find omnirob_description)/config/omnirob.ros2_control.xacro"/> -->
