@@ -21,7 +21,7 @@
   <xacro:arg name="pitch" default="0"/>
   <xacro:arg name="yaw" default="0"/>
 
-  <xacro:omnirob prefix="platform" package_name="omnirob_description"/>
+  <xacro:omnirob prefix="platform_" package_name="omnirob_description"/>
   <xacro:kuka_lbr_iisy15_r930_robot prefix="arm_" package_name="kuka_iisy_description">
     <origin xyz="$(arg x) $(arg y) $(arg z)" rpy="$(arg roll) $(arg pitch) $(arg yaw)"/>
   </xacro:kuka_lbr_iisy15_r930_robot>
