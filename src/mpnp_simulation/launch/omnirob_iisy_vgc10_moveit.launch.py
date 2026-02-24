@@ -41,7 +41,14 @@ def generate_launch_description():
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
-        parameters=[moveit_config.to_dict()]
+        parameters=[moveit_config.to_dict(),
+                        {"publish_planning_scene_hz": 30.0},
+                        {"allow_trajectory_execution": True},
+                        {"use_sim_time": True},
+                        {"publish_planning_scene": True},
+                        {"publish_state_updates": True},
+                        {"publish_transforms_updates": True}
+                    ]
     )
 
     rviz_config_arg = DeclareLaunchArgument(

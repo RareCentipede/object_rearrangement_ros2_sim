@@ -18,6 +18,8 @@
         <joint name="arm_joint_5"/>
         <joint name="arm_joint_6"/>
         <joint name="arm_link6-flange"/>
+        <joint name="vg_mount"/>
+        <joint name="_suction_joint"/>
     </group>
     <group name="vacuum_controller">
         <link name="onrobot_vgc10_base_link"/>
@@ -30,14 +32,14 @@
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="home" group="arm_controller">
         <joint name="arm_joint_1" value="0"/>
-        <joint name="arm_joint_2" value="-1.9623"/>
+        <joint name="arm_joint_2" value="-1.8543"/>
         <joint name="arm_joint_3" value="2.6179"/>
         <joint name="arm_joint_4" value="0"/>
         <joint name="arm_joint_5" value="0"/>
         <joint name="arm_joint_6" value="0"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="vacuum" parent_link="arm_flange" group="vacuum_controller" parent_group="arm_controller"/>
+    <end_effector name="vacuum" parent_link="arm_flange" group="vacuum_controller"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="arm_base_link" link2="arm_link_1" reason="Adjacent"/>
     <disable_collisions link1="arm_base_link" link2="bl_wheel" reason="Never"/>
@@ -75,6 +77,8 @@
     <disable_collisions link1="arm_link_4" link2="arm_link_6" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="bl_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="br_wheel" reason="Never"/>
+    <disable_collisions link1="arm_link_4" link2="fl_wheel" reason="Never"/>
+    <disable_collisions link1="arm_link_4" link2="fr_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="onrobot_vgc10_base_link" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="suction1" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="suction2" reason="Never"/>
@@ -98,9 +102,7 @@
     <disable_collisions link1="bl_wheel" link2="br_wheel" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="fl_wheel" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="fr_wheel" reason="Never"/>
-    <disable_collisions link1="bl_wheel" link2="onrobot_vgc10_base_link" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="platform_base_link" reason="Adjacent"/>
-    <disable_collisions link1="bl_wheel" link2="suction1" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="suction2" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="suction3" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="suction4" reason="Never"/>

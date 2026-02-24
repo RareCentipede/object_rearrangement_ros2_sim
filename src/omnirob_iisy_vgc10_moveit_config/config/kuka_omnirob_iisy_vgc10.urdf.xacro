@@ -7,9 +7,9 @@
 
     <!-- Import control_xacro -->
     <xacro:include filename="kuka_omnirob_iisy_vgc10.ros2_control.xacro" />
-    <xacro:include filename="$(find omnirob_description)/config/omnirob.ros2_control.xacro"/>
+    <!-- <xacro:include filename="$(find omnirob_description)/config/omnirob.ros2_control.xacro" /> -->
 
     <xacro:kuka_omnirob_iisy_vgc10_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
-    <xacro:omnirob_ros2_control/>
+    <!-- <xacro:omnirob_ros2_control/> -->
 
 </robot>
