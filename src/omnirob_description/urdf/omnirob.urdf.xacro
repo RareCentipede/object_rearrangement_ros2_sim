@@ -6,7 +6,7 @@
   <xacro:omnirob prefix="omnirob" package_name="omnirob_description"/>
 
   <!-- Import control_xacro -->
-  <xacro:include filename="$(find omnirob_description)/config/omnirob.ros2_control.xacro"/>
-  <xacro:omnirob_ros2_control/>
+  <!-- <xacro:include filename="$(find omnirob_description)/config/omnirob.ros2_control.xacro"/> -->
+  <!-- <xacro:omnirob_ros2_control/> -->
 
 </robot>
