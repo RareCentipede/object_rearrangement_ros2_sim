@@ -1,5 +1,5 @@
-#ifndef ARIAC_PLUGINS__VACUUM_TOOL_PLUGIN_HPP_
-#define ARIAC_PLUGINS__VACUUM_TOOL_PLUGIN_HPP_
+#ifndef MPNP_PLUGINS__VACUUM_TOOL_PLUGIN_HPP_
+#define MPNP_PLUGINS__VACUUM_TOOL_PLUGIN_HPP_
 
 #include <gz/sim/Model.hh>
 #include <gz/sim/Joint.hh>
@@ -15,21 +15,19 @@
 #include <gz/msgs/contacts.pb.h>
 #include <gz/msgs/stringmsg_v.pb.h>
 
-#include <ariac_components/trial.hpp>
-
 #include <ament_index_cpp/get_package_share_directory.hpp>
 
 #include <rclcpp/rclcpp.hpp>
 
-#include <ariac_interfaces/msg/vacuum_tools.hpp>
-#include <ariac_interfaces/srv/trigger.hpp>
+#include <mpnp_interfaces/msg/vacuum_tools.hpp>
+#include <mpnp_interfaces/srv/trigger.hpp>
 
-using VacuumTools = ariac_interfaces::msg::VacuumTools;
-using Trigger = ariac_interfaces::srv::Trigger;
+using VacuumTools = mpnp_interfaces::msg::VacuumTools;
+using Trigger = mpnp_interfaces::srv::Trigger;
 using TriggerReqPtr = Trigger::Request::SharedPtr;
 using TriggerResPtr = Trigger::Response::SharedPtr;
 
-namespace ariac_plugins{
+namespace mpnp_plugins{
 
   struct PadContact {
     bool in_contact;
@@ -112,6 +110,6 @@ namespace ariac_plugins{
     VacuumToolLockState lock_state = VacuumToolLockState::UNLOCKED;
 
   };
-} // namespace ariac_plugins
+} // namespace mpnp_plugins
 
-#endif // ARIAC_PLUGINS__VACUUM_TOOL_PLUGIN_HPP_
+#endif // MPNP_PLUGINS__VACUUM_TOOL_PLUGIN_HPP_

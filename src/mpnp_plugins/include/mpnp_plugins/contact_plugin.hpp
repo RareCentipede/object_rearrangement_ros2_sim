@@ -1,5 +1,5 @@
-#ifndef ARIAC_PLUGINS__CONTACT_PLUGIN_HPP_
-#define ARIAC_PLUGINS__CONTACT_PLUGIN_HPP_
+#ifndef MPNP_PLUGINS__CONTACT_PLUGIN_HPP_
+#define MPNP_PLUGINS__CONTACT_PLUGIN_HPP_
 
 #include <gz/sim/System.hh>
 #include <gz/sim/EntityComponentManager.hh>
@@ -22,7 +22,7 @@
 #include <string>
 #include <cmath>
 
-namespace ariac_plugins
+namespace mpnp_plugins
 {
   class ContactPlugin:
     public gz::sim::System,
@@ -61,4 +61,4 @@ namespace ariac_plugins
   };
 }
 
-#endif // ARIAC_PLUGINS__CONTACT_PLUGIN_HPP_
+#endif // MPNP_PLUGINS__CONTACT_PLUGIN_HPP_

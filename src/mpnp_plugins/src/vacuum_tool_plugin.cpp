@@ -1,13 +1,13 @@
-#include "ariac_plugins/vacuum_tool_plugin.hpp"
+#include "mpnp_plugins/vacuum_tool_plugin.hpp"
 
 GZ_ADD_PLUGIN(
-  ariac_plugins::VacuumToolPlugin,
+  mpnp_plugins::VacuumToolPlugin,
   gz::sim::System,
-  ariac_plugins::VacuumToolPlugin::ISystemConfigure,
-  ariac_plugins::VacuumToolPlugin::ISystemPreUpdate
+  mpnp_plugins::VacuumToolPlugin::ISystemConfigure,
+  mpnp_plugins::VacuumToolPlugin::ISystemPreUpdate
 )
 
-using namespace ariac_plugins;
+using namespace mpnp_plugins;
 
 VacuumToolPlugin::~VacuumToolPlugin()
 {
@@ -32,23 +32,6 @@ void VacuumToolPlugin::Configure(
 
   tool_type = _sdf->Get<int>("tool_type");
 
-  // Read trial component
-  if (!_ecm.EntityHasComponentType(world_entity, gz::sim::components::Trial::typeId)){
-    throw(std::runtime_error("Could not find trial component"));
-  }
-
-  auto trial_component = _ecm.Component<gz::sim::components::Trial>(world_entity);
-  if (trial_component == nullptr) {
-    throw(std::runtime_error("Could not find trial component"));
-  }
-
-  // Get challenges
-  for (auto const &m: trial_component->Data().vacuum_tool_malfunctions) {
-    if (m.tool == tool_type) {
-      malfunctions.push_back(std::make_pair(m.grasp_occurrence, false));
-    }
-  }
-  
   // GZ setup
   auto model = gz::sim::Model(_entity);
   gripper_base_link = model.LinkByName(_ecm, "base_link");

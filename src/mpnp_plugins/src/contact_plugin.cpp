@@ -1,15 +1,15 @@
 #include <gz/plugin/Register.hh>
 #include <gz/common/Console.hh>
 
-#include <ariac_plugins/contact_plugin.hpp>
+#include <mpnp_plugins/contact_plugin.hpp>
 
 GZ_ADD_PLUGIN(
-  ariac_plugins::ContactPlugin,
+  mpnp_plugins::ContactPlugin,
   gz::sim::System,
-  ariac_plugins::ContactPlugin::ISystemPreUpdate,
-  ariac_plugins::ContactPlugin::ISystemConfigure)
+  mpnp_plugins::ContactPlugin::ISystemPreUpdate,
+  mpnp_plugins::ContactPlugin::ISystemConfigure)
 
-namespace ariac_plugins{
+namespace mpnp_plugins{
 
 
   void ContactPlugin::Configure(
