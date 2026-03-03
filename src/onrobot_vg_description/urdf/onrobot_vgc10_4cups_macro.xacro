@@ -45,18 +45,6 @@
           <mesh filename="package://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl" />
         </geometry>
       </collision>
-      <sensor name='contact_sensor' type='contact'>
-        <update_rate>30</update_rate>
-        <contact>
-          <collision>collision</collision>
-        </contact>
-        <plugin
-          filename="libContactPlugin.so"
-          name="mpnp_plugins::ContactPlugin">
-          <search_term>vg_4</search_term>
-          <update_rate>30</update_rate>
-        </plugin>
-      </sensor>
     </link>
 
     <link name="${prefix}suction2">
@@ -80,18 +68,6 @@
           <mesh filename="package://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl" />
         </geometry>
       </collision>
-      <sensor name='contact_sensor' type='contact'>
-        <update_rate>30</update_rate>
-        <contact>
-          <collision>collision</collision>
-        </contact>
-        <plugin
-          filename="libContactPlugin.so"
-          name="mpnp_plugins::ContactPlugin">
-          <search_term>vg_4</search_term>
-          <update_rate>30</update_rate>
-        </plugin>
-      </sensor>
     </link>
 
     <link name="${prefix}suction3">
@@ -120,12 +96,6 @@
         <contact>
           <collision>collision</collision>
         </contact>
-        <plugin
-          filename="libContactPlugin.so"
-          name="mpnp_plugins::ContactPlugin">
-          <search_term>vg_4</search_term>
-          <update_rate>30</update_rate>
-        </plugin>
       </sensor>
     </link>
 
@@ -150,18 +120,6 @@
           <mesh filename="package://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl" />
         </geometry>
       </collision>
-      <sensor name='contact_sensor' type='contact'>
-        <update_rate>30</update_rate>
-        <contact>
-          <collision>collision</collision>
-        </contact>
-        <plugin
-          filename="libContactPlugin.so"
-          name="mpnp_plugins::ContactPlugin">
-          <search_term>vg_4</search_term>
-          <update_rate>30</update_rate>
-        </plugin>
-      </sensor>
     </link>
 
     <link name="${prefix}suction" />
@@ -197,14 +155,61 @@
       <axis xyz="1 0 0" />
     </joint>
 
-    <plugin
-      filename="libVacuumToolPlugin.so"
-      name="mpnp_plugins::VacuumToolPlugin">
-      <ros>
-        <namespace>/vacuum_tool/vgc10</namespace>
-      </ros>
-      <tool_type>2</tool_type>
-    </plugin>
+    <gazebo reference="${prefix}suction1">
+      <sensor name='contact_sensor1' type='contact'>
+        <update_rate>30</update_rate>
+        <contact>
+          <collision>collision</collision>
+        </contact>
+
+        <plugin filename="libContactPlugin.so" name="mpnp_plugins::ContactPlugin">
+          <search_term>onrobot_vgc10</search_term>
+          <update_rate>30</update_rate>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="${prefix}suction2">
+      <sensor name='contact_sensor2' type='contact'>
+        <update_rate>30</update_rate>
+        <contact>
+          <collision>collision</collision>
+        </contact>
+
+        <plugin filename="libContactPlugin.so" name="mpnp_plugins::ContactPlugin">
+          <search_term>onrobot_vgc10</search_term>
+          <update_rate>30</update_rate>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="${prefix}suction3">
+      <sensor name='contact_sensor3' type='contact'>
+        <update_rate>30</update_rate>
+        <contact>
+          <collision>collision</collision>
+        </contact>
+
+        <plugin filename="libContactPlugin.so" name="mpnp_plugins::ContactPlugin">
+          <search_term>onrobot_vgc10</search_term>
+          <update_rate>30</update_rate>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+    <gazebo reference="${prefix}suction4">
+      <sensor name='contact_sensor4' type='contact'>
+        <update_rate>30</update_rate>
+        <contact>
+          <collision>collision</collision>
+        </contact>
+
+        <plugin filename="libContactPlugin.so" name="mpnp_plugins::ContactPlugin">
+          <search_term>onrobot_vgc10</search_term>
+          <update_rate>30</update_rate>
+        </plugin>
+      </sensor>
+    </gazebo>
 
   </xacro:macro>
 </robot>
