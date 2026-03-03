@@ -73,8 +73,6 @@ namespace mpnp_plugins{
     void contact_sensor_4_cb(const gz::msgs::StringMsg_V &);
 
     bool wait_for_state(VacuumToolLockState);
-    bool should_malfunction();
-    void clear_malfunction();
 
     // Functions
     std::optional<std::string> shell_in_contact(const gz::msgs::StringMsg_V &);

@@ -125,7 +125,7 @@ void VacuumToolPlugin::PreUpdate(const gz::sim::UpdateInfo &,
       break;
     }
     
-    auto shell_link = gz::sim::Model(model.value()).LinkByName(_ecm, "base_link");
+    auto shell_link = gz::sim::Model(model.value()).LinkByName(_ecm, "onrobot_vgc10_base_link");
 
     // Lock joint
     lock_joint = _ecm.CreateEntity();
@@ -150,11 +150,6 @@ void VacuumToolPlugin::PreUpdate(const gz::sim::UpdateInfo &,
     break;
   }
 
-  // If malfunction is active check if should be cleared
-  if (malfunction_active && std::all_of(pad_contacts.begin(), pad_contacts.end(),
-      [](const auto& entry) { return !entry.second.in_contact; })) {
-    clear_malfunction();
-  }
 }
 
 void VacuumToolPlugin::vg_2_attach_cb(const TriggerReqPtr request, TriggerResPtr response)
@@ -168,12 +163,6 @@ void VacuumToolPlugin::vg_2_attach_cb(const TriggerReqPtr request, TriggerResPtr
   if (!pad_contacts[1].in_contact && !pad_contacts[2].in_contact) {
     response->success = false;
     response->message = "Suction cups must be in contact with the shell";
-    return;
-  }
-  
-  if (should_malfunction()) {
-    response->success = false;
-    response->message = "Vacuum gripper is malfunctioning";
     return;
   }
 
@@ -196,12 +185,6 @@ void VacuumToolPlugin::vg_4_attach_cb(const TriggerReqPtr request, TriggerResPtr
   if ((!pad_contacts[1].in_contact && !pad_contacts[2].in_contact) || (!pad_contacts[3].in_contact && !pad_contacts[4].in_contact)) {
     response->success = false;
     response->message = "Suction cups must be in contact with the shell";
-    return;
-  }  
-  
-  if (should_malfunction()) {
-    response->success = false;
-    response->message = "Vacuum gripper is malfunctioning";
     return;
   }
 
@@ -299,7 +282,6 @@ std::optional<std::string> VacuumToolPlugin::shell_in_contact(const gz::msgs::St
   return data.at(0);
 }
 
-
 bool VacuumToolPlugin::wait_for_state(VacuumToolLockState state)
 {
   rclcpp::Time start_time = ros_node->now();
@@ -315,32 +297,4 @@ bool VacuumToolPlugin::wait_for_state(VacuumToolLockState state)
   };
 
   return lock_state == state;
-}
-
-
-
-bool VacuumToolPlugin::should_malfunction()
-{
-  // Check if malfunction challenge should activate based on current grasp occurrence
-  if (malfunctions.empty()) {
-    return false;
-  }
-
-  malfunction_active = std::find_if(malfunctions.begin(), malfunctions.end(), 
-    [this](const auto& p) { return !p.second && p.first == grasp_occurrence; }
-  ) != malfunctions.end();
-  
-  return malfunction_active;
-}
-
-void VacuumToolPlugin::clear_malfunction()
-{
-  // Clear malfunction challenge based on current grasp occurrence
-  auto it = std::find_if(malfunctions.begin(), malfunctions.end(),
-    [this](const auto& p) { return p.first == grasp_occurrence; });
-
-  if (it != malfunctions.end()) {
-    malfunctions[std::distance(malfunctions.begin(), it)].second = true;
-  }
-
 }
