@@ -19,7 +19,7 @@
         <joint name="arm_joint_6"/>
         <joint name="arm_link6-flange"/>
         <joint name="vg_mount"/>
-        <joint name="_suction_joint"/>
+        <joint name="suction_joint"/>
     </group>
     <group name="vacuum_controller">
         <link name="onrobot_vgc10_base_link"/>

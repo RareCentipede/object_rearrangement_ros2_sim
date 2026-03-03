@@ -34,12 +34,12 @@ void VacuumToolPlugin::Configure(
 
   // GZ setup
   auto model = gz::sim::Model(_entity);
-  gripper_base_link = model.LinkByName(_ecm, "base_link");
+  gripper_base_link = model.LinkByName(_ecm, "onrobot_vgc10_base_link");
 
   gz_node = std::make_shared<gz::transport::Node>();
 
   std::vector<std::string> topic_names; 
-  std::string topic = model.Name(_ecm) + "/suction_{n}_link/contact_sensor";
+  std::string topic = model.Name(_ecm) + "/suction{n}/contact_sensor";
 
   int suction_cup_count = tool_type == VacuumTools::VG_2 ? 2 : 4;
   for(int i = 1; i <= suction_cup_count; i++){
@@ -50,17 +50,17 @@ void VacuumToolPlugin::Configure(
   if (tool_type == VacuumTools::VG_2) {
     gz_node->Subscribe(topic_names[0], &VacuumToolPlugin::contact_sensor_1_cb, this);
     gz_node->Subscribe(topic_names[1], &VacuumToolPlugin::contact_sensor_2_cb, this);
-    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction_1_joint")));
-    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction_2_joint")));
+    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction1_joint")));
+    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction2_joint")));
   } else if(tool_type == VacuumTools::VG_4) {
     gz_node->Subscribe(topic_names[0], &VacuumToolPlugin::contact_sensor_1_cb, this);
     gz_node->Subscribe(topic_names[1], &VacuumToolPlugin::contact_sensor_2_cb, this);
     gz_node->Subscribe(topic_names[2], &VacuumToolPlugin::contact_sensor_3_cb, this);
     gz_node->Subscribe(topic_names[3], &VacuumToolPlugin::contact_sensor_4_cb, this);
-    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction_1_joint")));
-    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction_2_joint")));
-    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction_3_joint")));
-    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction_4_joint")));
+    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction1_joint")));
+    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction2_joint")));
+    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction3_joint")));
+    suction_cup_joints.push_back(gz::sim::Joint(gz::sim::Model(model).JointByName(_ecm, "suction4_joint")));
   }
 
   // ROS setup

@@ -30,7 +30,7 @@ namespace mpnp_plugins{
     }
     model = model_temp.value();
 
-    std::string topic = "/world/ariac/model/" + model.Name(_ecm) + 
+    std::string topic = "/world/mpnp/model/" + model.Name(_ecm) + 
                         "/link/" + link_obj.Name(_ecm).value() + 
                         "/sensor/" + sensor.Name(_ecm).value() + "/contact";
 
