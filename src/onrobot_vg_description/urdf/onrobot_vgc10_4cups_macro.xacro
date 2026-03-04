@@ -163,7 +163,7 @@
     </joint>
 
     <gazebo reference="suction1">
-      <sensor name='contact_sensor1' type='contact'>
+      <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
           <collision>collision</collision>
@@ -177,7 +177,7 @@
     </gazebo>
 
     <gazebo reference="suction2">
-      <sensor name='contact_sensor2' type='contact'>
+      <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
           <collision>collision</collision>
@@ -191,7 +191,7 @@
     </gazebo>
 
     <gazebo reference="suction3">
-      <sensor name='contact_sensor3' type='contact'>
+      <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
           <collision>collision</collision>
@@ -205,7 +205,7 @@
     </gazebo>
 
     <gazebo reference="suction4">
-      <sensor name='contact_sensor4' type='contact'>
+      <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
           <collision>collision</collision>
@@ -223,7 +223,7 @@
         <ros>
           <namespace>/vacuum_tool/onrobot_vgc10</namespace>
         </ros>
-        <tool_type>4</tool_type>
+        <tool_type>2</tool_type>
       </plugin>
     </gazebo>
 
