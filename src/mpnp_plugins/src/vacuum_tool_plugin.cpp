@@ -100,8 +100,6 @@ void VacuumToolPlugin::Configure(
     "release",
     std::bind(&VacuumToolPlugin::detach_object_cb, this, std::placeholders::_1, std::placeholders::_2)
   );
-
-  lock_tool_to_stand();
 }
 
 void VacuumToolPlugin::PreUpdate(const gz::sim::UpdateInfo &,
@@ -117,37 +115,37 @@ void VacuumToolPlugin::PreUpdate(const gz::sim::UpdateInfo &,
   }
   case VacuumToolLockState::LOCK_REQUESTED: {
     // Get link entity for bottom shell
-    auto model = _ecm.EntityByName(attach_shell_name);
+    // auto model = _ecm.EntityByName(attach_shell_name);
     
-    if (!model.has_value()) {
-      gzerr << "Unable to locate shell model: " << attach_shell_name << std::endl;
-      lock_state = VacuumToolLockState::UNLOCKED;
-      break;
-    }
-    
-    auto shell_link = gz::sim::Model(model.value()).LinkByName(_ecm, "onrobot_vgc10_base_link");
+    // if (!model.has_value()) {
+    //   gzerr << "Unable to locate shell model: " << attach_shell_name << std::endl;
+    //   lock_state = VacuumToolLockState::UNLOCKED;
+    //   break;
+    // }
 
-    // Lock joint
-    lock_joint = _ecm.CreateEntity();
+    // auto shell_link = gz::sim::Model(model.value()).LinkByName(_ecm, "base_link");
 
-    _ecm.CreateComponent(lock_joint, gz::sim::components::DetachableJoint({gripper_base_link, shell_link, "fixed"}));
+    // // Lock joint
+    // lock_joint = _ecm.CreateEntity();
+
+    // _ecm.CreateComponent(lock_joint, gz::sim::components::DetachableJoint({gripper_base_link, shell_link, "fixed"}));
 
     lock_state = VacuumToolLockState::LOCKED;
-    
+
     grasp_occurrence++;
-    
+
     break;
   }
-  case VacuumToolLockState::UNLOCK_REQUESTED:
-    // Unlock joint
-    _ecm.RequestRemoveEntity(lock_joint);
-    lock_joint = gz::sim::kNullEntity;
+  // case VacuumToolLockState::UNLOCK_REQUESTED:
+  //   // Unlock joint
+  //   _ecm.RequestRemoveEntity(lock_joint);
+  //   lock_joint = gz::sim::kNullEntity;
 
-    lock_state = VacuumToolLockState::UNLOCKED;
-    for(gz::sim::Joint joint : suction_cup_joints){
-      joint.ResetPosition(_ecm, {0.0});
-    }
-    break;
+  //   lock_state = VacuumToolLockState::UNLOCKED;
+  //   for(gz::sim::Joint joint : suction_cup_joints){
+  //     joint.ResetPosition(_ecm, {0.0});
+  //   }
+  //   break;
   }
 
 }
@@ -216,31 +214,6 @@ void VacuumToolPlugin::detach_object_cb(const TriggerReqPtr request, TriggerResP
 
   response->success = wait_for_state(VacuumToolLockState::UNLOCKED);
   response->message = response->success ? "Object detached" : "Unable to release object";
-}
-
-bool VacuumToolPlugin::lock_tool_to_stand(){
-  gz::msgs::Entity req;
-  req.set_type(gz::msgs::Entity::LINK);
-  req.set_name(std::to_string(tool_type));
-  req.set_id(gripper_base_link);
-
-  gz::msgs::Boolean res;
-  bool result;
-  unsigned int timeout = 10000;
-
-  bool executed = gz_node->Request("/tool_stand/lock", req, timeout, res, result);
-
-  if (executed){
-    if(result){
-      RCLCPP_INFO_STREAM(ros_node->get_logger(), tool_type << " successfully locked to tool stand");
-    } else {
-      RCLCPP_ERROR_STREAM(ros_node->get_logger(), tool_type << " could not be locked to tool stand");
-    }
-  } else {
-    RCLCPP_ERROR_STREAM(ros_node->get_logger(), "Service to lock " << tool_type << " timed out");
-  }
-
-  return result;
 }
 
 void VacuumToolPlugin::contact_sensor_1_cb(const gz::msgs::StringMsg_V &msg)

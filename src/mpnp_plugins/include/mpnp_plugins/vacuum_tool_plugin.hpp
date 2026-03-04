@@ -76,7 +76,6 @@ namespace mpnp_plugins{
 
     // Functions
     std::optional<std::string> shell_in_contact(const gz::msgs::StringMsg_V &);
-    bool lock_tool_to_stand();
       
     // GZ
     std::shared_ptr<gz::transport::Node> gz_node;
