@@ -63,5 +63,10 @@
       </link>
     </model>
 
+    <include>
+      <name>onrobot_vgc10</name>
+      <uri>model://onrobot_vgc10</uri>
+    </include>
+
   </world>
 </sdf>
