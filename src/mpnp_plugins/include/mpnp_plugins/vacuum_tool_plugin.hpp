@@ -93,16 +93,11 @@ namespace mpnp_plugins{
 
     // Variables
     int tool_type = VacuumTools::NONE;
-    int grasp_occurrence = 1;
-
-    bool malfunction_active = false;
-
+  
     std::string tool_holder_contact_topic;
     std::string attach_shell_name = "";
 
     std::map<int, PadContact> pad_contacts;
-
-    std::vector<std::pair<int, bool>> malfunctions; 
 
     VacuumToolLockState lock_state = VacuumToolLockState::UNLOCKED;
 
