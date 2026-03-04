@@ -1,3 +1,4 @@
+<?xml version='1.0'?>
 <sdf version='1.11'>
   <model name='onrobot_vgc10_model'>
     <link name='onrobot_vgc10_base_link'>

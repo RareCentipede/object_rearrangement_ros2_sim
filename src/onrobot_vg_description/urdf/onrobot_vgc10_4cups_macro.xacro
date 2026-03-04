@@ -163,7 +163,6 @@
     </joint>
 
     <gazebo reference="suction1">
-      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor1' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -178,7 +177,6 @@
     </gazebo>
 
     <gazebo reference="suction2">
-      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor2' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -193,7 +191,6 @@
     </gazebo>
 
     <gazebo reference="suction3">
-      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor3' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -208,7 +205,6 @@
     </gazebo>
 
     <gazebo reference="suction4">
-      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor4' type='contact'>
         <update_rate>30</update_rate>
         <contact>
