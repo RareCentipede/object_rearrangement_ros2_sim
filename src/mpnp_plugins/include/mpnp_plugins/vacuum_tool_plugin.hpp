@@ -75,7 +75,7 @@ namespace mpnp_plugins{
     bool wait_for_state(VacuumToolLockState);
 
     // Functions
-    std::optional<std::string> shell_in_contact(const gz::msgs::StringMsg_V &);
+    std::optional<std::string> obj_in_contact(const gz::msgs::StringMsg_V &);
       
     // GZ
     std::shared_ptr<gz::transport::Node> gz_node;
@@ -95,7 +95,7 @@ namespace mpnp_plugins{
     int tool_type = VacuumTools::NONE;
   
     std::string tool_holder_contact_topic;
-    std::string attach_shell_name = "";
+    std::string attach_obj_name = "";
 
     std::map<int, PadContact> pad_contacts;
 

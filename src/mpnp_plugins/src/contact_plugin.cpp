@@ -30,7 +30,7 @@ namespace mpnp_plugins{
     }
     model = model_temp.value();
 
-    std::string topic = "/world/mpnp/model/" + model.Name(_ecm) + 
+    std::string topic = "/world/empty/model/" + model.Name(_ecm) + 
                         "/link/" + link_obj.Name(_ecm).value() + 
                         "/sensor/" + sensor.Name(_ecm).value() + "/contact";
 
@@ -47,7 +47,7 @@ namespace mpnp_plugins{
 
     pub = gz_node->Advertise<gz::msgs::StringMsg_V>(topic_to_publish_to);
     if(!pub){
-      gzmsg << "Unable to publish topic " << topic_to_publish_to;
+      gzerr << "Unable to publish topic " << topic_to_publish_to;
     }
   }
   
