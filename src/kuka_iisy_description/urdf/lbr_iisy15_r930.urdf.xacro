@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kuka-omnirob-iisy">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="kuka_omnirob_iisy">
   <xacro:include filename="$(find kuka_iisy_description)/urdf/lbr_iisy15_r930_macro.xacro"/>
 
   <xacro:arg name="driver_version" default="rsi_only"/>
