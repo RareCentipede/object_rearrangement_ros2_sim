@@ -2,5 +2,5 @@
 <robot name="onrobot_vgc10_model" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find onrobot_vg_description)/urdf/onrobot_vgc10_4cups_macro.xacro"/>
 
-  <xacro:onrobot_vgc10 prefix=""/>
+  <xacro:onrobot_vgc10/>
 </robot>

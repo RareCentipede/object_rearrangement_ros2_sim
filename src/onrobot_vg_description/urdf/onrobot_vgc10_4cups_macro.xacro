@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:macro name="onrobot_vgc10" params="prefix">
-    <link name="${prefix}onrobot_vgc10_base_link">
+  <xacro:macro name="onrobot_vgc10">
+
+    <link name="onrobot_vgc10_base_link">
       <inertial>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <mass value="0.6" />
@@ -24,7 +25,7 @@
       </collision>
     </link>
 
-    <link name="${prefix}suction1">
+    <link name="suction1">
       <inertial>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <mass value="0.2" />
@@ -47,7 +48,7 @@
       </collision>
     </link>
 
-    <link name="${prefix}suction2">
+    <link name="suction2">
       <inertial>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <mass value="0.2" />
@@ -70,7 +71,7 @@
       </collision>
     </link>
 
-    <link name="${prefix}suction3">
+    <link name="suction3">
       <inertial>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <mass value="0.2" />
@@ -99,7 +100,7 @@
       </sensor>
     </link>
 
-    <link name="${prefix}suction4">
+    <link name="suction4">
       <inertial>
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
         <mass value="0.2" />
@@ -122,40 +123,47 @@
       </collision>
     </link>
 
-    <link name="${prefix}suction" />
+    <!-- <link name="suction" /> -->
 
-    <joint name="${prefix}suction_joint" type="fixed">
+    <!-- <joint name="suction_joint" type="prismatic">
       <origin xyz="0. 0. 0.08350" rpy="0 0 0" />
-      <parent link="${prefix}onrobot_vgc10_base_link" />
-      <child link="${prefix}suction" />
-      <axis xyz="1 0 0" />
+      <parent link="onrobot_vgc10_base_link" />
+      <child link="suction" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="0.004" effort="10" velocity="0.01"/>
+    </joint> -->
+    <joint name="suction1_joint" type="prismatic">
+      <origin xyz="0.0175 0.0175 0.08350" rpy="0 0 0" />
+      <parent link="onrobot_vgc10_base_link" />
+      <child link="suction1" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="0.004" effort="10" velocity="0.01"/>
     </joint>
-    <joint name="${prefix}suction1_joint" type="fixed">
-      <origin xyz="0.0175 0.0175 0." rpy="0 0 0" />
-      <parent link="${prefix}suction" />
-      <child link="${prefix}suction1" />
-      <axis xyz="1 0 0" />
+    <joint name="suction2_joint" type="prismatic">
+      <origin xyz="0.0175 -0.0175 0.08350" rpy="0 0 0" />
+      <parent link="onrobot_vgc10_base_link" />
+      <child link="suction2" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="0.004" effort="10" velocity="0.01"/>
     </joint>
-    <joint name="${prefix}suction2_joint" type="fixed">
-      <origin xyz="0.0175 -0.0175 0." rpy="0 0 0" />
-      <parent link="${prefix}suction" />
-      <child link="${prefix}suction2" />
-      <axis xyz="1 0 0" />
+    <joint name="suction3_joint" type="prismatic">
+      <origin xyz="-0.0175 0.0175 0.08350" rpy="0 0 0" />
+      <parent link="onrobot_vgc10_base_link" />
+      <child link="suction3" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="0.004" effort="10" velocity="0.01"/>
     </joint>
-    <joint name="${prefix}suction3_joint" type="fixed">
-      <origin xyz="-0.0175 0.0175 0." rpy="0 0 0" />
-      <parent link="${prefix}suction" />
-      <child link="${prefix}suction3" />
-      <axis xyz="1 0 0" />
-    </joint>
-    <joint name="${prefix}suction4_joint" type="fixed">
-      <origin xyz="-0.0175 -0.0175 0." rpy="0 0 0" />
-      <parent link="${prefix}suction" />
-      <child link="${prefix}suction4" />
+    <joint name="suction4_joint" type="prismatic">
+      <origin xyz="-0.0175 -0.0175 0.08350" rpy="0 0 0" />
+      <parent link="onrobot_vgc10_base_link" />
+      <child link="suction4" />
+      <axis xyz="0 0 1" />
+      <limit lower="0" upper="0.004" effort="10" velocity="0.01"/>
       <axis xyz="1 0 0" />
     </joint>
 
-    <gazebo reference="${prefix}suction1">
+    <gazebo reference="suction1">
+      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor1' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -169,7 +177,8 @@
       </sensor>
     </gazebo>
 
-    <gazebo reference="${prefix}suction2">
+    <gazebo reference="suction2">
+      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor2' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -183,7 +192,8 @@
       </sensor>
     </gazebo>
 
-    <gazebo reference="${prefix}suction3">
+    <gazebo reference="suction3">
+      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor3' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -197,7 +207,8 @@
       </sensor>
     </gazebo>
 
-    <gazebo reference="${prefix}suction4">
+    <gazebo reference="suction4">
+      <preserveFixedJoint>true</preserveFixedJoint>
       <sensor name='contact_sensor4' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -209,6 +220,15 @@
           <update_rate>30</update_rate>
         </plugin>
       </sensor>
+    </gazebo>
+
+    <gazebo>
+      <plugin filename="libVacuumToolPlugin.so" name="mpnp_plugins::VacuumToolPlugin">
+        <ros>
+          <namespace>/vacuum_tool/onrobot_vgc10</namespace>
+        </ros>
+        <tool_type>2</tool_type>
+      </plugin>
     </gazebo>
 
   </xacro:macro>
