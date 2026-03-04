@@ -21,7 +21,7 @@ def generate_launch_description() -> LaunchDescription:
              ' ',
              PathJoinSubstitution(
                  [omnirob_iisy_moveit_pkg_share, 
-                  "config", "kuka-omnirob-iisy.urdf.xacro"]
+                  "config", "kuka_omnirob_iisy.urdf.xacro"]
                  )
              ]
         )
@@ -49,7 +49,7 @@ def generate_launch_description() -> LaunchDescription:
         output="screen",
         arguments=[
             '-topic', 'robot_description',
-            '-name', 'kuka-omnirob-iisy',
+            '-name', 'kuka_omnirob_iisy',
             '-allow_renaming', 'true'
         ]
     )

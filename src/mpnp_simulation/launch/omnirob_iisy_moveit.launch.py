@@ -23,7 +23,7 @@ def generate_launch_description():
     # Load the robot configuration
     moveit_config = (
         MoveItConfigsBuilder(
-            robot_name="kuka-omnirob-iisy",
+            robot_name="kuka_omnirob_iisy",
             package_name="omnirob_iisy_moveit_config"
         )
         .robot_description(mappings=launch_arguments) #type: ignore

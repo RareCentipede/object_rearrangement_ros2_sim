@@ -49,7 +49,7 @@ def generate_launch_description() -> LaunchDescription:
         output="screen",
         arguments=[
             '-topic', 'robot_description',
-            '-name', 'kuka-omnirob-iisy',
+            '-name', 'kuka_omnirob_iisy',
             '-allow_renaming', 'true'
         ]
     )

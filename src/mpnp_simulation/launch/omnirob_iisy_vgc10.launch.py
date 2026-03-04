@@ -49,7 +49,7 @@ def generate_launch_description() -> LaunchDescription:
         output="screen",
         arguments=[
             '-topic', 'robot_description',
-            '-name', 'omnirob-iisy-vgc10',
+            '-name', 'omnirob_iisy_vgc10',
             '-allow_renaming', 'true'
         ]
     )

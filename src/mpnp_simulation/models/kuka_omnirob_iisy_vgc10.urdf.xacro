@@ -26,7 +26,7 @@
   <xacro:kuka_lbr_iisy15_r930_robot prefix="arm_" package_name="kuka_iisy_description">
     <origin xyz="$(arg x) $(arg y) $(arg z)" rpy="$(arg roll) $(arg pitch) $(arg yaw)"/>
   </xacro:kuka_lbr_iisy15_r930_robot>
-  <xacro:onrobot_vgc10 prefix=""/>
+  <xacro:onrobot_vgc10/>
 
   <!-- Assemble lbr iisy r930 and onrobot vgc10 -->
   <joint name="vg_mount" type="fixed">
