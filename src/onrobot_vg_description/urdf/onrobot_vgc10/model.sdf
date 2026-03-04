@@ -1,16 +1,16 @@
 <sdf version='1.11'>
-  <model name='onrobot_vgc10'>
+  <model name='onrobot_vgc10_model'>
     <link name='onrobot_vgc10_base_link'>
       <inertial>
-        <pose>0 0 0.047714285714285723 0 0 0</pose>
-        <mass>1.3999999999999999</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.59999999999999998</mass>
         <inertia>
-          <ixx>0.0076354857142857131</ixx>
-          <ixy>4.9999999999999894e-06</ixy>
-          <ixz>5.0000000000000004e-06</ixz>
-          <iyy>0.0076354857142857131</iyy>
-          <iyz>5.0000000000000004e-06</iyz>
-          <izz>0.0054900000000000001</izz>
+          <ixx>0.001</ixx>
+          <ixy>9.9999999999999995e-07</ixy>
+          <ixz>9.9999999999999995e-07</ixz>
+          <iyy>0.001</iyy>
+          <iyz>9.9999999999999995e-07</iyz>
+          <izz>0.001</izz>
         </inertia>
       </inertial>
       <collision name='onrobot_vgc10_base_link_collision'>
@@ -21,74 +21,6 @@
             <uri>model://onrobot_vg_description/meshes/vgc10/collision/base_link_4cups.stl</uri>
           </mesh>
         </geometry>
-      </collision>
-      <collision name='onrobot_vgc10_base_link_fixed_joint_lump__suction1_collision_1'>
-        <pose>0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-      <collision name='onrobot_vgc10_base_link_fixed_joint_lump__suction2_collision_2'>
-        <pose>0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-      <collision name='onrobot_vgc10_base_link_fixed_joint_lump__suction3_collision_3'>
-        <pose>-0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
-      </collision>
-      <collision name='onrobot_vgc10_base_link_fixed_joint_lump__suction4_collision_4'>
-        <pose>-0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
-          </mesh>
-        </geometry>
-        <surface>
-          <contact>
-            <ode/>
-          </contact>
-          <friction>
-            <ode/>
-          </friction>
-        </surface>
       </collision>
       <visual name='onrobot_vgc10_base_link_visual'>
         <pose>0 0 0 0 0 0</pose>
@@ -103,47 +35,58 @@
           <ambient>1 1 1 1</ambient>
         </material>
       </visual>
-      <visual name='onrobot_vgc10_base_link_fixed_joint_lump__suction1_visual_1'>
-        <pose>0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
+    </link>
+    <joint name='suction1_joint' type='prismatic'>
+      <pose relative_to='onrobot_vgc10_base_link'>0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
+      <parent>onrobot_vgc10_base_link</parent>
+      <child>suction1</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.0040000000000000001</upper>
+          <effort>10</effort>
+          <velocity>0.01</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='suction1'>
+      <pose relative_to='suction1_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.20000000000000001</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>9.9999999999999995e-07</ixy>
+          <ixz>9.9999999999999995e-07</ixz>
+          <iyy>0.001</iyy>
+          <iyz>9.9999999999999995e-07</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='suction1_collision'>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/visual/suction_cup_4cups.stl</uri>
+            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
           </mesh>
         </geometry>
-        <material>
-          <diffuse>1 1 1 1</diffuse>
-          <ambient>1 1 1 1</ambient>
-        </material>
-      </visual>
-      <visual name='onrobot_vgc10_base_link_fixed_joint_lump__suction2_visual_2'>
-        <pose>0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/visual/suction_cup_4cups.stl</uri>
-          </mesh>
-        </geometry>
-        <material>
-          <diffuse>1 1 1 1</diffuse>
-          <ambient>1 1 1 1</ambient>
-        </material>
-      </visual>
-      <visual name='onrobot_vgc10_base_link_fixed_joint_lump__suction3_visual_3'>
-        <pose>-0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
-        <geometry>
-          <mesh>
-            <scale>1 1 1</scale>
-            <uri>model://onrobot_vg_description/meshes/vgc10/visual/suction_cup_4cups.stl</uri>
-          </mesh>
-        </geometry>
-        <material>
-          <diffuse>1 1 1 1</diffuse>
-          <ambient>1 1 1 1</ambient>
-        </material>
-      </visual>
-      <visual name='onrobot_vgc10_base_link_fixed_joint_lump__suction4_visual_4'>
-        <pose>-0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='suction1_visual'>
+        <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -165,8 +108,70 @@
           <search_term>onrobot_vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
-        <pose>0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
       </sensor>
+    </link>
+    <joint name='suction2_joint' type='prismatic'>
+      <pose relative_to='onrobot_vgc10_base_link'>0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
+      <parent>onrobot_vgc10_base_link</parent>
+      <child>suction2</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.0040000000000000001</upper>
+          <effort>10</effort>
+          <velocity>0.01</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='suction2'>
+      <pose relative_to='suction2_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.20000000000000001</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>9.9999999999999995e-07</ixy>
+          <ixz>9.9999999999999995e-07</ixz>
+          <iyy>0.001</iyy>
+          <iyz>9.9999999999999995e-07</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='suction2_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='suction2_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://onrobot_vg_description/meshes/vgc10/visual/suction_cup_4cups.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
       <sensor name='contact_sensor2' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -177,8 +182,70 @@
           <search_term>onrobot_vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
-        <pose>0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
       </sensor>
+    </link>
+    <joint name='suction3_joint' type='prismatic'>
+      <pose relative_to='onrobot_vgc10_base_link'>-0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
+      <parent>onrobot_vgc10_base_link</parent>
+      <child>suction3</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.0040000000000000001</upper>
+          <effort>10</effort>
+          <velocity>0.01</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='suction3'>
+      <pose relative_to='suction3_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.20000000000000001</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>9.9999999999999995e-07</ixy>
+          <ixz>9.9999999999999995e-07</ixz>
+          <iyy>0.001</iyy>
+          <iyz>9.9999999999999995e-07</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='suction3_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='suction3_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://onrobot_vg_description/meshes/vgc10/visual/suction_cup_4cups.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
       <sensor name='contact_sensor3' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -189,8 +256,70 @@
           <search_term>onrobot_vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
-        <pose>-0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
       </sensor>
+    </link>
+    <joint name='suction4_joint' type='prismatic'>
+      <pose relative_to='onrobot_vgc10_base_link'>-0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
+      <parent>onrobot_vgc10_base_link</parent>
+      <child>suction4</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.0040000000000000001</upper>
+          <effort>10</effort>
+          <velocity>0.01</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+    </joint>
+    <link name='suction4'>
+      <pose relative_to='suction4_joint'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>0.20000000000000001</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>9.9999999999999995e-07</ixy>
+          <ixz>9.9999999999999995e-07</ixz>
+          <iyy>0.001</iyy>
+          <iyz>9.9999999999999995e-07</iyz>
+          <izz>0.001</izz>
+        </inertia>
+      </inertial>
+      <collision name='suction4_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://onrobot_vg_description/meshes/vgc10/collision/suction_cup_4cups.stl</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode/>
+          </contact>
+          <friction>
+            <ode/>
+          </friction>
+        </surface>
+      </collision>
+      <visual name='suction4_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://onrobot_vg_description/meshes/vgc10/visual/suction_cup_4cups.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>1 1 1 1</diffuse>
+          <ambient>1 1 1 1</ambient>
+        </material>
+      </visual>
       <sensor name='contact_sensor4' type='contact'>
         <update_rate>30</update_rate>
         <contact>
@@ -201,44 +330,13 @@
           <search_term>onrobot_vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
-        <pose>-0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
       </sensor>
-      <plugin filename="libVacuumToolPlugin.so" name="mpnp_plugins::VacuumToolPlugin">
-        <ros>
-          <namespace>/vacuum_tool/onrobot_vgc10</namespace>
-        </ros>
-        <tool_type>2</tool_type>
-      </plugin>
     </link>
-    <frame name='suction1_joint' attached_to='suction'>
-      <pose>0.017500000000000002 0.017500000000000002 0 0 0 0</pose>
-    </frame>
-    <frame name='suction1' attached_to='suction1_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='suction2_joint' attached_to='suction'>
-      <pose>0.017500000000000002 -0.017500000000000002 0 0 0 0</pose>
-    </frame>
-    <frame name='suction2' attached_to='suction2_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='suction3_joint' attached_to='suction'>
-      <pose>-0.017500000000000002 0.017500000000000002 0 0 0 0</pose>
-    </frame>
-    <frame name='suction3' attached_to='suction3_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='suction4_joint' attached_to='suction'>
-      <pose>-0.017500000000000002 -0.017500000000000002 0 0 0 0</pose>
-    </frame>
-    <frame name='suction4' attached_to='suction4_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
-    <frame name='suction_joint' attached_to='onrobot_vgc10_base_link'>
-      <pose>0 0 0.083500000000000005 0 0 0</pose>
-    </frame>
-    <frame name='suction' attached_to='suction_joint'>
-      <pose>0 0 0 0 0 0</pose>
-    </frame>
+    <plugin name='mpnp_plugins::VacuumToolPlugin' filename='libVacuumToolPlugin.so'>
+      <ros>
+        <namespace>/vacuum_tool/onrobot_vgc10</namespace>
+      </ros>
+      <tool_type>2</tool_type>
+    </plugin>
   </model>
 </sdf>
