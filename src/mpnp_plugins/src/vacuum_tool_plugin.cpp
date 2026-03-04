@@ -20,7 +20,7 @@ void VacuumToolPlugin::Configure(
   const std::shared_ptr<const sdf::Element> &_sdf,
   gz::sim::EntityComponentManager &_ecm,
   gz::sim::EventManager &)
-{ 
+{
   // Read SDF tags
   std::string ros_namespace = "";
   if (_sdf->HasElement("ros")){

@@ -223,7 +223,7 @@
         <ros>
           <namespace>/vacuum_tool/onrobot_vgc10</namespace>
         </ros>
-        <tool_type>2</tool_type>
+        <tool_type>4</tool_type>
       </plugin>
     </gazebo>
 
