@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <sdf version='1.11'>
-  <model name='onrobot_vgc10'>
+  <model name='onrobot_vgc10_model'>
     <link name='onrobot_vgc10_base_link'>
       <inertial>
         <pose>0 0 0 0 0 0</pose>
@@ -37,23 +37,29 @@
         </material>
       </visual>
     </link>
-    <joint name='suction1_joint' type='prismatic'>
+    <joint name='suction1_joint' type='fixed'>
       <pose relative_to='onrobot_vgc10_base_link'>0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
       <parent>onrobot_vgc10_base_link</parent>
       <child>suction1</child>
       <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0.0040000000000000001</upper>
-          <effort>10</effort>
-          <velocity>0.01</velocity>
-        </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
       </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
     </joint>
     <link name='suction1'>
       <pose relative_to='suction1_joint'>0 0 0 0 0 0</pose>
@@ -102,32 +108,38 @@
       <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
-          <collision>collision</collision>
+          <collision>suction1_collision</collision>
           <topic>__default_topic__</topic>
         </contact>
         <plugin name='mpnp_plugins::ContactPlugin' filename='libContactPlugin.so'>
-          <search_term>onrobot_vgc10</search_term>
+          <search_term>vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
       </sensor>
     </link>
-    <joint name='suction2_joint' type='prismatic'>
+    <joint name='suction2_joint' type='fixed'>
       <pose relative_to='onrobot_vgc10_base_link'>0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
       <parent>onrobot_vgc10_base_link</parent>
       <child>suction2</child>
       <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0.0040000000000000001</upper>
-          <effort>10</effort>
-          <velocity>0.01</velocity>
-        </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
       </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
     </joint>
     <link name='suction2'>
       <pose relative_to='suction2_joint'>0 0 0 0 0 0</pose>
@@ -176,32 +188,38 @@
       <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
-          <collision>collision</collision>
+          <collision>suction2_collision</collision>
           <topic>__default_topic__</topic>
         </contact>
         <plugin name='mpnp_plugins::ContactPlugin' filename='libContactPlugin.so'>
-          <search_term>onrobot_vgc10</search_term>
+          <search_term>vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
       </sensor>
     </link>
-    <joint name='suction3_joint' type='prismatic'>
+    <joint name='suction3_joint' type='fixed'>
       <pose relative_to='onrobot_vgc10_base_link'>-0.017500000000000002 0.017500000000000002 0.083500000000000005 0 0 0</pose>
       <parent>onrobot_vgc10_base_link</parent>
       <child>suction3</child>
       <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0.0040000000000000001</upper>
-          <effort>10</effort>
-          <velocity>0.01</velocity>
-        </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
       </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
     </joint>
     <link name='suction3'>
       <pose relative_to='suction3_joint'>0 0 0 0 0 0</pose>
@@ -250,32 +268,38 @@
       <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
-          <collision>collision</collision>
+          <collision>suction3_collision</collision>
           <topic>__default_topic__</topic>
         </contact>
         <plugin name='mpnp_plugins::ContactPlugin' filename='libContactPlugin.so'>
-          <search_term>onrobot_vgc10</search_term>
+          <search_term>vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
       </sensor>
     </link>
-    <joint name='suction4_joint' type='prismatic'>
+    <joint name='suction4_joint' type='fixed'>
       <pose relative_to='onrobot_vgc10_base_link'>-0.017500000000000002 -0.017500000000000002 0.083500000000000005 0 0 0</pose>
       <parent>onrobot_vgc10_base_link</parent>
       <child>suction4</child>
       <axis>
-        <xyz>0 0 1</xyz>
-        <limit>
-          <lower>0</lower>
-          <upper>0.0040000000000000001</upper>
-          <effort>10</effort>
-          <velocity>0.01</velocity>
-        </limit>
         <dynamics>
           <spring_reference>0</spring_reference>
           <spring_stiffness>0</spring_stiffness>
         </dynamics>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-inf</lower>
+          <upper>inf</upper>
+        </limit>
       </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
     </joint>
     <link name='suction4'>
       <pose relative_to='suction4_joint'>0 0 0 0 0 0</pose>
@@ -324,11 +348,11 @@
       <sensor name='contact_sensor' type='contact'>
         <update_rate>30</update_rate>
         <contact>
-          <collision>collision</collision>
+          <collision>suction4_collision</collision>
           <topic>__default_topic__</topic>
         </contact>
         <plugin name='mpnp_plugins::ContactPlugin' filename='libContactPlugin.so'>
-          <search_term>onrobot_vgc10</search_term>
+          <search_term>vgc10</search_term>
           <update_rate>30</update_rate>
         </plugin>
       </sensor>
