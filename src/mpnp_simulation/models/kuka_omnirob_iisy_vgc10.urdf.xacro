@@ -35,6 +35,10 @@
     <parent link="arm_flange"/>
   </joint>
 
+  <gazebo reference="vg_mount">
+    <preserveFixedJoint>true</preserveFixedJoint>
+  </gazebo>
+
   <joint name="arm_mount" type="fixed">
     <child link="arm_base_link"/>
     <origin rpy="0.0 0.0 0.0" xyz="0.38 0.12 0.65"/>
