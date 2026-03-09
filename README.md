@@ -1,5 +1,9 @@
 # Object rearrangement ros2 simulation
 
+## mpnp simulation
+Stands for Mobile Pick and Place simulation. This package contains the launch files and world files for simulating the
+mobile pick and place task in Gazebo.
+
 # Reference repositories
 ## Kuka descriptions:
 ```bash
