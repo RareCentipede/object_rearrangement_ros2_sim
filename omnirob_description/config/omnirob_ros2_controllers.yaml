@@ -5,9 +5,6 @@ controller_manager:
     omnirob_controller:
       type: mecanum_drive_controller/MecanumDriveController
 
-    omnirob_controller_with_rotation:
-      type: mecanum_drive_controller/MecanumDriveController
-
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 

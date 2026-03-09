@@ -98,7 +98,7 @@ def generate_launch_description() -> LaunchDescription:
             PathJoinSubstitution(
                 [FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"]
             )        ),
-        launch_arguments=[('gz_args', [' -r -v 1 object_rearrangement_ros2_sim/mpnp_simulation/worlds/empty.sdf'])])
+        launch_arguments=[('gz_args', [' -r -v 1 empty.sdf'])])
 
     spawner_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
