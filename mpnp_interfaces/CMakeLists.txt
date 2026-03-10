@@ -35,6 +35,7 @@ set(msg_files
 set(srv_files
   "srv/Trigger.srv"
   "srv/MoveBase.srv"
+  "srv/MoveArm.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
