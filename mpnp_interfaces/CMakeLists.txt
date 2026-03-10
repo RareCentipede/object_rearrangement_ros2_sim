@@ -29,10 +29,12 @@ endif()
 
 set(msg_files
   "msg/VacuumTools.msg"
+  "msg/Vector4.msg"
 )
 
 set(srv_files
   "srv/Trigger.srv"
+  "srv/MoveBase.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}

@@ -1,0 +1,8 @@
+# Move base service
+# Request
+mpnp_interfaces/Vector4 target_position # [x, y, z, w]
+
+---
+# Response
+bool success
+string message
