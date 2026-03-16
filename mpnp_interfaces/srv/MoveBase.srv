@@ -2,6 +2,7 @@
 # Request
 mpnp_interfaces/Vector4 target_position # [x, y, z, w]
 float32 speed # [m/s]
+string frame_id
 
 ---
 # Response
