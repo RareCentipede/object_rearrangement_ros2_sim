@@ -55,7 +55,8 @@ def generate_launch_description() -> LaunchDescription:
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="screen",
-        parameters=[robot_description]
+        parameters=[robot_description,
+                    {"use_sim_time": True}]
     )
 
     gz_spawn_entity = Node(
@@ -84,7 +85,9 @@ def generate_launch_description() -> LaunchDescription:
     box_tf_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['2', '2', '0.05', '0', '0', '0', 'world', 'box/base_link']
+        arguments=['2', '2', '0.05', '0', '0', '0', 'world', 'box/base_link'],
+        parameters=[{"use_sim_time": True}],
+        output='screen'
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -94,6 +97,7 @@ def generate_launch_description() -> LaunchDescription:
                    "--controller-manager", "/controller_manager",
                    "--param-file", robot_controllers],
         output="screen",
+        parameters=[{"use_sim_time": True}]
     )
 
     arm_controller_spawner = Node(
@@ -103,6 +107,7 @@ def generate_launch_description() -> LaunchDescription:
                    "--controller-manager", "/controller_manager",
                    "--param-file", robot_controllers],
         output="screen",
+        parameters=[{"use_sim_time": True}]
     )
 
     omnirob_controller_spawner = Node(
@@ -112,6 +117,7 @@ def generate_launch_description() -> LaunchDescription:
                    "--controller-manager", "/controller_manager",
                    "--param-file", robot_controllers],
         output="screen",
+        parameters=[{"use_sim_time": True}]
     )
 
     # Bridge
@@ -124,6 +130,7 @@ def generate_launch_description() -> LaunchDescription:
             "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
         ],
+        parameters=[{"use_sim_time": True}]
     )
 
     ros_gz_sim_launch = IncludeLaunchDescription(
@@ -131,7 +138,7 @@ def generate_launch_description() -> LaunchDescription:
             PathJoinSubstitution(
                 [FindPackageShare("ros_gz_sim"), "launch", "gz_sim.launch.py"]
             )        ),
-        launch_arguments=[('gz_args', [' -r -v 1 empty.sdf'])])
+        launch_arguments=[('gz_args', [' -r -v 1 worlds/empty.sdf'])])
 
     spawner_event_handler = RegisterEventHandler(
         event_handler=OnProcessExit(
@@ -152,17 +159,32 @@ def generate_launch_description() -> LaunchDescription:
         )
     )
 
+    omnirob_controller_node = Node(
+        package="koi_controller",
+        executable="omnirob_controller",
+        output="screen",
+        parameters=[{"use_sim_time": True}]
+    )
+
+    iisy_arm_controller_node = Node(
+        package="koi_controller",
+        executable="iisy_arm_controller",
+        output="screen",
+        parameters=[{"use_sim_time": True}]
+    )
+
     ld.add_action(append_gz_env)
+    ld.add_action(bridge)
     ld.add_action(ros_gz_sim_launch)
     ld.add_action(spawner_event_handler)
     ld.add_action(arm_controller_spawner_event_handler)
     ld.add_action(joint_state_broadcaster_spawner_event_handler)
-    ld.add_action(bridge)
     ld.add_action(robot_state_publisher_node)
     ld.add_action(gz_spawn_entity)
 
-    # ld.add_action(box_state_publisher_node)
     ld.add_action(spawn_box)
     ld.add_action(box_tf_node)
+    ld.add_action(omnirob_controller_node)
+    ld.add_action(iisy_arm_controller_node)
 
     return ld

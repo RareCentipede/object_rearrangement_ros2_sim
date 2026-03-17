@@ -1,9 +1,10 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
   <world name="empty">
-    <physics name="1ms" type="ignored">
+    <physics name="1ms" type="ode">
       <max_step_size>0.001</max_step_size>
       <real_time_factor>1.0</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
     </physics>
 
     <plugin
@@ -68,33 +69,6 @@
             <ambient>0.8 0.8 0.8 1</ambient>
             <diffuse>0.8 0.8 0.8 1</diffuse>
             <specular>0.8 0.8 0.8 1</specular>
-          </material>
-        </visual>
-      </link>
-    </model>
-
-    <model name="box">
-      <static>false</static>
-      <link name="base_link">
-        <collision name="vgc10_collision">
-          <origin xyz="0 1 0" rpy="0 0 0"/>
-          <geometry>
-            <box>
-              <size>0.1 0.1 0.1</size>
-            </box>
-          </geometry>
-        </collision>
-        <visual name="visual">
-          <origin xyz="0 1 0" rpy="0 0 0"/>
-          <geometry>
-            <box>
-              <size>0.1 0.1 0.1</size>
-            </box>
-          </geometry>
-          <material>
-            <ambient>0.8 0.2 0.2 1</ambient>
-            <diffuse>0.8 0.2 0.2 1</diffuse>
-            <specular>0.8 0.2 0.2 1</specular>
           </material>
         </visual>
       </link>
