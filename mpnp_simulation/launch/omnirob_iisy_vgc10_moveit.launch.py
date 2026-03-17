@@ -47,7 +47,8 @@ def generate_launch_description():
                         {"use_sim_time": True},
                         {"publish_planning_scene": True},
                         {"publish_state_updates": True},
-                        {"publish_transforms_updates": True}
+                        {"publish_transforms_updates": True},
+                        {"capabilities": "move_group/ExecuteTaskSolutionCapability"},
                     ]
     )
 
