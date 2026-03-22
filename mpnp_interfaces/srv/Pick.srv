@@ -1,0 +1,9 @@
+# Pick object service
+# Request
+mpnp_interfaces/msg/Object object
+string frame_id
+
+---
+# Response
+bool success
+string message
