@@ -1,6 +1,6 @@
 # Pick object service
 # Request
-mpnp_interfaces/msg/Object object
+mpnp_interfaces/Object object
 string frame_id
 
 ---

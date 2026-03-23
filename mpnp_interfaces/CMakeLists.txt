@@ -9,7 +9,8 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(builtin_interfaces REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
-find_package(geometry_msgs)
+find_package(geometry_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # uncomment the following section in order to fill in
 # further dependencies manually.
@@ -30,12 +31,15 @@ endif()
 set(msg_files
   "msg/VacuumTools.msg"
   "msg/Vector4.msg"
+  "msg/Object.msg"
 )
 
 set(srv_files
   "srv/Trigger.srv"
   "srv/MoveBase.srv"
   "srv/MoveArm.srv"
+  "srv/Pick.srv"
+  "srv/Place.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -45,6 +49,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   DEPENDENCIES
   builtin_interfaces
   geometry_msgs
+  std_msgs
 
   ADD_LINTER_TESTS
 )
