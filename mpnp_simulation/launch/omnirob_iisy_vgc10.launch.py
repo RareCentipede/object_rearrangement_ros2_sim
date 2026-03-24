@@ -71,15 +71,15 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     spawn_box = Node(
-    package="ros_gz_sim",
-    executable="create",
-    output="screen",
-    arguments=[
-        '-file', box_path,   # ← spawn directly from sdf file
-        '-name', 'box',
-        '-x', '2', '-y', '2', '-z', '0.05',  # ← set pose here instead of static tf
-        '-allow_renaming', 'true'
-        ]
+        package="ros_gz_sim",
+        executable="create",
+        output="screen",
+        arguments=[
+            '-file', box_path,   # ← spawn directly from sdf file
+            '-name', 'box',
+            '-x', '2', '-y', '2', '-z', '0.05',  # ← set pose here instead of static tf
+            '-allow_renaming', 'true'
+            ]
     )
 
     box_tf_node = Node(
