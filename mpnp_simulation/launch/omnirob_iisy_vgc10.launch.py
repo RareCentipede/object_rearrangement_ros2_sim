@@ -66,6 +66,7 @@ def generate_launch_description() -> LaunchDescription:
         arguments=[
             '-topic', '/robot_description',
             '-name', 'omnirob_iisy_vgc10',
+            '-x', '0', '-y', '0', '-z', '0.24',
             '-allow_renaming', 'true'
         ]
     )
@@ -166,13 +167,6 @@ def generate_launch_description() -> LaunchDescription:
         parameters=[{"use_sim_time": True}]
     )
 
-    iisy_arm_controller_node = Node(
-        package="koi_controller",
-        executable="iisy_arm_controller",
-        output="screen",
-        parameters=[{"use_sim_time": True}]
-    )
-
     ld.add_action(append_gz_env)
     ld.add_action(bridge)
     ld.add_action(ros_gz_sim_launch)
@@ -185,6 +179,5 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(spawn_box)
     ld.add_action(box_tf_node)
     ld.add_action(omnirob_controller_node)
-    # ld.add_action(iisy_arm_controller_node)
 
     return ld
