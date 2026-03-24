@@ -82,11 +82,23 @@ def generate_launch_description():
         )
     )
 
+    koi_controller_node = Node(
+        package="koi_controller",
+        executable="koi_pick_place_controller",
+        output="screen",
+        parameters=[
+            moveit_config.to_dict(),
+            {"use_sim_time": True}
+        ],
+        arguments=["--log-level", "error"]
+    )
+
     return LaunchDescription(
         [
             rviz_config_arg,
             rviz_node,
             run_move_group_node,
             omnirob_iisy_vgc10_gz_launch,
+            koi_controller_node
         ]
     )

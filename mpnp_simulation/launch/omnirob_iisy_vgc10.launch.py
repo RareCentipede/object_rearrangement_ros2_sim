@@ -185,6 +185,6 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(spawn_box)
     ld.add_action(box_tf_node)
     ld.add_action(omnirob_controller_node)
-    ld.add_action(iisy_arm_controller_node)
+    # ld.add_action(iisy_arm_controller_node)
 
     return ld
