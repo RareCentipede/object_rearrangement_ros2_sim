@@ -10,6 +10,13 @@ Panels:
     Name: Views
 Visualization Manager:
   Displays:
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Name: TF
+      Marker Scale: 0.3
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
     - Class: rviz_default_plugins/Grid
       Name: Grid
       Value: true

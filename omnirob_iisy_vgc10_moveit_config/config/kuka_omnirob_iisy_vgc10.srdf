@@ -22,6 +22,7 @@
     </group>
     <group name="vacuum_controller">
         <link name="onrobot_vgc10_base_link"/>
+        <link name="suction"/>
         <link name="suction1"/>
         <link name="suction2"/>
         <link name="suction3"/>
@@ -37,7 +38,7 @@
         <joint name="arm_joint_6" value="0"/>
     </group_state>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="vacuum" parent_link="arm_flange" group="vacuum_controller"/>
+    <end_effector name="vacuum" parent_link="suction" group="vacuum_controller"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="arm_base_link" link2="arm_link_1" reason="Adjacent"/>
     <disable_collisions link1="arm_base_link" link2="bl_wheel" reason="Never"/>
@@ -67,6 +68,7 @@
     <disable_collisions link1="arm_link_3" link2="fl_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_3" link2="fr_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_3" link2="onrobot_vgc10_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_3" link2="suction" reason="Never"/>
     <disable_collisions link1="arm_link_3" link2="suction1" reason="Never"/>
     <disable_collisions link1="arm_link_3" link2="suction2" reason="Never"/>
     <disable_collisions link1="arm_link_3" link2="suction3" reason="Never"/>
@@ -78,6 +80,7 @@
     <disable_collisions link1="arm_link_4" link2="fl_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="fr_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="onrobot_vgc10_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_4" link2="suction" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="suction1" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="suction2" reason="Never"/>
     <disable_collisions link1="arm_link_4" link2="suction3" reason="Never"/>
@@ -86,6 +89,7 @@
     <disable_collisions link1="arm_link_5" link2="bl_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_5" link2="br_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_5" link2="onrobot_vgc10_base_link" reason="Never"/>
+    <disable_collisions link1="arm_link_5" link2="suction" reason="Never"/>
     <disable_collisions link1="arm_link_5" link2="suction1" reason="Never"/>
     <disable_collisions link1="arm_link_5" link2="suction2" reason="Never"/>
     <disable_collisions link1="arm_link_5" link2="suction3" reason="Never"/>
@@ -93,6 +97,7 @@
     <disable_collisions link1="arm_link_6" link2="bl_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_6" link2="br_wheel" reason="Never"/>
     <disable_collisions link1="arm_link_6" link2="onrobot_vgc10_base_link" reason="Adjacent"/>
+    <disable_collisions link1="arm_link_6" link2="suction" reason="Never"/>
     <disable_collisions link1="arm_link_6" link2="suction1" reason="Never"/>
     <disable_collisions link1="arm_link_6" link2="suction2" reason="Never"/>
     <disable_collisions link1="arm_link_6" link2="suction3" reason="Never"/>
@@ -101,6 +106,8 @@
     <disable_collisions link1="bl_wheel" link2="fl_wheel" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="fr_wheel" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="platform_base_link" reason="Adjacent"/>
+    <disable_collisions link1="bl_wheel" link2="suction" reason="Never"/>
+    <disable_collisions link1="bl_wheel" link2="suction1" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="suction2" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="suction3" reason="Never"/>
     <disable_collisions link1="bl_wheel" link2="suction4" reason="Never"/>
@@ -108,6 +115,7 @@
     <disable_collisions link1="br_wheel" link2="fr_wheel" reason="Never"/>
     <disable_collisions link1="br_wheel" link2="onrobot_vgc10_base_link" reason="Never"/>
     <disable_collisions link1="br_wheel" link2="platform_base_link" reason="Adjacent"/>
+    <disable_collisions link1="br_wheel" link2="suction" reason="Never"/>
     <disable_collisions link1="br_wheel" link2="suction1" reason="Never"/>
     <disable_collisions link1="br_wheel" link2="suction2" reason="Never"/>
     <disable_collisions link1="br_wheel" link2="suction3" reason="Never"/>
@@ -115,14 +123,20 @@
     <disable_collisions link1="fl_wheel" link2="fr_wheel" reason="Never"/>
     <disable_collisions link1="fl_wheel" link2="platform_base_link" reason="Adjacent"/>
     <disable_collisions link1="fr_wheel" link2="platform_base_link" reason="Adjacent"/>
+    <disable_collisions link1="onrobot_vgc10_base_link" link2="suction" reason="Adjacent"/>
     <disable_collisions link1="onrobot_vgc10_base_link" link2="suction1" reason="Adjacent"/>
     <disable_collisions link1="onrobot_vgc10_base_link" link2="suction2" reason="Adjacent"/>
     <disable_collisions link1="onrobot_vgc10_base_link" link2="suction3" reason="Adjacent"/>
     <disable_collisions link1="onrobot_vgc10_base_link" link2="suction4" reason="Adjacent"/>
+    <disable_collisions link1="suction" link2="suction1" reason="Adjacent"/>
+    <disable_collisions link1="suction" link2="suction2" reason="Adjacent"/>
+    <disable_collisions link1="suction" link2="suction3" reason="Adjacent"/>
+    <disable_collisions link1="suction" link2="suction4" reason="Adjacent"/>
     <disable_collisions link1="suction1" link2="suction2" reason="Adjacent"/>
     <disable_collisions link1="suction1" link2="suction3" reason="Adjacent"/>
     <disable_collisions link1="suction1" link2="suction4" reason="Adjacent"/>
     <disable_collisions link1="suction2" link2="suction3" reason="Adjacent"/>
     <disable_collisions link1="suction2" link2="suction4" reason="Adjacent"/>
     <disable_collisions link1="suction3" link2="suction4" reason="Adjacent"/>
+    <disable_collisions link1="onrobot_vgc10_base_link" link2="box" reason="adjacent"/>
 </robot>
