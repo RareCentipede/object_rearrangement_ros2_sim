@@ -91,6 +91,14 @@ def generate_launch_description() -> LaunchDescription:
         output='screen'
     )
 
+    goal_tf_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['-2', '-2', '0.05', '0', '0', '0', 'world', 'goal/base_link'],
+        parameters=[{"use_sim_time": True}],
+        output='screen'
+    )
+
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -178,6 +186,7 @@ def generate_launch_description() -> LaunchDescription:
 
     ld.add_action(spawn_box)
     ld.add_action(box_tf_node)
+    ld.add_action(goal_tf_node)
     ld.add_action(omnirob_controller_node)
 
     return ld
