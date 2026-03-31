@@ -6,4 +6,10 @@ string frame_id
 ---
 # Response
 bool success
+int32 result
 string message
+
+int32 SUCCESS = 0
+int32 IK_FAILED = 1
+int32 GRIPPER_EMPTY = 2
+int32 TARGET_OCCUPIED = 3
