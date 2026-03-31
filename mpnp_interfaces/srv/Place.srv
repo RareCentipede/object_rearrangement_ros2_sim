@@ -1,6 +1,6 @@
 # Place object service
 # Request
-string object_name
+string target_name
 string frame_id
 
 ---
