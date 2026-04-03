@@ -192,7 +192,7 @@ void VacuumToolPlugin::vg_4_attach_cb(const TriggerReqPtr request, TriggerResPtr
     return;
   }
   
-  if ((!pad_contacts[1].in_contact && !pad_contacts[2].in_contact) || (!pad_contacts[3].in_contact && !pad_contacts[4].in_contact)) {
+  if ((!pad_contacts[1].in_contact && !pad_contacts[2].in_contact) && (!pad_contacts[3].in_contact && !pad_contacts[4].in_contact)) {
     response->success = false;
     response->message = "Suction cups must be in contact with an obj";
     return;
