@@ -20,9 +20,6 @@ def generate_launch_description() -> LaunchDescription:
     if not os.path.exists(box_path):
         raise FileNotFoundError(f"Box URDF not found at {box_path}. Please ensure the file exists.")
 
-    with open(box_path, 'r') as box_file:
-        box_urdf_content = box_file.read()
-
     # Append world path to GZ_SIM_RESOURCE_PATH
     append_gz_env = (AppendEnvironmentVariable(
                     name="GZ_SIM_RESOURCE_PATH",
@@ -78,7 +75,7 @@ def generate_launch_description() -> LaunchDescription:
         arguments=[
             '-file', box_path,   # ← spawn directly from sdf file
             '-name', 'box',
-            '-x', '2', '-y', '2', '-z', '0.05',  # ← set pose here instead of static tf
+            '-x', '2', '-y', '2', '-z', '0.15',  # ← set pose here instead of static tf
             '-allow_renaming', 'true'
             ]
     )
@@ -86,7 +83,7 @@ def generate_launch_description() -> LaunchDescription:
     box_tf_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['2', '2', '0.05', '0', '0', '0', 'world', 'box/base_link'],
+        arguments=['2', '2', '0.15', '0', '0', '0', 'world', 'box/base_link'],
         parameters=[{"use_sim_time": True}],
         output='screen'
     )

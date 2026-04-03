@@ -2,12 +2,12 @@
 <sdf version="1.6">
     <model name="box">
         <static>false</static>
-        <link name="box_base_link">
+        <link name="base_link">
         <collision name="vgc10_collision">
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
             <box>
-                <size>0.1 0.1 0.1</size>
+                <size>0.3 0.3 0.3</size>
             </box>
             </geometry>
         </collision>
@@ -15,7 +15,7 @@
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
             <box>
-                <size>0.1 0.1 0.1</size>
+                <size>0.3 0.3 0.3</size>
             </box>
             </geometry>
             <material>
