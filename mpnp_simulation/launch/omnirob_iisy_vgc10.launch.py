@@ -91,7 +91,7 @@ def generate_launch_description() -> LaunchDescription:
     goal_tf_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['-2', '-2', '0.05', '0', '0', '0', 'world', 'goal/base_link'],
+        arguments=['-2', '-2', '0.15', '0', '0', '0', 'world', 'goal/base_link'],
         parameters=[{"use_sim_time": True}],
         output='screen'
     )
