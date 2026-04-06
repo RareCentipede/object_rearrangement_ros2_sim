@@ -16,10 +16,6 @@ def generate_launch_description() -> LaunchDescription:
     omnirob_iisy_vgc10_moveit_pkg_share = FindPackageShare("omnirob_iisy_vgc10_moveit_config")
     mpnp_dir = os.path.join(get_package_prefix("mpnp_simulation"), "share", "mpnp_simulation")
 
-    box_path = os.path.join(mpnp_dir, "models", "box.sdf")
-    if not os.path.exists(box_path):
-        raise FileNotFoundError(f"Box URDF not found at {box_path}. Please ensure the file exists.")
-
     # Append world path to GZ_SIM_RESOURCE_PATH
     append_gz_env = (AppendEnvironmentVariable(
                     name="GZ_SIM_RESOURCE_PATH",
@@ -68,40 +64,14 @@ def generate_launch_description() -> LaunchDescription:
         ]
     )
 
-    spawn_box = Node(
-        package="ros_gz_sim",
-        executable="create",
-        output="screen",
-        arguments=[
-            '-file', box_path,   # ← spawn directly from sdf file
-            '-name', 'box',
-            '-x', '2', '-y', '2', '-z', '0.15',  # ← set pose here instead of static tf
-            '-allow_renaming', 'true'
-            ]
-    )
-
-    box_tf_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=['2', '2', '0.15', '0', '0', '0', 'world', 'box/base_link'],
-        parameters=[{"use_sim_time": True}],
-        output='screen'
-    )
-
-    goal_tf_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=['-2', '-2', '0.15', '0', '0', '0', 'world', 'goal/base_link'],
-        parameters=[{"use_sim_time": True}],
-        output='screen'
-    )
-
+    problem_arg = DeclareLaunchArgument('problem', default_value='basic', description='The problem to load')
+    problem = LaunchConfiguration('problem')
     world_manager_node = Node(
         package="mpnp_simulation",
         executable="world_manager",
         output="screen",
         parameters=[{"use_sim_time": True}],
-        arguments=['basic']
+        arguments=[problem]
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -183,16 +153,15 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(append_gz_env)
     ld.add_action(bridge)
     ld.add_action(ros_gz_sim_launch)
+
     ld.add_action(spawner_event_handler)
     ld.add_action(arm_controller_spawner_event_handler)
     ld.add_action(joint_state_broadcaster_spawner_event_handler)
     ld.add_action(robot_state_publisher_node)
-    ld.add_action(gz_spawn_entity)
 
-    ld.add_action(spawn_box)
-    ld.add_action(box_tf_node)
-    ld.add_action(goal_tf_node)
+    ld.add_action(gz_spawn_entity)
     ld.add_action(omnirob_controller_node)
+    ld.add_action(problem_arg)
     ld.add_action(world_manager_node)
 
     return ld

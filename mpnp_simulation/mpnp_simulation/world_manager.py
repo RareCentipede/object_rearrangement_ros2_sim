@@ -14,15 +14,22 @@ from tf2_ros import StaticTransformBroadcaster
 
 from gz.transport13 import Node as GzNode
 from gz.msgs10.pose_v_pb2 import Pose_V #type: ignore
+from gz.msgs10.entity_factory_pb2 import EntityFactory #type: ignore
+from gz.msgs10.boolean_pb2 import Boolean #type: ignore
 
 class WorldManager(Node):
     def __init__(self, problem_name: str):
         super().__init__('world_manager')
+        self.gz_node = GzNode()
 
         self.config_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/config/problem_configs'
+        self.box_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/models/box.sdf'
+
         self.problem_path = f'{self.config_path}/{problem_name}'
         self.init_config = yaml.safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
         self.goal_config = yaml.safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
+        self.get_logger().info(f'Loaded problem: {problem_name}')
+
 
         self.tf_broadcaster = TransformBroadcaster(self)
         self.static_tf_broadcaster = StaticTransformBroadcaster(self)
@@ -30,13 +37,34 @@ class WorldManager(Node):
         self.poses_list = []
         self.objs = []
 
-        self.get_logger().info(f'Loaded problem: {problem_name}')
-
         self.define_objs_and_poses()
         self.publish_position_tfs()
 
-        self.gz_node = GzNode()
         self.gz_node.subscribe(Pose_V, '/world/empty/dynamic_pose/info', self.gz_pose_callback)
+
+    def spawn_object(self, obj_name: str, pose: Pose):
+        spawn_obj_req = EntityFactory()
+        spawn_obj_req.sdf = open(f'src/object_rearrangement_ros2_sim/mpnp_simulation/models/box.sdf', 'r').read()
+        spawn_obj_req.pose.position.x = pose.position.x
+        spawn_obj_req.pose.position.y = pose.position.y
+        spawn_obj_req.pose.position.z = pose.position.z
+        spawn_obj_req.pose.orientation.x = pose.orientation.x
+        spawn_obj_req.pose.orientation.y = pose.orientation.y
+        spawn_obj_req.pose.orientation.z = pose.orientation.z
+        spawn_obj_req.pose.orientation.w = pose.orientation.w
+        spawn_obj_req.name = obj_name
+        spawn_obj_req.allow_renaming = False
+
+        spawn_result, spawn_response = self.gz_node.request('/world/empty/create',
+                                                            spawn_obj_req, EntityFactory, Boolean, 5000)
+
+        if spawn_result:
+            if spawn_response.data:
+                self.get_logger().info(f'Successfully spawned {obj_name}')
+            else:
+                self.get_logger().error(f'Failed to spawn {obj_name}: Service returned False')
+        else:
+            self.get_logger().error(f'Failed to spawn {obj_name}: Service call failed')
 
     def gz_pose_callback(self, pose_v_msg):
         for pose_msg in pose_v_msg.pose:
@@ -45,7 +73,7 @@ class WorldManager(Node):
                 tf_pose = TransformStamped()
                 tf_pose.header.stamp = self.get_clock().now().to_msg()
                 tf_pose.header.frame_id = 'world'
-                tf_pose.child_frame_id = pose_name
+                tf_pose.child_frame_id = pose_name + '/base_link'
                 tf_pose.transform.translation.x = pose_msg.position.x
                 tf_pose.transform.translation.y = pose_msg.position.y
                 tf_pose.transform.translation.z = pose_msg.position.z
@@ -65,7 +93,7 @@ class WorldManager(Node):
 
             pose.position.x = info['position'][0]
             pose.position.y = info['position'][1]
-            pose.position.z = 0.15
+            pose.position.z = info['position'][2]
             pose.orientation.x = info['orientation'][0]
             pose.orientation.y = info['orientation'][1]
             pose.orientation.z = info['orientation'][2]
@@ -76,6 +104,8 @@ class WorldManager(Node):
             pose_name = 'p' + str(idx)
             self.poses_dict[pose_name] = pose
             idx += 1
+
+            self.spawn_object(obj_name, pose)
 
         for obj_name, info in self.goal_config.items():
             pos = info['position']
@@ -112,7 +142,7 @@ class WorldManager(Node):
         pose = Pose()
         pose.position.x = pos[0]
         pose.position.y = pos[1]
-        pose.position.z = 0.15
+        pose.position.z = pos[2]
         pose.orientation.w = 1.0
 
         return pose_name, pose
