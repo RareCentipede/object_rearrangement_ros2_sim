@@ -1,0 +1,46 @@
+# Left pillar
+block1:
+  position: [6.0, -2.0, 0.5]
+
+block2:
+  position: [6.0, -2.0, 1.5]
+
+block3:
+  position: [6.0, -2.0, 2.5]
+
+# Right pillar
+block4:
+  position: [10.0, -2.0, 0.5]
+
+block5:
+  position: [10.0, -2.0, 1.5]
+
+block6:
+  position: [10.0, -2.0, 2.5]
+
+# Bridge deck (placed left → right)
+block7:
+  position: [6.5, -2.0, 3.5]
+
+block8:
+  position: [7.5, -2.0, 3.5]
+
+block9:
+  position: [8.5, -2.0, 3.5]
+
+block10:
+  position: [9.5, -2.0, 3.5]
+
+block11:
+  position: [6.5, -2.0, 4.5]
+
+block12:
+  position: [7.5, -2.0, 4.5]
+
+block13:
+  position: [8.5, -2.0, 4.5]
+
+block14:
+  position: [9.5, -2.0, 4.5]
+
+# blocks 15–20 have no goal

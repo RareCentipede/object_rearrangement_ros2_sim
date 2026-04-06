@@ -1,0 +1,26 @@
+block2:
+  position: [0.0, 0.0, 0.5]
+
+block3:
+  position: [0.0, 0.0, 1.5]
+
+block4:
+  position: [0.0, 0.0, 2.5]
+
+block5:
+  position: [0.0, 0.0, 3.5]
+
+block6:
+  position: [2.0, 2.0, 0.5]
+
+block7:
+  position: [-2.0, 2.0, 0.5]
+
+block8:
+  position: [2.0, -2.0, 0.5]
+
+block9:
+  position: [-2.0, -2.0, 0.5]
+
+# Blocks 10–20 intentionally left without explicit goals
+# to allow free placement or use as buffers
