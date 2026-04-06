@@ -24,12 +24,12 @@ class WorldManager(Node):
 
         self.config_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/config/problem_configs'
         self.box_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/models/box.sdf'
+        self.box_size = 0.3
 
         self.problem_path = f'{self.config_path}/{problem_name}'
         self.init_config = yaml.safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
         self.goal_config = yaml.safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
         self.get_logger().info(f'Loaded problem: {problem_name}')
-
 
         self.tf_broadcaster = TransformBroadcaster(self)
         self.static_tf_broadcaster = StaticTransformBroadcaster(self)
@@ -73,7 +73,7 @@ class WorldManager(Node):
                 tf_pose = TransformStamped()
                 tf_pose.header.stamp = self.get_clock().now().to_msg()
                 tf_pose.header.frame_id = 'world'
-                tf_pose.child_frame_id = pose_name + '/base_link'
+                tf_pose.child_frame_id = pose_name
                 tf_pose.transform.translation.x = pose_msg.position.x
                 tf_pose.transform.translation.y = pose_msg.position.y
                 tf_pose.transform.translation.z = pose_msg.position.z
@@ -88,12 +88,14 @@ class WorldManager(Node):
         idx = 1
 
         for obj_name, info in self.init_config.items():
+            if obj_name == 'robot':
+                continue
             self.objs.append(obj_name)
             pose = Pose()
 
             pose.position.x = info['position'][0]
             pose.position.y = info['position'][1]
-            pose.position.z = info['position'][2]
+            pose.position.z = (info['position'][2] + 1) * self.box_size / 2.0
             pose.orientation.x = info['orientation'][0]
             pose.orientation.y = info['orientation'][1]
             pose.orientation.z = info['orientation'][2]
@@ -142,7 +144,7 @@ class WorldManager(Node):
         pose = Pose()
         pose.position.x = pos[0]
         pose.position.y = pos[1]
-        pose.position.z = pos[2]
+        pose.position.z = (pos[2] + 1) * self.box_size / 2.0
         pose.orientation.w = 1.0
 
         return pose_name, pose
