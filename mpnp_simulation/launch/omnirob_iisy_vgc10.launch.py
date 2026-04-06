@@ -96,6 +96,14 @@ def generate_launch_description() -> LaunchDescription:
         output='screen'
     )
 
+    world_manager_node = Node(
+        package="mpnp_simulation",
+        executable="world_manager",
+        output="screen",
+        parameters=[{"use_sim_time": True}],
+        arguments=['basic']
+    )
+
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -185,5 +193,6 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(box_tf_node)
     ld.add_action(goal_tf_node)
     ld.add_action(omnirob_controller_node)
+    ld.add_action(world_manager_node)
 
     return ld
