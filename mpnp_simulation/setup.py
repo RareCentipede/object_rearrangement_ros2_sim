@@ -42,6 +42,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'world_manager = mpnp_simulation.world_manager:main',
         ],
     },
 )
