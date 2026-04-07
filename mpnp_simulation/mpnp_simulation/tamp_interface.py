@@ -1,6 +1,7 @@
 import rclpy
+import pickle
 
-from typing import List
+from typing import List, Tuple
 
 from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
@@ -33,13 +34,22 @@ class TAMPInterface(Node):
             self.get_logger().info('Waiting for place service...')
         self.get_logger().info('place service available!')
 
-    def load_plan(self, plan: List):
+    def load_plan(self, plan: List[Tuple[str, List[str]]]):
         self.plan = plan
         self.get_logger().info(f'Loaded plan with {len(plan)} steps.')
 
+def load_plan_from_file(file_path: str) -> List[Tuple[str, List[str]]]:
+    with open(file_path, 'rb') as f:
+        plan = pickle.load(f)
+
+    return plan
+
 def main():
+    plan = load_plan_from_file('src/object_rearrangement_ros2_sim/mpnp_simulation/config/plan.pkl')
+
     rclpy.init()
     tamp_interface = TAMPInterface()
+    tamp_interface.load_plan(plan)
     executor = MultiThreadedExecutor()
     executor.add_node(tamp_interface)
     try:
