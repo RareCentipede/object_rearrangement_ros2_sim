@@ -3,12 +3,11 @@ import yaml
 import sys
 import numpy as np
 
-from typing import List, Tuple
+from typing import Tuple
 
 from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
-from geometry_msgs.msg import Pose, PoseStamped, TransformStamped
+from geometry_msgs.msg import Pose, TransformStamped
 from tf2_ros import TransformBroadcaster
 from tf2_ros import StaticTransformBroadcaster
 
