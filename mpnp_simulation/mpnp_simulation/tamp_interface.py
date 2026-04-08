@@ -1,10 +1,11 @@
 import rclpy
-from rclpy import time
 import pickle
+import numpy as np
 
 from typing import List, Tuple
 
 from rclpy.node import Node
+from rclpy.time import Time
 from rclpy.executors import MultiThreadedExecutor
 from geometry_msgs.msg import Pose, TransformStamped, Point
 from tf2_ros import TransformListener, Buffer
@@ -22,6 +23,7 @@ class TAMPInterface(Node):
         self.pick_client = self.create_client(Pick, '/koi_pick_place_controller/pick')
         self.place_client = self.create_client(Place, '/koi_pick_place_controller/place')
         self.plan = plan
+        self.rate = self.create_rate(1/5)
 
         while not self.move_base_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for move_base service...')
@@ -58,16 +60,32 @@ class TAMPInterface(Node):
                 case _:
                     self.get_logger().error(f'Unknown action: {act_name}')
 
+        self.get_logger().info('Plan execution completed!')
+
     def execute_move_base(self, args: List[str]):
         move_base_req = MoveBase.Request()
         target_pos_name = args[-1]
         target_pose_tf = self.tf_buffer.lookup_transform('world', target_pos_name, self.get_clock().now())
+        current_pose_tf = self.tf_buffer.lookup_transform('world', 'platform_base_link', Time())
 
-        target_pos = Point()
-        target_pos.x = target_pose_tf.transform.translation.x
-        target_pos.y = target_pose_tf.transform.translation.y
-        target_pos.z = target_pose_tf.transform.translation.z
-        move_base_req.target_position = target_pos
+        current_pos = [current_pose_tf.transform.translation.x,
+                       current_pose_tf.transform.translation.y,
+                       current_pose_tf.transform.translation.z]
+        current_pos = np.array(current_pos)
+
+        target_pos = [target_pose_tf.transform.translation.x,
+                      target_pose_tf.transform.translation.y,
+                      target_pose_tf.transform.translation.z]
+        target_pos = np.array(target_pos)
+
+        curr_target_vec = target_pos - current_pos
+        travel_dist = np.linalg.norm(curr_target_vec)
+        curr_target_vec_u = curr_target_vec / travel_dist if travel_dist > 1e-6 else np.zeros_like(curr_target_vec)
+        adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.8)  # Stop 90cm before the target
+
+        move_base_req.target_position.x = adjusted_target_pos[0]
+        move_base_req.target_position.y = adjusted_target_pos[1]
+        move_base_req.target_position.z = adjusted_target_pos[2]
 
         future = self.move_base_client.call_async(move_base_req)
         future.add_done_callback(lambda f: self.get_logger().info(f'Move base {f.result().success} result: {f.result().message}'))
@@ -78,11 +96,23 @@ class TAMPInterface(Node):
 
     def execute_pick(self, args: List[str]):
         pick_req = Pick.Request()
-        self.get_logger().info(f'Executing pick with args: {args}')
+        pick_req.object_name = args[1]
+        pick_req.frame_id = 'world'
+
+        future = self.pick_client.call_async(pick_req)
+        future.add_done_callback(lambda f: self.get_logger().info(f'Pick {f.result().success} result: {f.result().message}'))
+        while (not future.done() and rclpy.ok()):
+            self.get_logger().info('Waiting for pick result...', throttle_duration_sec=2.0)
 
     def execute_place(self, args: List[str]):
         place_req = Place.Request()
-        self.get_logger().info(f'Executing place with args: {args}')
+        place_req.target_name = args[-1]
+        place_req.frame_id = 'world'
+
+        future = self.place_client.call_async(place_req)
+        future.add_done_callback(lambda f: self.get_logger().info(f'Place {f.result().success} result: {f.result().message}'))
+        while (not future.done() and rclpy.ok()):
+            self.get_logger().info('Waiting for place result...', throttle_duration_sec=2.0)
 
 def load_plan_from_file(file_path: str) -> List[Tuple[str, List[str]]]:
     with open(file_path, 'rb') as f:

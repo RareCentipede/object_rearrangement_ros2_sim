@@ -87,8 +87,6 @@ class WorldManager(Node):
         idx = 1
 
         for obj_name, info in self.init_config.items():
-            if obj_name == 'robot':
-                continue
             self.objs.append(obj_name)
             pose = Pose()
 
