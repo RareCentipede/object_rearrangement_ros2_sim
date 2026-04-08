@@ -7,6 +7,7 @@ from typing import List, Tuple
 from rclpy.node import Node
 from rclpy.time import Time
 from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
 from geometry_msgs.msg import Pose, TransformStamped, Point
 from tf2_ros import TransformListener, Buffer
 
@@ -19,7 +20,7 @@ class TAMPInterface(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self, spin_thread=True)
 
-        self.move_base_client = self.create_client(MoveBase, '/omnirob_controller/move_base')
+        self.move_base_client = self.create_client(MoveBase, '/omnirob_controller/move_base', callback_group=ReentrantCallbackGroup())
         self.pick_client = self.create_client(Pick, '/koi_pick_place_controller/pick')
         self.place_client = self.create_client(Place, '/koi_pick_place_controller/place')
         self.plan = plan
@@ -81,8 +82,9 @@ class TAMPInterface(Node):
         curr_target_vec = target_pos - current_pos
         travel_dist = np.linalg.norm(curr_target_vec)
         curr_target_vec_u = curr_target_vec / travel_dist if travel_dist > 1e-6 else np.zeros_like(curr_target_vec)
-        adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.8)  # Stop 90cm before the target
+        adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.85)  # Stop 90cm before the target
 
+        # Arm is not at the center, so we need to adjust the target position to account for the arm's offset
         move_base_req.target_position.x = adjusted_target_pos[0]
         move_base_req.target_position.y = adjusted_target_pos[1]
         move_base_req.target_position.z = adjusted_target_pos[2]

@@ -7,6 +7,7 @@ from typing import Tuple
 
 from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
+from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
 from geometry_msgs.msg import Pose, TransformStamped
 from tf2_ros import TransformBroadcaster
 from tf2_ros import StaticTransformBroadcaster
@@ -39,7 +40,8 @@ class WorldManager(Node):
         self.define_objs_and_poses()
         self.publish_position_tfs()
 
-        self.gz_node.subscribe(Pose_V, '/world/empty/dynamic_pose/info', self.gz_pose_callback)
+        self.robot_pose_pub = self.create_publisher(Pose, '/omnirob_iisy_vgc10/pose', 10, callback_group=ReentrantCallbackGroup())
+        self.gz_node.subscribe(Pose_V, '/world/empty/pose/info', self.gz_pose_callback)
 
     def spawn_object(self, obj_name: str, pose: Pose):
         spawn_obj_req = EntityFactory()
@@ -68,7 +70,8 @@ class WorldManager(Node):
     def gz_pose_callback(self, pose_v_msg):
         for pose_msg in pose_v_msg.pose:
             pose_name = pose_msg.name
-            if pose_name in self.objs:
+            if pose_name in self.objs or pose_name == 'omnirob_iisy_vgc10':
+                pose_name = pose_name if pose_name != 'omnirob_iisy_vgc10' else 'platform_base_link'
                 tf_pose = TransformStamped()
                 tf_pose.header.stamp = self.get_clock().now().to_msg()
                 tf_pose.header.frame_id = 'world'
@@ -82,6 +85,17 @@ class WorldManager(Node):
                 tf_pose.transform.rotation.w = pose_msg.orientation.w
 
                 self.tf_broadcaster.sendTransform(tf_pose)
+
+                if pose_name == 'platform_base_link':
+                    pose = Pose()
+                    pose.position.x = pose_msg.position.x
+                    pose.position.y = pose_msg.position.y
+                    pose.position.z = pose_msg.position.z
+                    pose.orientation.x = pose_msg.orientation.x
+                    pose.orientation.y = pose_msg.orientation.y
+                    pose.orientation.z = pose_msg.orientation.z
+                    pose.orientation.w = pose_msg.orientation.w
+                    self.robot_pose_pub.publish(pose)
 
     def define_objs_and_poses(self):
         idx = 1

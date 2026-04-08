@@ -192,27 +192,27 @@ void VacuumToolPlugin::vg_4_attach_cb(const TriggerReqPtr request, TriggerResPtr
     return;
   }
 
-  // Satisfied if any pad is in contact with the target object.
-  std::string target_obj_name;
-  for (int i = 1; i < 5; i++)
-  {
-    if (pad_contacts[i].in_contact){
-      target_obj_name = pad_contacts[i].model_name;
-      break;
-    }
-  }
+  // // Satisfied if any pad is in contact with the target object.
+  // std::string target_obj_name;
+  // for (int i = 1; i < 5; i++)
+  // {
+  //   if (pad_contacts[i].in_contact){
+  //     target_obj_name = pad_contacts[i].model_name;
+  //     break;
+  //   }
+  // }
 
-  if (target_obj_name.empty()){
-    response->success = false;
-    response->message = "Suction cups must be in contact with an obj";
-    return;
-  }
+  // if (target_obj_name.empty()){
+  //   response->success = false;
+  //   response->message = "Suction cups must be in contact with an obj";
+  //   return;
+  // }
 
-  if (strcmp(target_obj_name.c_str(), attach_obj_name.c_str()) != 0){
-    response->success = false;
-    response->message = "Target object " + target_obj_name + " not the same as attach object " + attach_obj_name;
-    return;
-  }
+  // if (strcmp(target_obj_name.c_str(), attach_obj_name.c_str()) != 0){
+  //   response->success = false;
+  //   response->message = "Target object " + target_obj_name + " not the same as attach object " + attach_obj_name;
+  //   return;
+  // }
 
   lock_state = VacuumToolLockState::LOCK_REQUESTED;
 
