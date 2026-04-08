@@ -43,6 +43,7 @@ setup(
     entry_points={
         'console_scripts': [
             'world_manager = mpnp_simulation.world_manager:main',
+            'tamp_interface = mpnp_simulation.tamp_interface:main',
         ],
     },
 )
