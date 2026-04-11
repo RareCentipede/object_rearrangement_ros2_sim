@@ -82,7 +82,7 @@ class TAMPInterface(Node):
         curr_target_vec = target_pos - current_pos
         travel_dist = np.linalg.norm(curr_target_vec)
         curr_target_vec_u = curr_target_vec / travel_dist if travel_dist > 1e-6 else np.zeros_like(curr_target_vec)
-        adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.85)  # Stop 90cm before the target
+        adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.95)  # Stop 90cm before the target
 
         # Arm is not at the center, so we need to adjust the target position to account for the arm's offset
         move_base_req.target_position.x = adjusted_target_pos[0]
