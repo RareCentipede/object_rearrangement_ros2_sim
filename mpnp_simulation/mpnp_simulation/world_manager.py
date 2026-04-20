@@ -6,11 +6,11 @@ from typing import Tuple
 from yaml import safe_load
 
 from rclpy.node import Node
+from rclpy.time import Time
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 from geometry_msgs.msg import Pose, TransformStamped
-from tf2_ros import TransformBroadcaster
-from tf2_ros import StaticTransformBroadcaster
+from tf2_ros import TransformBroadcaster, StaticTransformBroadcaster, Buffer, TransformListener
 
 from gz.transport13 import Node as GzNode
 from gz.msgs10.pose_v_pb2 import Pose_V #type: ignore
@@ -18,12 +18,15 @@ from gz.msgs10.entity_factory_pb2 import EntityFactory #type: ignore
 from gz.msgs10.boolean_pb2 import Boolean #type: ignore
 
 from mpnp_interfaces.msg import Plan
-from mpnp_interfaces.srv import PlanConstructionTask
+from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 
 class WorldManager(Node):
     def __init__(self, problem_name: str):
         super().__init__('world_manager')
         self.gz_node = GzNode()
+
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self, spin_thread=True)
 
         self.config_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/config/problem_configs'
         self.box_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/models/box.sdf'
@@ -46,10 +49,17 @@ class WorldManager(Node):
 
         self.robot_pose_pub = self.create_publisher(Pose, '/omnirob_iisy_vgc10/pose', 10, callback_group=ReentrantCallbackGroup())
         self.gz_node.subscribe(Pose_V, '/world/empty/pose/info', self.gz_pose_callback)
-        self.task_planner_client = self.create_client(PlanConstructionTask, 'plan_construction_task')
+
+        self.task_planner_client = self.create_client(PlanConstructionTask, '/tamp/plan_construction_task')
         while not self.task_planner_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Waiting for plan_construction_task service...')
         self.get_logger().info('plan_construction_task service online!')
+
+        self.plan_executor_client = self.create_client(ExecutePlan, '/tamp/execute_plan')
+        while not self.plan_executor_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for execute_plan service...')
+        self.get_logger().info('execute_plan service online!')
+
         self.request_plan()
 
     def request_plan(self) -> None:
@@ -65,9 +75,32 @@ class WorldManager(Node):
         try:
             response = future.result()
             if response.success:
-                self.get_logger().info(f"Plan received successfully: {response.plan}")
+                self.get_logger().info(f"Plan received successfully, executing plan...")
+                self.send_execute_plan_request(response.plan)
             else:
                 self.get_logger().error(f"Failed to receive plan: {response.msg}")
+        except Exception as e:
+            self.get_logger().error(f"Service call failed: {e}")
+
+    def send_execute_plan_request(self, plan: Plan) -> None:
+        request = ExecutePlan.Request()
+        request.problem_name = self.problem_name
+        request.plan = plan
+
+        # Wait until tf tree is initialized
+        while not self.tf_buffer.can_transform('world', 'platform_base_link', Time()):
+            pass
+
+        future = self.plan_executor_client.call_async(request)
+        future.add_done_callback(self.execute_plan_response_callback)
+
+    def execute_plan_response_callback(self, future):
+        try:
+            response = future.result()
+            if response.success:
+                self.get_logger().info(f"Plan executed successfully: {response.message}")
+            else:
+                self.get_logger().error(f"Failed to execute plan: {response.message}")
         except Exception as e:
             self.get_logger().error(f"Service call failed: {e}")
 

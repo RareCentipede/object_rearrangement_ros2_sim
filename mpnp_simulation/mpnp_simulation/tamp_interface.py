@@ -12,7 +12,7 @@ from geometry_msgs.msg import Pose, TransformStamped, Point
 from tf2_ros import TransformListener, Buffer
 
 from mpnp_interfaces.msg import Object
-from mpnp_interfaces.srv import Pick, Place, MoveBase
+from mpnp_interfaces.srv import Pick, Place, MoveBase, ExecutePlan
 
 class TAMPInterface(Node):
     def __init__(self, plan: List[Tuple[str, List[str]]] | None = None):
@@ -20,7 +20,8 @@ class TAMPInterface(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self, spin_thread=True)
 
-        self.move_base_client = self.create_client(MoveBase, '/omnirob_controller/move_base', callback_group=ReentrantCallbackGroup())
+        cb_group = ReentrantCallbackGroup()
+        self.move_base_client = self.create_client(MoveBase, '/omnirob_controller/move_base', callback_group=cb_group)
         self.pick_client = self.create_client(Pick, '/koi_pick_place_controller/pick')
         self.place_client = self.create_client(Place, '/koi_pick_place_controller/place')
         self.plan = plan
@@ -38,11 +39,45 @@ class TAMPInterface(Node):
             self.get_logger().info('Waiting for place service...')
         self.get_logger().info('place service available!')
 
-        self.execute_plan()
+        if self.plan:
+            self.execute_plan()
+        else:
+            self.execute_plan_srv = self.create_service(ExecutePlan, '/tamp/execute_plan',
+                                                        self.execute_plan_service, callback_group=cb_group)
 
-    def load_plan(self, plan: List[Tuple[str, List[str]]]):
-        self.plan = plan
-        self.get_logger().info(f'Loaded plan with {len(plan)} steps.')
+    def execute_plan_service(self, request: ExecutePlan.Request, response: ExecutePlan.Response) -> ExecutePlan.Response:
+        self.get_logger().info(f'Received request to execute plan for problem {request.problem_name}')
+
+        for step in request.plan.actions:
+            act_name = step.action_name
+            host, src, target = step.host, step.source, step.target
+
+            try:
+                match act_name:
+                    case 'transit' | 'transport':
+                        self.execute_move_base([host, src, target])
+                    case 'pick':
+                        self.execute_pick([host, src, target])
+                    case 'place':
+                        self.execute_place([host, src, target])
+                    case _:
+                        self.get_logger().error(f'Unknown action: {act_name}')
+                        response.success = False
+                        response.result = ExecutePlan.Response.UNKNOWN_ACTION
+                        response.message = f'Unknown action: {act_name}'
+                        return response
+            except Exception as e:
+                self.get_logger().error(f'Error executing action {act_name} with args {host, src, target}: {e}')
+                response.success = False
+                response.result = ExecutePlan.Response.EXECUTION_FAILURE
+                response.message = f'Error executing action {act_name} with args {host, src, target}: {e}'
+                return response
+
+        response.success = True
+        response.result = ExecutePlan.Response.SUCCESS
+        response.message = 'Plan executed successfully!'
+
+        return response
 
     def execute_plan(self):
         if not self.plan:
@@ -123,11 +158,11 @@ def load_plan_from_file(file_path: str) -> List[Tuple[str, List[str]]]:
     return plan
 
 def main():
+    # Still useful for testing, especially to test other TAMP solvers.
     plan = load_plan_from_file('src/object_rearrangement_ros2_sim/mpnp_simulation/config/plan.pkl')
 
     rclpy.init()
-    tamp_interface = TAMPInterface(plan)
-    # tamp_interface.load_plan(plan)
+    tamp_interface = TAMPInterface()
     executor = MultiThreadedExecutor()
     executor.add_node(tamp_interface)
     try:

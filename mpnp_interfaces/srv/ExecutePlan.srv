@@ -1,0 +1,14 @@
+# Service to execute a plan for object rearrangement
+# Request
+string problem_name
+Plan plan
+
+---
+# Response
+bool success
+int8 result
+string message
+
+int8 SUCCESS = 0
+int8 UNKNOWN_ACTION = 1
+int8 EXECUTION_FAILURE = 2
