@@ -28,23 +28,15 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-set(msg_files
-  "msg/VacuumTools.msg"
-  "msg/Vector4.msg"
-  "msg/Object.msg"
-)
+set(MSGS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/msg")
+file(GLOB MPNP_MSGS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${MSGS_DIR}/*.msg")
 
-set(srv_files
-  "srv/Trigger.srv"
-  "srv/MoveBase.srv"
-  "srv/MoveArm.srv"
-  "srv/Pick.srv"
-  "srv/Place.srv"
-)
+set(SRVS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/srv")
+file(GLOB MPNP_SRVS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${SRVS_DIR}/*.srv")
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-  ${msg_files}
-  ${srv_files}
+  ${MPNP_MSGS}
+  ${MPNP_SRVS}
 
   DEPENDENCIES
   builtin_interfaces

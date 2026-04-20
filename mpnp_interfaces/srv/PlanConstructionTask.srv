@@ -1,8 +1,16 @@
 # Request
 # Request the task planner to plan a task.
-string config_path
+string config_name
+string problem_config_path
 
 ---
 # Response
 # Response after planning the task.
 Plan plan
+bool success
+int8 result
+string msg
+
+int8 SUCCESS=0
+int8 INVALID_CONFIG=1
+int8 PLANNING_FAILED=2
