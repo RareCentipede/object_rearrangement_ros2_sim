@@ -1,0 +1,8 @@
+# Request
+# Request the task planner to plan a task.
+string config_path
+
+---
+# Response
+# Response after planning the task.
+Plan plan
