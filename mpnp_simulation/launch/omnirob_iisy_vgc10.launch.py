@@ -66,6 +66,13 @@ def generate_launch_description() -> LaunchDescription:
 
     problem_arg = DeclareLaunchArgument('problem', default_value='basic', description='The problem to load')
     problem = LaunchConfiguration('problem')
+    task_planner_node = Node(
+        package="modular_construction_task_planner",
+        executable="task_planner",
+        output="screen",
+        parameters=[{"use_sim_time": True}]
+    )
+
     world_manager_node = Node(
         package="mpnp_simulation",
         executable="world_manager",
@@ -162,6 +169,7 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(gz_spawn_entity)
     ld.add_action(omnirob_controller_node)
     ld.add_action(problem_arg)
+    ld.add_action(task_planner_node)
     ld.add_action(world_manager_node)
 
     return ld

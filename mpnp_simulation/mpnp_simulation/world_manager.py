@@ -1,13 +1,13 @@
 import rclpy
-import yaml
 import sys
 import numpy as np
 
 from typing import Tuple
+from yaml import safe_load
 
 from rclpy.node import Node
 from rclpy.executors import MultiThreadedExecutor
-from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
+from rclpy.callback_groups import ReentrantCallbackGroup
 from geometry_msgs.msg import Pose, TransformStamped
 from tf2_ros import TransformBroadcaster
 from tf2_ros import StaticTransformBroadcaster
@@ -16,6 +16,9 @@ from gz.transport13 import Node as GzNode
 from gz.msgs10.pose_v_pb2 import Pose_V #type: ignore
 from gz.msgs10.entity_factory_pb2 import EntityFactory #type: ignore
 from gz.msgs10.boolean_pb2 import Boolean #type: ignore
+
+from mpnp_interfaces.msg import Plan
+from mpnp_interfaces.srv import PlanConstructionTask
 
 class WorldManager(Node):
     def __init__(self, problem_name: str):
@@ -26,9 +29,10 @@ class WorldManager(Node):
         self.box_path = 'src/object_rearrangement_ros2_sim/mpnp_simulation/models/box.sdf'
         self.box_size = 0.3
 
+        self.problem_name = problem_name
         self.problem_path = f'{self.config_path}/{problem_name}'
-        self.init_config = yaml.safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
-        self.goal_config = yaml.safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
+        self.init_config = safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
+        self.goal_config = safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
         self.get_logger().info(f'Loaded problem: {problem_name}')
 
         self.tf_broadcaster = TransformBroadcaster(self)
@@ -42,6 +46,30 @@ class WorldManager(Node):
 
         self.robot_pose_pub = self.create_publisher(Pose, '/omnirob_iisy_vgc10/pose', 10, callback_group=ReentrantCallbackGroup())
         self.gz_node.subscribe(Pose_V, '/world/empty/pose/info', self.gz_pose_callback)
+        self.task_planner_client = self.create_client(PlanConstructionTask, 'plan_construction_task')
+        while not self.task_planner_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Waiting for plan_construction_task service...')
+        self.get_logger().info('plan_construction_task service online!')
+        self.request_plan()
+
+    def request_plan(self) -> None:
+        request = PlanConstructionTask.Request()
+
+        request.config_name = self.problem_name
+        request.problem_config_path = self.config_path + '/'
+
+        future = self.task_planner_client.call_async(request)
+        future.add_done_callback(self.plan_response_callback)
+
+    def plan_response_callback(self, future):
+        try:
+            response = future.result()
+            if response.success:
+                self.get_logger().info(f"Plan received successfully: {response.plan}")
+            else:
+                self.get_logger().error(f"Failed to receive plan: {response.msg}")
+        except Exception as e:
+            self.get_logger().error(f"Service call failed: {e}")
 
     def spawn_object(self, obj_name: str, pose: Pose):
         spawn_obj_req = EntityFactory()
