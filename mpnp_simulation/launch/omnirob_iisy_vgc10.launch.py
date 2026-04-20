@@ -81,6 +81,13 @@ def generate_launch_description() -> LaunchDescription:
         arguments=[problem]
     )
 
+    tamp_interface_node = Node(
+        package="mpnp_simulation",
+        executable="tamp_interface",
+        output="screen",
+        parameters=[{"use_sim_time": True}]
+    )
+
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -170,6 +177,7 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(omnirob_controller_node)
     ld.add_action(problem_arg)
     ld.add_action(task_planner_node)
+    ld.add_action(tamp_interface_node)
     ld.add_action(world_manager_node)
 
     return ld
