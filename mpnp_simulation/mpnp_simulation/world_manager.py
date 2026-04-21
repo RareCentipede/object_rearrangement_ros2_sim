@@ -10,7 +10,8 @@ from rclpy.time import Time
 from rclpy.duration import Duration
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
-from geometry_msgs.msg import Pose, TransformStamped
+from std_msgs.msg import Header
+from geometry_msgs.msg import Pose, Transform, TransformStamped, Point, Quaternion, Vector3
 from tf2_geometry_msgs import PoseStamped
 from tf2_ros import TransformBroadcaster, StaticTransformBroadcaster, Buffer, TransformListener
 
@@ -78,18 +79,29 @@ class WorldManager(Node):
             if obj_name != 'robot':
                 self.objs.append(obj_name)
 
-            pose = Pose()
-            pose.position.x = info['position'][0]
-            pose.position.y = info['position'][1]
-            pose.position.z = (info['position'][2] + 1) * self.box_size / 2.0
-            pose.orientation.x = info['orientation'][0]
-            pose.orientation.y = info['orientation'][1]
-            pose.orientation.z = info['orientation'][2]
-            pose.orientation.w = 1.0
-
-            self.poses_list.append([pose.position.x, pose.position.y, pose.position.z])
-
             pose_name = 'p' + str(idx)
+            pose = PoseStamped(
+                header=Header(
+                    stamp=self.get_clock().now().to_msg(),
+                    frame_id=pose_name
+                ),
+                pose=Pose(
+                    position=Point(
+                        x=info['position'][0],
+                        y=info['position'][1],
+                        z=(info['position'][2] + 1) * self.box_size / 2.0
+                    ),
+                    orientation=Quaternion(
+                        x=info['orientation'][0],
+                        y=info['orientation'][1],
+                        z=info['orientation'][2],
+                        w=1.0
+                    )
+                )
+            )
+
+            self.poses_list.append([pose.pose.position.x, pose.pose.position.y, pose.pose.position.z])
+
             self.poses_dict[pose_name] = pose
             idx += 1
 
@@ -107,23 +119,27 @@ class WorldManager(Node):
             if pose_name not in self.poses_dict:
                 self.poses_list.append(pos)
                 orientation = info.get('orientation', [0.0, 0.0, 0.0])
-                pose.orientation.x, pose.orientation.y, pose.orientation.z = orientation[0], orientation[1], orientation[2]
-                self.poses_dict[pose_name] = pose
+                pose.orientation = Quaternion(x=orientation[0], y=orientation[1], z=orientation[2], w=1.0)
+
+                pose_stamped = PoseStamped()
+                pose_stamped.header.frame_id = pose_name
+                pose_stamped.pose = pose
+                self.poses_dict[pose_name] = pose_stamped
 
                 block = self.blocks[obj_name]
-                block.goal_pose = pose
+                block.goal_pose = pose_stamped
                 self.blocks.update({obj_name: block})
 
-    def spawn_object(self, obj_name: str, pose: Pose):
+    def spawn_object(self, obj_name: str, pose: PoseStamped):
         spawn_obj_req = EntityFactory()
         spawn_obj_req.sdf = open(f'src/object_rearrangement_ros2_sim/mpnp_simulation/models/box.sdf', 'r').read()
-        spawn_obj_req.pose.position.x = pose.position.x
-        spawn_obj_req.pose.position.y = pose.position.y
-        spawn_obj_req.pose.position.z = pose.position.z
-        spawn_obj_req.pose.orientation.x = pose.orientation.x
-        spawn_obj_req.pose.orientation.y = pose.orientation.y
-        spawn_obj_req.pose.orientation.z = pose.orientation.z
-        spawn_obj_req.pose.orientation.w = pose.orientation.w
+        spawn_obj_req.pose.position.x = pose.pose.position.x
+        spawn_obj_req.pose.position.y = pose.pose.position.y
+        spawn_obj_req.pose.position.z = pose.pose.position.z
+        spawn_obj_req.pose.orientation.x = pose.pose.orientation.x
+        spawn_obj_req.pose.orientation.y = pose.pose.orientation.y
+        spawn_obj_req.pose.orientation.z = pose.pose.orientation.z
+        spawn_obj_req.pose.orientation.w = pose.pose.orientation.w
         spawn_obj_req.name = obj_name
         spawn_obj_req.allow_renaming = False
 
@@ -141,6 +157,8 @@ class WorldManager(Node):
     def create_polyhedral_blocks(self):
         for obj_name in self.objs:
             surfaces = []
+            base_positions = []
+
             _, _, clean_faces = generate_diced_block(self.box_size/2, 14)
             base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
 
@@ -151,24 +169,49 @@ class WorldManager(Node):
                     normal=n
                 ))
             block.surfaces = surfaces
+
+            for i, base_pos in enumerate(base_placements):
+                base_pose = PoseStamped(
+                    header=PoseStamped(
+                            frame_id=f"{obj_name}_base_target{i}"
+                        ),
+                    pose=Pose(
+                        position=Point(
+                            x=base_pos[0],
+                            y=base_pos[1],
+                            z=base_pos[2]
+                        ),
+                        orientation=block.init_pose.pose.orientation
+                    )
+                )
+                base_positions.append(base_pose)
+
             block.base_positions = base_placements
             self.blocks.update({obj_name: block})
             self.base_positions.append(base_placements)
 
     def publish_position_tfs(self):
-        for pose_name in list(self.poses_dict.keys()):
-            pose = self.poses_dict[pose_name]
-            tf_pose = TransformStamped()
-            tf_pose.header.stamp = self.get_clock().now().to_msg()
-            tf_pose.header.frame_id = 'world'
-            tf_pose.child_frame_id = pose_name
-            tf_pose.transform.translation.x = pose.position.x
-            tf_pose.transform.translation.y = pose.position.y
-            tf_pose.transform.translation.z = pose.position.z
-            tf_pose.transform.rotation.x = pose.orientation.x
-            tf_pose.transform.rotation.y = pose.orientation.y
-            tf_pose.transform.rotation.z = pose.orientation.z
-            tf_pose.transform.rotation.w = pose.orientation.w
+        for pose_name, pose_stamped in self.poses_dict.items():
+            tf_pose = TransformStamped(
+                header=Header(
+                    stamp=self.get_clock().now().to_msg(),
+                    frame_id='world'
+                ),
+                child_frame_id=pose_name,
+                transform=Transform(
+                    translation=Vector3(
+                        x=pose_stamped.pose.position.x,
+                        y=pose_stamped.pose.position.y,
+                        z=pose_stamped.pose.position.z
+                    ),
+                    rotation=Quaternion(
+                        x=pose_stamped.pose.orientation.x,
+                        y=pose_stamped.pose.orientation.y,
+                        z=pose_stamped.pose.orientation.z,
+                        w=pose_stamped.pose.orientation.w
+                    )
+                )
+            )
 
             self.static_tf_broadcaster.sendTransform(tf_pose)
 
@@ -179,48 +222,69 @@ class WorldManager(Node):
                 pass
 
             for i, surface in enumerate(block.surfaces):
-                tf_pose = TransformStamped()
-                tf_pose.header.stamp = self.get_clock().now().to_msg()
-                tf_pose.header.frame_id = block_name
-                tf_pose.child_frame_id = f"{block_name}_surface{i}"
-                tf_pose.transform.translation.x = surface.center[0]
-                tf_pose.transform.translation.y = surface.center[1]
-                tf_pose.transform.translation.z = surface.center[2]
-                tf_pose.transform.rotation.x = 0.0
-                tf_pose.transform.rotation.y = 0.0
-                tf_pose.transform.rotation.z = 0.0
-                tf_pose.transform.rotation.w = 1.0
+                tf_pose = TransformStamped(
+                    header=Header(
+                        stamp=self.get_clock().now().to_msg(),
+                        frame_id=block_name
+                    ),
+                    child_frame_id=f"{block_name}_surface{i}",
+                    transform=Transform(
+                        translation=Vector3(
+                            x=surface.center[0],
+                            y=surface.center[1],
+                            z=surface.center[2]
+                        ),
+                        rotation=Quaternion(
+                            x=0.0,
+                            y=0.0,
+                            z=0.0,
+                            w=1.0
+                        )
+                    )
+                )
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
                 self.get_logger().info(f"Published TF for {tf_pose.child_frame_id} at {surface.center} with normal {surface.normal}")
 
             base_positions = self.base_positions[base_pos_idx]
             for j, base_pos in enumerate(base_positions):
-                base_pose_stamped = PoseStamped()
-                base_pose_stamped.header.stamp = self.get_clock().now().to_msg()
-                base_pose_stamped.header.frame_id = block_name
-                base_pose_stamped.pose.position.x = base_pos[0]
-                base_pose_stamped.pose.position.y = base_pos[1]
-                base_pose_stamped.pose.position.z = base_pos[2]
-                base_pose_stamped.pose.orientation.x = 0.0
-                base_pose_stamped.pose.orientation.y = 0.0
-                base_pose_stamped.pose.orientation.z = 0.0
-                base_pose_stamped.pose.orientation.w = 1.0
+                base_pose_stamped = PoseStamped(
+                    header=Header(
+                        stamp=self.get_clock().now().to_msg(),
+                        frame_id=block_name
+                    ),
+                    pose=Pose(
+                        position=Point(
+                            x=base_pos[0],
+                            y=base_pos[1],
+                            z=base_pos[2]
+                        ),
+                        orientation=Quaternion(
+                            w=1.0
+                        )
+                    )
+                )
 
                 base_pose_in_world = self.tf_buffer.transform(base_pose_stamped, 'world', timeout=Duration(seconds=5.0))
                 base_pose_in_world = cast(PoseStamped, base_pose_in_world)
 
-                tf_pose = TransformStamped()
-                tf_pose.header.stamp = self.get_clock().now().to_msg()
-                tf_pose.header.frame_id = 'world'
-                tf_pose.child_frame_id = f"{block_name}_base_target{j}"
-                tf_pose.transform.translation.x = base_pose_in_world.pose.position.x
-                tf_pose.transform.translation.y = base_pose_in_world.pose.position.y
-                tf_pose.transform.translation.z = base_pose_in_world.pose.position.z
-                tf_pose.transform.rotation.x = 0.0
-                tf_pose.transform.rotation.y = 0.0
-                tf_pose.transform.rotation.z = 0.0
-                tf_pose.transform.rotation.w = 1.0
+                tf_pose = TransformStamped(
+                    header=Header(
+                        stamp=self.get_clock().now().to_msg(),
+                        frame_id='world'
+                    ),
+                    child_frame_id=f"{block_name}_base_target{j}",
+                    transform=Transform(
+                        translation=Vector3(
+                            x=base_pose_in_world.pose.position.x,
+                            y=base_pose_in_world.pose.position.y,
+                            z=base_pose_in_world.pose.position.z
+                        ),
+                        rotation=Quaternion(
+                            w=1.0
+                        )
+                    )
+                )
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
                 self.get_logger().info(f"Published TF for {tf_pose.child_frame_id} at {base_pos}")
@@ -232,29 +296,43 @@ class WorldManager(Node):
             pose_name = pose_msg.name
             if pose_name in self.objs or pose_name == 'omnirob_iisy_vgc10':
                 pose_name = pose_name if pose_name != 'omnirob_iisy_vgc10' else 'platform_base_link'
-                tf_pose = TransformStamped()
-                tf_pose.header.stamp = self.get_clock().now().to_msg()
-                tf_pose.header.frame_id = 'world'
-                tf_pose.child_frame_id = pose_name
-                tf_pose.transform.translation.x = pose_msg.position.x
-                tf_pose.transform.translation.y = pose_msg.position.y
-                tf_pose.transform.translation.z = pose_msg.position.z
-                tf_pose.transform.rotation.x = pose_msg.orientation.x
-                tf_pose.transform.rotation.y = pose_msg.orientation.y
-                tf_pose.transform.rotation.z = pose_msg.orientation.z
-                tf_pose.transform.rotation.w = pose_msg.orientation.w
+                tf_pose = TransformStamped(
+                    header=Header(
+                        stamp=self.get_clock().now().to_msg(),
+                        frame_id='world'
+                    ),
+                    child_frame_id=pose_name,
+                    transform=Transform(
+                        translation=Vector3(
+                            x=pose_msg.position.x,
+                            y=pose_msg.position.y,
+                            z=pose_msg.position.z
+                        ),
+                        rotation=Quaternion(
+                            x=pose_msg.orientation.x,
+                            y=pose_msg.orientation.y,
+                            z=pose_msg.orientation.z,
+                            w=pose_msg.orientation.w
+                        )
+                    )
+                )
 
                 self.tf_broadcaster.sendTransform(tf_pose)
 
                 if pose_name == 'platform_base_link':
-                    pose = Pose()
-                    pose.position.x = pose_msg.position.x
-                    pose.position.y = pose_msg.position.y
-                    pose.position.z = pose_msg.position.z
-                    pose.orientation.x = pose_msg.orientation.x
-                    pose.orientation.y = pose_msg.orientation.y
-                    pose.orientation.z = pose_msg.orientation.z
-                    pose.orientation.w = pose_msg.orientation.w
+                    pose = Pose(
+                        position=Point(
+                            x=pose_msg.position.x,
+                            y=pose_msg.position.y,
+                            z=pose_msg.position.z
+                        ),
+                        orientation=Quaternion(
+                            x=pose_msg.orientation.x,
+                            y=pose_msg.orientation.y,
+                            z=pose_msg.orientation.z,
+                            w=pose_msg.orientation.w
+                        )
+                    )
                     self.robot_pose_pub.publish(pose)
 
     def request_plan(self) -> None:
@@ -307,11 +385,16 @@ class WorldManager(Node):
                 return pose_name, self.poses_dict[pose_name]
 
         pose_name = 'p' + str(len(self.poses_dict) + 1)
-        pose = Pose()
-        pose.position.x = pos[0]
-        pose.position.y = pos[1]
-        pose.position.z = (pos[2] + 1) * self.box_size / 2.0
-        pose.orientation.w = 1.0
+        pose = Pose(
+            position=Point(
+                x=pos[0],
+                y=pos[1],
+                z=(pos[2] + 1) * self.box_size / 2.0
+            ),
+            orientation=Quaternion(
+                w=1.0
+            )
+        )
 
         return pose_name, pose
 
