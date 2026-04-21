@@ -2,6 +2,7 @@
 # Request the task planner to plan a task.
 string config_name
 string problem_config_path
+Block[] blocks
 
 ---
 # Response
