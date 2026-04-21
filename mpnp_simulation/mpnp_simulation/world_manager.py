@@ -50,7 +50,7 @@ class WorldManager(Node):
         self.blocks = {}
         self.base_positions = []
 
-        self.define_objs_and_poses()
+        self.define_objs_poses_init_blocks()
         self.create_polyhedral_blocks()
 
         self.robot_pose_pub = self.create_publisher(Pose, '/omnirob_iisy_vgc10/pose', 10, callback_group=ReentrantCallbackGroup())
@@ -71,7 +71,7 @@ class WorldManager(Node):
 
         self.request_plan()
 
-    def define_objs_and_poses(self):
+    def define_objs_poses_init_blocks(self):
         idx = 1
 
         for obj_name, info in self.init_config.items():
@@ -93,6 +93,11 @@ class WorldManager(Node):
             self.poses_dict[pose_name] = pose
             idx += 1
 
+            block = Block()
+            block.name = obj_name
+            block.init_pose = pose
+            self.blocks[obj_name] = block
+
             self.spawn_object(obj_name, pose)
 
         for obj_name, info in self.goal_config.items():
@@ -101,7 +106,13 @@ class WorldManager(Node):
 
             if pose_name not in self.poses_dict:
                 self.poses_list.append(pos)
+                orientation = info.get('orientation', [0.0, 0.0, 0.0])
+                pose.orientation.x, pose.orientation.y, pose.orientation.z = orientation[0], orientation[1], orientation[2]
                 self.poses_dict[pose_name] = pose
+
+                block = self.blocks[obj_name]
+                block.goal_pose = pose
+                self.blocks.update({obj_name: block})
 
     def spawn_object(self, obj_name: str, pose: Pose):
         spawn_obj_req = EntityFactory()
@@ -128,23 +139,20 @@ class WorldManager(Node):
             self.get_logger().error(f'Failed to spawn {obj_name}: Service call failed')
 
     def create_polyhedral_blocks(self):
-        num_blocks = len(self.objs)
-        for i in range(num_blocks):
+        for obj_name in self.objs:
             surfaces = []
-            pos = self.poses_list[i]
-            block_name = f'block{i+1}'
             _, _, clean_faces = generate_diced_block(self.box_size/2, 14)
             base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
 
-            block = Block()
+            block = self.blocks[obj_name]
             for c, n in zip(valid_centers, valid_normals):
                 surfaces.append(Surface(
                     center=c,
                     normal=n
                 ))
-            block.center = pos
             block.surfaces = surfaces
-            self.blocks[block_name] = block
+            block.base_positions = base_placements
+            self.blocks.update({obj_name: block})
             self.base_positions.append(base_placements)
 
     def publish_position_tfs(self):
@@ -253,7 +261,8 @@ class WorldManager(Node):
         request = PlanConstructionTask.Request()
 
         request.config_name = self.problem_name
-        request.problem_config_path = self.config_path + '/'
+        # request.problem_config_path = self.config_path + '/'
+        request.blocks = list(self.blocks.values())
 
         future = self.task_planner_client.call_async(request)
         future.add_done_callback(self.plan_response_callback)
