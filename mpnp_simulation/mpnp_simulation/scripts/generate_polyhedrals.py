@@ -61,7 +61,7 @@ def generate_diced_block(radius, num_points=12, angle_threshold=0.98) -> Tuple[n
 
     return hull.points, hull.simplices, unique_faces
 
-def compute_base_positions(clean_faces, base_offset=0.5) -> Tuple[List[List[float]], List[float], List[float]]:
+def compute_base_positions(clean_faces, base_offset=0.5) -> Tuple[List[List[float]], List[List[float]], List[List[float]]]:
     """
         Computes the base positions for the block based on the clean faces.
         
