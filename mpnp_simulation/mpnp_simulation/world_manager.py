@@ -11,8 +11,8 @@ from rclpy.duration import Duration
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 from std_msgs.msg import Header
-from geometry_msgs.msg import Pose, Transform, TransformStamped, Point, Quaternion, Vector3
-from tf2_geometry_msgs import PoseStamped
+from geometry_msgs.msg import Pose, Transform, TransformStamped, Point, Quaternion, Vector3, PoseStamped
+from tf2_geometry_msgs import PoseStamped as TF2PoseStamped
 from tf2_ros import TransformBroadcaster, StaticTransformBroadcaster, Buffer, TransformListener
 
 from gz.transport13 import Node as GzNode
@@ -80,7 +80,7 @@ class WorldManager(Node):
                 self.objs.append(obj_name)
 
             pose_name = 'p' + str(idx)
-            pose = PoseStamped(
+            pose_stamped = PoseStamped(
                 header=Header(
                     stamp=self.get_clock().now().to_msg(),
                     frame_id=pose_name
@@ -95,35 +95,32 @@ class WorldManager(Node):
                         x=info['orientation'][0],
                         y=info['orientation'][1],
                         z=info['orientation'][2],
-                        w=1.0
                     )
                 )
             )
 
-            self.poses_list.append([pose.pose.position.x, pose.pose.position.y, pose.pose.position.z])
+            self.poses_list.append([pose_stamped.pose.position.x, pose_stamped.pose.position.y, pose_stamped.pose.position.z])
 
-            self.poses_dict[pose_name] = pose
+            self.poses_dict[pose_name] = pose_stamped
             idx += 1
 
-            block = Block()
-            block.name = obj_name
-            block.init_pose = pose
-            self.blocks[obj_name] = block
+            if obj_name != 'robot':
+                block = Block()
+                block.name = obj_name
+                block.init_pose = pose_stamped
+                self.blocks[obj_name] = block
 
-            self.spawn_object(obj_name, pose)
+                self.spawn_object(obj_name, pose_stamped)
 
         for obj_name, info in self.goal_config.items():
             pos = info['position']
-            pose_name, pose = self.find_pose_from_position(pos)
+            pose_name, pose_stamped = self.find_pose_from_position(pos)
 
             if pose_name not in self.poses_dict:
                 self.poses_list.append(pos)
-                orientation = info.get('orientation', [0.0, 0.0, 0.0])
-                pose.orientation = Quaternion(x=orientation[0], y=orientation[1], z=orientation[2], w=1.0)
 
-                pose_stamped = PoseStamped()
-                pose_stamped.header.frame_id = pose_name
-                pose_stamped.pose = pose
+                orientation = info.get('orientation', [0.0, 0.0, 0.0])
+                pose_stamped.pose.orientation = Quaternion(x=orientation[0], y=orientation[1], z=orientation[2])
                 self.poses_dict[pose_name] = pose_stamped
 
                 block = self.blocks[obj_name]
@@ -165,14 +162,22 @@ class WorldManager(Node):
             block = self.blocks[obj_name]
             for c, n in zip(valid_centers, valid_normals):
                 surfaces.append(Surface(
-                    center=c,
-                    normal=n
+                    center=Vector3(
+                        x=c[0],
+                        y=c[1],
+                        z=c[2]
+                    ),
+                    normal=Vector3(
+                        x=n[0],
+                        y=n[1],
+                        z=n[2]
+                    )
                 ))
             block.surfaces = surfaces
 
             for i, base_pos in enumerate(base_placements):
                 base_pose = PoseStamped(
-                    header=PoseStamped(
+                    header=Header(
                             frame_id=f"{obj_name}_base_target{i}"
                         ),
                     pose=Pose(
@@ -186,7 +191,7 @@ class WorldManager(Node):
                 )
                 base_positions.append(base_pose)
 
-            block.base_positions = base_placements
+            block.base_positions = base_positions
             self.blocks.update({obj_name: block})
             self.base_positions.append(base_placements)
 
@@ -219,7 +224,8 @@ class WorldManager(Node):
         base_pos_idx = 0
         for block_name, block in self.blocks.items():
             while not self.tf_buffer.can_transform('world', block_name, Time()):
-                pass
+                self.get_logger().info(f'Waiting for transform from {block_name} to world to publish surfaces and base positions...')
+                self.create_rate(1.0).sleep()
 
             for i, surface in enumerate(block.surfaces):
                 tf_pose = TransformStamped(
@@ -229,43 +235,19 @@ class WorldManager(Node):
                     ),
                     child_frame_id=f"{block_name}_surface{i}",
                     transform=Transform(
-                        translation=Vector3(
-                            x=surface.center[0],
-                            y=surface.center[1],
-                            z=surface.center[2]
-                        ),
-                        rotation=Quaternion(
-                            x=0.0,
-                            y=0.0,
-                            z=0.0,
-                            w=1.0
-                        )
+                        translation=surface.center,
                     )
                 )
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
-                self.get_logger().info(f"Published TF for {tf_pose.child_frame_id} at {surface.center} with normal {surface.normal}")
 
-            base_positions = self.base_positions[base_pos_idx]
-            for j, base_pos in enumerate(base_positions):
-                base_pose_stamped = PoseStamped(
-                    header=Header(
-                        stamp=self.get_clock().now().to_msg(),
-                        frame_id=block_name
-                    ),
-                    pose=Pose(
-                        position=Point(
-                            x=base_pos[0],
-                            y=base_pos[1],
-                            z=base_pos[2]
-                        ),
-                        orientation=Quaternion(
-                            w=1.0
-                        )
-                    )
+            for j, base_pose_stamped in enumerate(block.base_positions):
+                base_pose_stamped.header.frame_id = block_name
+                base_pose_stamped.header.stamp = self.get_clock().now().to_msg()
+                
+                base_pose_in_world = self.tf_buffer.transform(
+                    base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
                 )
-
-                base_pose_in_world = self.tf_buffer.transform(base_pose_stamped, 'world', timeout=Duration(seconds=5.0))
                 base_pose_in_world = cast(PoseStamped, base_pose_in_world)
 
                 tf_pose = TransformStamped(
@@ -279,15 +261,11 @@ class WorldManager(Node):
                             x=base_pose_in_world.pose.position.x,
                             y=base_pose_in_world.pose.position.y,
                             z=base_pose_in_world.pose.position.z
-                        ),
-                        rotation=Quaternion(
-                            w=1.0
                         )
                     )
                 )
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
-                self.get_logger().info(f"Published TF for {tf_pose.child_frame_id} at {base_pos}")
 
             base_pos_idx += 1
 
@@ -341,6 +319,7 @@ class WorldManager(Node):
         request.config_name = self.problem_name
         # request.problem_config_path = self.config_path + '/'
         request.blocks = list(self.blocks.values())
+        # self.get_logger().info(f"Requesting plan with blocks: {[block.name for block in request.blocks]}")
 
         future = self.task_planner_client.call_async(request)
         future.add_done_callback(self.plan_response_callback)
@@ -378,21 +357,24 @@ class WorldManager(Node):
         except Exception as e:
             self.get_logger().error(f"Service call failed: {e}")
 
-    def find_pose_from_position(self, pos: Tuple[float, float, float]) -> Tuple[str, Pose]:
+    def find_pose_from_position(self, pos: Tuple[float, float, float]) -> Tuple[str, PoseStamped]:
         for idx, position in enumerate(self.poses_list):
             if np.allclose(np.array(position), np.array(pos)):
                 pose_name = list(self.poses_dict.keys())[idx]
                 return pose_name, self.poses_dict[pose_name]
 
         pose_name = 'p' + str(len(self.poses_dict) + 1)
-        pose = Pose(
-            position=Point(
-                x=pos[0],
-                y=pos[1],
-                z=(pos[2] + 1) * self.box_size / 2.0
+        pose = PoseStamped(
+            header=Header(
+                stamp=self.get_clock().now().to_msg(),
+                frame_id=pose_name
             ),
-            orientation=Quaternion(
-                w=1.0
+            pose=Pose(
+                position=Point(
+                    x=pos[0],
+                    y=pos[1],
+                    z=(pos[2] + 1) * self.box_size / 2.0
+                )
             )
         )
 
