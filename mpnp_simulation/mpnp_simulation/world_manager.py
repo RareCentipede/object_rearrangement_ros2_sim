@@ -79,7 +79,7 @@ class WorldManager(Node):
         self.robot_init_pose = PoseStamped(
             header=Header(
                 stamp=self.get_clock().now().to_msg(),
-                frame_id='p' + str(len(self.init_config))
+                frame_id='p' + str(len(self.init_config)+1)
             ),
             pose=Pose(
                 position=Point(
