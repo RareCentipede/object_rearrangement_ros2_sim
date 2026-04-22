@@ -333,6 +333,7 @@ class WorldManager(Node):
         request.config_name = self.problem_name
         # request.problem_config_path = self.config_path + '/'
         request.blocks = list(self.blocks.values())
+        request.robot_init_pose = self.robot_init_pose
         # self.get_logger().info(f"Requesting plan with blocks: {[block.name for block in request.blocks]}")
 
         future = self.task_planner_client.call_async(request)
