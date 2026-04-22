@@ -49,7 +49,7 @@ class WorldManager(Node):
         self.poses_list = []
         self.objs = []
         self.blocks = {}
-        self.base_positions = []
+        self.robot_init_pose = PoseStamped()
 
         self.define_objs_poses_init_blocks()
         self.create_polyhedral_blocks()
@@ -75,10 +75,29 @@ class WorldManager(Node):
     def define_objs_poses_init_blocks(self):
         idx = 1
 
-        for obj_name, info in self.init_config.items():
-            if obj_name != 'robot':
-                self.objs.append(obj_name)
+        robot_init_data = self.init_config.pop('robot')
+        self.robot_init_pose = PoseStamped(
+            header=Header(
+                stamp=self.get_clock().now().to_msg(),
+                frame_id='p' + str(len(self.init_config))
+            ),
+            pose=Pose(
+                position=Point(
+                    x=robot_init_data['position'][0],
+                    y=robot_init_data['position'][1],
+                    z=robot_init_data['position'][2]
+                ),
+                orientation=Quaternion(
+                    x=robot_init_data['orientation'][0],
+                    y=robot_init_data['orientation'][1],
+                    z=robot_init_data['orientation'][2],
+                )
+            )
+        )
+        self.poses_dict[self.robot_init_pose.header.frame_id] = self.robot_init_pose
 
+        for obj_name, info in self.init_config.items():
+            self.objs.append(obj_name)
             pose_name = 'p' + str(idx)
             pose_stamped = PoseStamped(
                 header=Header(
@@ -104,13 +123,11 @@ class WorldManager(Node):
             self.poses_dict[pose_name] = pose_stamped
             idx += 1
 
-            if obj_name != 'robot':
-                block = Block()
-                block.name = obj_name
-                block.init_pose = pose_stamped
-                self.blocks[obj_name] = block
-
-                self.spawn_object(obj_name, pose_stamped)
+            block = Block()
+            block.name = obj_name
+            block.init_pose = pose_stamped
+            self.blocks[obj_name] = block
+            self.spawn_object(obj_name, pose_stamped)
 
         for obj_name, info in self.goal_config.items():
             pos = info['position']
@@ -175,10 +192,10 @@ class WorldManager(Node):
                 ))
             block.surfaces = surfaces
 
-            for i, base_pos in enumerate(base_placements):
+            for base_pos in base_placements:
                 base_pose = PoseStamped(
                     header=Header(
-                            frame_id=f"{obj_name}_base_target{i}"
+                            frame_id=obj_name
                         ),
                     pose=Pose(
                         position=Point(
@@ -193,7 +210,6 @@ class WorldManager(Node):
 
             block.base_positions = base_positions
             self.blocks.update({obj_name: block})
-            self.base_positions.append(base_placements)
 
     def publish_position_tfs(self):
         for pose_name, pose_stamped in self.poses_dict.items():
@@ -221,7 +237,6 @@ class WorldManager(Node):
             self.static_tf_broadcaster.sendTransform(tf_pose)
 
     def publish_surfaces_and_base_positions(self):
-        base_pos_idx = 0
         for block_name, block in self.blocks.items():
             while not self.tf_buffer.can_transform('world', block_name, Time()):
                 self.get_logger().info(f'Waiting for transform from {block_name} to world to publish surfaces and base positions...')
@@ -242,9 +257,8 @@ class WorldManager(Node):
                 self.static_tf_broadcaster.sendTransform(tf_pose)
 
             for j, base_pose_stamped in enumerate(block.base_positions):
-                base_pose_stamped.header.frame_id = block_name
                 base_pose_stamped.header.stamp = self.get_clock().now().to_msg()
-                
+
                 base_pose_in_world = self.tf_buffer.transform(
                     base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
                 )
@@ -266,8 +280,7 @@ class WorldManager(Node):
                 )
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
-
-            base_pos_idx += 1
+                base_pose_stamped.header.frame_id = f"{block_name}_base_target{j}"
 
     def gz_pose_callback(self, pose_v_msg):
         for pose_msg in pose_v_msg.pose:
@@ -296,6 +309,7 @@ class WorldManager(Node):
                 )
 
                 self.tf_broadcaster.sendTransform(tf_pose)
+                self.get_logger().debug(f"Published TF for {pose_name} at position ({pose_msg.position.x}, {pose_msg.position.y}, {pose_msg.position.z})")
 
                 if pose_name == 'platform_base_link':
                     pose = Pose(

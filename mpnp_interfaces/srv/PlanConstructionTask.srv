@@ -3,6 +3,7 @@
 string config_name
 string problem_config_path
 Block[] blocks
+geometry_msgs/PoseStamped robot_init_pose
 
 ---
 # Response
