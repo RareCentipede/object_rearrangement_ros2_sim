@@ -256,6 +256,10 @@ class WorldManager(Node):
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
 
+            pick_poses_stamped = []
+            place_poses_stamped = []
+            goal_pose_stamped = block.goal_pose
+            goal_pose_name = goal_pose_stamped.header.frame_id if goal_pose_stamped else ''
             for j, base_pose_stamped in enumerate(block.base_positions):
                 base_pose_stamped.header.stamp = self.get_clock().now().to_msg()
 
@@ -280,7 +284,37 @@ class WorldManager(Node):
                 )
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
-                base_pose_stamped.header.frame_id = f"{block_name}_base_target{j}"
+                pick_poses_stamped.append(base_pose_in_world)
+
+                if goal_pose_name != '':
+                    base_pose_stamped.header.frame_id = goal_pose_name
+                    place_pose_in_world = self.tf_buffer.transform(
+                        base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
+                    )
+
+                    place_pose_in_world = cast(PoseStamped, place_pose_in_world)
+
+                    place_pose_in_world_tf = TransformStamped(
+                        header=Header(
+                            stamp=self.get_clock().now().to_msg(),
+                            frame_id='world'
+                        ),
+                        child_frame_id=f"{block_name}_place_target{j}",
+                        transform=Transform(
+                            translation=Vector3(
+                                x=place_pose_in_world.pose.position.x,
+                                y=place_pose_in_world.pose.position.y,
+                                z=place_pose_in_world.pose.position.z
+                            )
+                        )
+                    )
+
+                    self.static_tf_broadcaster.sendTransform(place_pose_in_world_tf)
+                    place_poses_stamped.append(place_pose_in_world)
+
+            block.base_positions = pick_poses_stamped
+            block.place_positions = place_poses_stamped
+            self.blocks.update({block_name: block})
 
     def gz_pose_callback(self, pose_v_msg):
         for pose_msg in pose_v_msg.pose:
