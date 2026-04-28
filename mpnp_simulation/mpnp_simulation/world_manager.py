@@ -267,6 +267,7 @@ class WorldManager(Node):
                     base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
                 )
                 base_pose_in_world = cast(PoseStamped, base_pose_in_world)
+                base_pose_in_world.header.frame_id = f"{block_name}_base_target{j}"
 
                 tf_pose = TransformStamped(
                     header=Header(
@@ -285,6 +286,7 @@ class WorldManager(Node):
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
                 pick_poses_stamped.append(base_pose_in_world)
+                self.poses_dict[base_pose_in_world.header.frame_id] = base_pose_in_world
 
                 if goal_pose_name != '':
                     base_pose_stamped.header.frame_id = goal_pose_name
@@ -293,6 +295,7 @@ class WorldManager(Node):
                     )
 
                     place_pose_in_world = cast(PoseStamped, place_pose_in_world)
+                    place_pose_in_world.header.frame_id = f"{block_name}_place_target{j}"
 
                     place_pose_in_world_tf = TransformStamped(
                         header=Header(
@@ -311,6 +314,7 @@ class WorldManager(Node):
 
                     self.static_tf_broadcaster.sendTransform(place_pose_in_world_tf)
                     place_poses_stamped.append(place_pose_in_world)
+                    self.poses_dict[place_pose_in_world.header.frame_id] = place_pose_in_world
 
             block.base_positions = pick_poses_stamped
             block.place_positions = place_poses_stamped

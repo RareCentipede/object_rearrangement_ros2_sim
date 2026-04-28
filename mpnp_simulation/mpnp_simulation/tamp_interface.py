@@ -101,6 +101,7 @@ class TAMPInterface(Node):
     def execute_move_base(self, args: List[str]):
         move_base_req = MoveBase.Request()
         target_pos_name = args[-1]
+        self.get_logger().info(f'Moving to target position: {target_pos_name}')
         target_pose_tf = self.tf_buffer.lookup_transform('world', target_pos_name, self.get_clock().now())
         current_pose_tf = self.tf_buffer.lookup_transform('world', 'platform_base_link', Time())
 
