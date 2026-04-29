@@ -259,73 +259,77 @@ class WorldManager(Node):
 
                 self.static_tf_broadcaster.sendTransform(tf_pose)
 
-            pick_poses_stamped = []
-            place_poses_stamped = []
-            goal_pose_stamped = block.goal_pose
-            goal_pose_name = goal_pose_stamped.header.frame_id if goal_pose_stamped else ''
-            for j, base_pose_stamped in enumerate(block.base_positions):
-                base_pose_stamped.header.stamp = self.get_clock().now().to_msg()
+            pick_poses_stamped, place_poses_stamped = self.publish_base_positions(block)
+            block.base_positions = pick_poses_stamped
+            block.place_positions = place_poses_stamped
+            self.blocks.update({block_name: block})
 
-                base_pose_in_world = self.tf_buffer.transform(
+    def publish_base_positions(self, block: Block):
+        pick_poses_stamped = []
+        place_poses_stamped = []
+        goal_pose_stamped = block.goal_pose
+        goal_pose_name = goal_pose_stamped.header.frame_id if goal_pose_stamped else ''
+        for j, base_pose_stamped in enumerate(block.base_positions):
+            base_pose_stamped.header.stamp = self.get_clock().now().to_msg()
+
+            base_pose_in_world = self.tf_buffer.transform(
+                base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
+            )
+            base_pose_in_world = cast(PoseStamped, base_pose_in_world)
+            base_pose_in_world.header.frame_id = f"{block.name}_base_target{j}"
+            base_pose_in_world.pose.orientation = rotate_pose_to_target(base_pose_in_world, block.init_pose)
+
+            tf_pose = TransformStamped(
+                header=Header(
+                    stamp=self.get_clock().now().to_msg(),
+                    frame_id='world'
+                ),
+                child_frame_id=f"{block.name}_base_target{j}",
+                transform=Transform(
+                    translation=Vector3(
+                        x=base_pose_in_world.pose.position.x,
+                        y=base_pose_in_world.pose.position.y,
+                        z=base_pose_in_world.pose.position.z
+                    ),
+                    rotation=base_pose_in_world.pose.orientation
+                )
+            )
+
+            self.static_tf_broadcaster.sendTransform(tf_pose)
+            pick_poses_stamped.append(base_pose_in_world)
+            self.poses_dict[base_pose_in_world.header.frame_id] = base_pose_in_world
+
+            if goal_pose_name != '':
+                base_pose_stamped.header.frame_id = goal_pose_name
+                place_pose_in_world = self.tf_buffer.transform(
                     base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
                 )
-                base_pose_in_world = cast(PoseStamped, base_pose_in_world)
-                base_pose_in_world.header.frame_id = f"{block_name}_base_target{j}"
-                base_pose_in_world.pose.orientation = rotate_pose_to_target(base_pose_in_world, block.init_pose)
 
-                tf_pose = TransformStamped(
+                place_pose_in_world = cast(PoseStamped, place_pose_in_world)
+                place_pose_in_world.header.frame_id = f"{block.name}_place_target{j}"
+                place_pose_in_world.pose.orientation = rotate_pose_to_target(place_pose_in_world, goal_pose_stamped)
+
+                place_pose_in_world_tf = TransformStamped(
                     header=Header(
                         stamp=self.get_clock().now().to_msg(),
                         frame_id='world'
                     ),
-                    child_frame_id=f"{block_name}_base_target{j}",
+                    child_frame_id=f"{block.name}_place_target{j}",
                     transform=Transform(
                         translation=Vector3(
-                            x=base_pose_in_world.pose.position.x,
-                            y=base_pose_in_world.pose.position.y,
-                            z=base_pose_in_world.pose.position.z
+                            x=place_pose_in_world.pose.position.x,
+                            y=place_pose_in_world.pose.position.y,
+                            z=place_pose_in_world.pose.position.z
                         ),
-                        rotation=base_pose_in_world.pose.orientation
+                        rotation=place_pose_in_world.pose.orientation
                     )
                 )
 
-                self.static_tf_broadcaster.sendTransform(tf_pose)
-                pick_poses_stamped.append(base_pose_in_world)
-                self.poses_dict[base_pose_in_world.header.frame_id] = base_pose_in_world
+                self.static_tf_broadcaster.sendTransform(place_pose_in_world_tf)
+                place_poses_stamped.append(place_pose_in_world)
+                self.poses_dict[place_pose_in_world.header.frame_id] = place_pose_in_world
 
-                if goal_pose_name != '':
-                    base_pose_stamped.header.frame_id = goal_pose_name
-                    place_pose_in_world = self.tf_buffer.transform(
-                        base_pose_stamped, 'world', timeout=Duration(seconds=5.0)
-                    )
-
-                    place_pose_in_world = cast(PoseStamped, place_pose_in_world)
-                    place_pose_in_world.header.frame_id = f"{block_name}_place_target{j}"
-                    place_pose_in_world.pose.orientation = rotate_pose_to_target(place_pose_in_world, goal_pose_stamped)
-
-                    place_pose_in_world_tf = TransformStamped(
-                        header=Header(
-                            stamp=self.get_clock().now().to_msg(),
-                            frame_id='world'
-                        ),
-                        child_frame_id=f"{block_name}_place_target{j}",
-                        transform=Transform(
-                            translation=Vector3(
-                                x=place_pose_in_world.pose.position.x,
-                                y=place_pose_in_world.pose.position.y,
-                                z=place_pose_in_world.pose.position.z
-                            ),
-                            rotation=place_pose_in_world.pose.orientation
-                        )
-                    )
-
-                    self.static_tf_broadcaster.sendTransform(place_pose_in_world_tf)
-                    place_poses_stamped.append(place_pose_in_world)
-                    self.poses_dict[place_pose_in_world.header.frame_id] = place_pose_in_world
-
-            block.base_positions = pick_poses_stamped
-            block.place_positions = place_poses_stamped
-            self.blocks.update({block_name: block})
+        return pick_poses_stamped, place_poses_stamped
 
     def gz_pose_callback(self, pose_v_msg):
         for pose_msg in pose_v_msg.pose:
@@ -354,7 +358,8 @@ class WorldManager(Node):
                 )
 
                 self.tf_broadcaster.sendTransform(tf_pose)
-                self.get_logger().debug(f"Published TF for {pose_name} at position ({pose_msg.position.x}, {pose_msg.position.y}, {pose_msg.position.z})")
+                self.get_logger().debug(f"Published TF for {pose_name} at position "
+                                        f"({pose_msg.position.x}, {pose_msg.position.y}, {pose_msg.position.z})")
 
                 if pose_name == 'platform_base_link':
                     pose = Pose(
