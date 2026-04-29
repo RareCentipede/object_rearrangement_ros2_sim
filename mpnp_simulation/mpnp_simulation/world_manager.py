@@ -2,8 +2,9 @@ import rclpy
 import sys
 import numpy as np
 
-from typing import Tuple, cast
+from typing import Tuple, cast, List
 from yaml import safe_load
+from scipy.spatial.transform import Rotation as R
 
 from rclpy.node import Node
 from rclpy.time import Time
@@ -243,6 +244,7 @@ class WorldManager(Node):
                 self.create_rate(1.0).sleep()
 
             for i, surface in enumerate(block.surfaces):
+                surface_normal_quat = normal_to_quaternion([surface.normal.x, surface.normal.y, surface.normal.z])
                 tf_pose = TransformStamped(
                     header=Header(
                         stamp=self.get_clock().now().to_msg(),
@@ -251,6 +253,7 @@ class WorldManager(Node):
                     child_frame_id=f"{block_name}_surface{i}",
                     transform=Transform(
                         translation=surface.center,
+                        rotation=surface_normal_quat
                     )
                 )
 
@@ -268,6 +271,7 @@ class WorldManager(Node):
                 )
                 base_pose_in_world = cast(PoseStamped, base_pose_in_world)
                 base_pose_in_world.header.frame_id = f"{block_name}_base_target{j}"
+                base_pose_in_world.pose.orientation = rotate_pose_to_target(base_pose_in_world, block.init_pose)
 
                 tf_pose = TransformStamped(
                     header=Header(
@@ -280,7 +284,8 @@ class WorldManager(Node):
                             x=base_pose_in_world.pose.position.x,
                             y=base_pose_in_world.pose.position.y,
                             z=base_pose_in_world.pose.position.z
-                        )
+                        ),
+                        rotation=base_pose_in_world.pose.orientation
                     )
                 )
 
@@ -296,6 +301,7 @@ class WorldManager(Node):
 
                     place_pose_in_world = cast(PoseStamped, place_pose_in_world)
                     place_pose_in_world.header.frame_id = f"{block_name}_place_target{j}"
+                    place_pose_in_world.pose.orientation = rotate_pose_to_target(place_pose_in_world, goal_pose_stamped)
 
                     place_pose_in_world_tf = TransformStamped(
                         header=Header(
@@ -308,7 +314,8 @@ class WorldManager(Node):
                                 x=place_pose_in_world.pose.position.x,
                                 y=place_pose_in_world.pose.position.y,
                                 z=place_pose_in_world.pose.position.z
-                            )
+                            ),
+                            rotation=place_pose_in_world.pose.orientation
                         )
                     )
 
@@ -432,6 +439,31 @@ class WorldManager(Node):
         )
 
         return pose_name, pose
+
+def normal_to_quaternion(normal) -> Quaternion:
+    normal = normal / np.linalg.norm(normal)
+    z = np.array([0, 0, 1])
+    axis = np.cross(z, normal)
+    angle = np.arccos(np.dot(z, normal))
+
+    if angle < 1e-6:
+        return Quaternion(x=0, y=0, z=0, w=1)
+
+    quat = R.from_rotvec(axis / np.linalg.norm(axis) * angle).as_quat(False)
+    quat_msg = Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3])
+
+    return quat_msg
+
+def rotate_pose_to_target(current_pose: PoseStamped, target_pose: PoseStamped) -> Quaternion:
+    pos = [current_pose.pose.position.x, current_pose.pose.position.y]
+    target_pos = [target_pose.pose.position.x, target_pose.pose.position.y]
+
+    pos_to_target_vec = np.array(target_pos) - np.array(pos)
+    target_angle = np.arctan2(pos_to_target_vec[1], pos_to_target_vec[0])
+    quat = R.from_euler('z', target_angle).as_quat(False)
+    quat_msg = Quaternion(x=quat[0], y=quat[1], z=quat[2], w=quat[3])
+
+    return quat_msg
 
 def main():
     args = sys.argv[1:]
