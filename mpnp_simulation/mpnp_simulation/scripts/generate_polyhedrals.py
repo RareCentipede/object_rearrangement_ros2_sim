@@ -6,7 +6,7 @@ from typing import List, Tuple
 def generate_diced_block(radius, num_points=12, angle_threshold=0.98) -> Tuple[np.ndarray, np.ndarray, List[dict]]:
     """
         Generates a dodecahedron-like block with extruded faces.
-        
+
         Args:
             radius: Size of the block.
             num_points: Points to pick. ~12-16 is good for dice-like shapes.
@@ -25,14 +25,14 @@ def generate_diced_block(radius, num_points=12, angle_threshold=0.98) -> Tuple[n
     x = radius * np.cos(theta) * np.sin(phi)
     y = radius * np.sin(theta) * np.sin(phi)
     z = radius * np.cos(phi)
-    
+
     # Add a little jitter so they aren't 'too' perfect
     points = np.vstack((x, y, z)).T
     points += np.random.normal(0, radius*0.05, points.shape)
 
     # 2. Compute Hull
     hull = ConvexHull(points, qhull_options='QJ')
-    
+
     # 3. Optimize: Merge faces with similar normals
     unique_faces = []
     seen_normals = []
@@ -40,18 +40,18 @@ def generate_diced_block(radius, num_points=12, angle_threshold=0.98) -> Tuple[n
     for i, eq in enumerate(hull.equations):
         normal = eq[:3]
         is_duplicate = False
-        
+
         for sn in seen_normals:
             # Dot product check: 1.0 means identical, 0.0 means perpendicular
             if np.dot(normal, sn) > angle_threshold:
                 is_duplicate = True
                 break
-        
+
         if not is_duplicate:
             # Calculate the face center (mean of vertices in this simplex)
             face_verts = hull.points[hull.simplices[i]]
             center = np.mean(face_verts, axis=0)
-            
+
             unique_faces.append({
                 'normal': normal,
                 'center': center,
@@ -61,10 +61,10 @@ def generate_diced_block(radius, num_points=12, angle_threshold=0.98) -> Tuple[n
 
     return hull.points, hull.simplices, unique_faces
 
-def compute_base_positions(clean_faces, base_offset=0.5) -> Tuple[List[List[float]], List[List[float]], List[List[float]]]:
+def compute_base_positions(clean_faces, base_offset=0.7) -> Tuple[List[List[float]], List[List[float]], List[List[float]]]:
     """
         Computes the base positions for the block based on the clean faces.
-        
+
         Args:
             clean_faces: List of unique faces with normals and centers.
             base_offset: Distance to offset the base from the center of the face.
@@ -90,7 +90,7 @@ def compute_base_positions(clean_faces, base_offset=0.5) -> Tuple[List[List[floa
             dir_xy[2] = 0
             # Normalize the XY direction
             dir_xy /= np.linalg.norm(dir_xy)
-            
+
             base_pos = c + (dir_xy * base_offset)
             base_pos[2] = 0 # Force to ground
             base_placements.append(base_pos)

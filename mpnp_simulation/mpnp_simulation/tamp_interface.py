@@ -4,6 +4,7 @@ import numpy as np
 
 from typing import List, Tuple
 
+from scipy.spatial.transform import Rotation as R
 from rclpy.node import Node
 from rclpy.time import Time
 from rclpy.executors import MultiThreadedExecutor
@@ -118,12 +119,21 @@ class TAMPInterface(Node):
         curr_target_vec = target_pos - current_pos
         travel_dist = np.linalg.norm(curr_target_vec)
         curr_target_vec_u = curr_target_vec / travel_dist if travel_dist > 1e-6 else np.zeros_like(curr_target_vec)
-        adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.95)  # Stop 90cm before the target
+        # adjusted_target_pos = current_pos + curr_target_vec_u * (travel_dist - 0.95)  # Stop 90cm before the target
+        adjusted_target_pos = target_pos
 
         # Arm is not at the center, so we need to adjust the target position to account for the arm's offset
         move_base_req.target_position.x = adjusted_target_pos[0]
         move_base_req.target_position.y = adjusted_target_pos[1]
         move_base_req.target_position.z = adjusted_target_pos[2]
+
+        quat = R.from_quat([target_pose_tf.transform.rotation.x,
+                            target_pose_tf.transform.rotation.y,
+                            target_pose_tf.transform.rotation.z,
+                            target_pose_tf.transform.rotation.w])
+        yaw = quat.as_euler('xyz')[2]
+        move_base_req.target_yaw = yaw
+        move_base_req.frame_id = 'world'
 
         future = self.move_base_client.call_async(move_base_req)
         future.add_done_callback(lambda f: self.get_logger().info(f'Move base {f.result().success} result: {f.result().message}'))
