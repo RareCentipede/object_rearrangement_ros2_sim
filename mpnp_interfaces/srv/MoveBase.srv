@@ -1,6 +1,7 @@
 # Move base service
 # Request
 geometry_msgs/Point target_position # [x, y, z]
+float64 target_yaw
 string frame_id
 
 ---
