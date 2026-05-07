@@ -27,7 +27,7 @@ from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions
 
 class WorldManager(Node):
-    def __init__(self, problem_name: str):
+    def __init__(self, problem_name: str, execute_plan: bool = True):
         super().__init__('world_manager')
         self.gz_node = GzNode()
 
@@ -43,6 +43,8 @@ class WorldManager(Node):
         self.init_config = safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
         self.goal_config = safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
         self.get_logger().info(f'Loaded problem: {problem_name}')
+
+        self.execute = execute_plan
 
         self.tf_broadcaster = TransformBroadcaster(self)
         self.static_tf_broadcaster = StaticTransformBroadcaster(self)
@@ -394,7 +396,10 @@ class WorldManager(Node):
             response = future.result()
             if response.success:
                 self.get_logger().info(f"Plan received successfully, executing plan...")
-                self.send_execute_plan_request(response.plan)
+                if self.execute:
+                    self.send_execute_plan_request(response.plan)
+                else:
+                    self.get_logger().info(f"Execution disabled, not sending execute plan request.")
             else:
                 self.get_logger().error(f"Failed to receive plan: {response.msg}")
         except Exception as e:
@@ -473,7 +478,9 @@ def rotate_pose_to_target(current_pose: PoseStamped, target_pose: PoseStamped) -
 def main():
     args = sys.argv[1:]
     rclpy.init()
-    world_manager = WorldManager(args[0] if args else 'basic')
+    problem_name = args[0] if args else 'basic'
+    execute = False if args[1] == 'false' and args and len(args) > 1 else True
+    world_manager = WorldManager(problem_name, execute)
     executor = MultiThreadedExecutor()
     executor.add_node(world_manager)
     try:
