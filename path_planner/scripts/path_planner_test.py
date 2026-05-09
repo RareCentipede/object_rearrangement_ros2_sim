@@ -5,7 +5,7 @@ from yaml import safe_load
 from mpnp_interfaces.msg import Block
 from std_msgs.msg import Header
 from geometry_msgs.msg import PoseStamped, Pose, Point
-from mapping import OCCUPANCY
+from scripts.mapping import OCCUPANCY
 
 from astar import GridGraph
 

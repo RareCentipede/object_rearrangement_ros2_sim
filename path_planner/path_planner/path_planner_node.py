@@ -1,3 +1,6 @@
+from scripts.astar import GridGraph
+from scripts.mapping import OCCUPANCY
+
 def main():
     print('Hi from path_planner.')
 
