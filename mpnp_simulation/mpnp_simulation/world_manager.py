@@ -27,7 +27,7 @@ from mpnp_interfaces.msg import Plan, Surface, Block
 from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 
 from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions
-from mpnp_simulation.scripts.generate_structure import Polygon
+from mpnp_simulation.scripts.generate_structure import Polygon, generate_voronoi_wall_hull
 
 class WorldManager(Node):
     def __init__(self, problem_name: str, execute_plan: bool = True):
@@ -227,6 +227,49 @@ class WorldManager(Node):
                                         block.init_pose.pose.orientation.z,
                                         block.init_pose.pose.orientation.w]))
             self.polygons.update({obj_name: polygon})
+
+    def create_polyhedral_wall(self):
+        for obj_name in self.objs:
+            surfaces = []
+            base_positions = []
+
+            clean_faces = generate_voronoi_wall_hull(width=1.0, thickness=0.2, height=1.0, num_blocks=10)
+            base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
+    
+            block = self.blocks[obj_name]
+            for c, n in zip(valid_centers, valid_normals):
+                surfaces.append(Surface(
+                    center=Vector3(
+                        x=c[0],
+                        y=c[1],
+                        z=c[2]
+                    ),
+                    normal=Vector3(
+                        x=n[0],
+                        y=n[1],
+                        z=n[2]
+                    )
+                ))
+            block.surfaces = surfaces
+
+            for base_pos in base_placements:
+                base_pose = PoseStamped(
+                    header=Header(
+                            frame_id=obj_name
+                        ),
+                    pose=Pose(
+                        position=Point(
+                            x=base_pos[0],
+                            y=base_pos[1],
+                            z=base_pos[2]
+                        ),
+                        orientation=block.init_pose.pose.orientation
+                    )
+                )
+                base_positions.append(base_pose)
+
+            block.base_positions = base_positions
+            self.blocks.update({obj_name: block})
 
     def publish_position_tfs(self):
         for pose_name, pose_stamped in self.poses_dict.items():

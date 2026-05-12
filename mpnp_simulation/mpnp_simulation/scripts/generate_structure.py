@@ -73,6 +73,65 @@ def generate_voronoi_wall(width=1.0, thickness=0.2, height=1.0, num_blocks=10):
 
     return blocks
 
+def generate_voronoi_wall_hull(width=1.0, thickness=0.2, height=1.0, num_blocks=10):
+    unique_faces = []
+    seen_normals = []
+    angle_threshold = 0.98  # Cosine of angle threshold for merging faces
+
+    # 1. Randomly seed points inside the wall volume
+    seeds = np.random.uniform(
+        [0, 0, 0], 
+        [width, thickness, height], 
+        (num_blocks, 3)
+    )
+
+    # 2. Add 'Dummy' points far away to ensure all inner cells are bounded
+    # (Voronoi needs a boundary or cells go to infinity)
+    boundary = 2.0
+    dummies = np.array([
+        [width/2, thickness/2, -boundary], [width/2, thickness/2, height+boundary],
+        [-boundary, thickness/2, height/2], [width+boundary, thickness/2, height/2],
+        [width/2, -boundary, height/2], [width/2, thickness+boundary, height/2]
+    ])
+    all_points = np.vstack([seeds, dummies])
+
+    vor = Voronoi(all_points)
+
+    blocks = []
+    for i in range(num_blocks):
+        # Get indices of vertices for this cell
+        region_idx = vor.point_region[i]
+        vert_indices = vor.regions[region_idx]
+
+        if -1 in vert_indices or len(vert_indices) == 0:
+            continue # Skip infinite cells
+
+        cell_verts = vor.vertices[vert_indices]
+        hull = ConvexHull(cell_verts)
+        for i, eq in enumerate(hull.equations):
+            normal = eq[:3]
+            is_duplicate = False
+
+            for sn in seen_normals:
+                # Dot product check: 1.0 means identical, 0.0 means perpendicular
+                if np.dot(normal, sn) > angle_threshold:
+                    is_duplicate = True
+                    break
+
+            if not is_duplicate:
+                # Calculate the face center (mean of vertices in this simplex)
+                face_verts = hull.points[hull.simplices[i]]
+                center = np.mean(face_verts, axis=0)
+
+                unique_faces.append({
+                    'normal': normal,
+                    'center': center,
+                    'equation': eq
+                })
+                seen_normals.append(normal)
+
+        return unique_faces
+
 def visualize_wall(blocks, shrink_factor=0.95):
     """
     Visualizes the Voronoi wall in Polyscope.
