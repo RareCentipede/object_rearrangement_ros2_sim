@@ -132,6 +132,11 @@ def generate_voronoi_wall_hull(width=1.0, thickness=0.2, height=1.0, num_blocks=
 
         return unique_faces
 
+"""
+    Try out stability scoring here. Use the projection -> union method to get a score.
+"""
+
+
 def visualize_wall(blocks, shrink_factor=0.95):
     """
     Visualizes the Voronoi wall in Polyscope.
