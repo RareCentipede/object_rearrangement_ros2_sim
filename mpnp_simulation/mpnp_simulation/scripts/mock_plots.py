@@ -21,7 +21,7 @@ def main():
     plt.plot(x, mb_cost, marker='o', label='Multi-bound', c='red')
     plt.plot(x, greedy_cost_stab, marker='o', label='Greedy-stable', c='green')
     plt.plot(x, mb_cost_stab, marker='o', label='Multi-bound-stable', c='orange')
-    plt.title('Mock Plot for Number of states explored vs number of blocks per planner strategy')
+    plt.title('Mock Plot for Navigation cost vs number of blocks per planner strategy')
     plt.xlabel('Number of blocks')
     plt.ylabel('Time take to terminate (s)')
     plt.legend()
