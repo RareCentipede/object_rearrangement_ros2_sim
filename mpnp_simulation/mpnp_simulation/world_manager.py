@@ -1,10 +1,12 @@
 import rclpy
 import sys
 import numpy as np
+import polyscope as ps
 
-from typing import Tuple, cast, List
+from typing import Tuple, cast, List, Dict
 from yaml import safe_load
 from scipy.spatial.transform import Rotation as R
+from scipy.spatial import Voronoi, ConvexHull
 
 from rclpy.node import Node
 from rclpy.time import Time
@@ -25,6 +27,7 @@ from mpnp_interfaces.msg import Plan, Surface, Block
 from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 
 from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions
+from mpnp_simulation.scripts.generate_structure import Polygon
 
 class WorldManager(Node):
     def __init__(self, problem_name: str, execute_plan: bool = True):
@@ -53,6 +56,8 @@ class WorldManager(Node):
         self.objs = []
         self.blocks = {}
         self.robot_init_pose = PoseStamped()
+        self.block_poses = {}
+        self.polygons = {}
 
         self.define_objs_poses_init_blocks()
         self.create_polyhedral_blocks()
@@ -176,7 +181,7 @@ class WorldManager(Node):
             surfaces = []
             base_positions = []
 
-            _, _, clean_faces = generate_diced_block(self.box_size/2, 14)
+            verts, _, clean_faces = generate_diced_block(self.box_size/2, 14)
             base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
 
             block = self.blocks[obj_name]
@@ -213,6 +218,15 @@ class WorldManager(Node):
 
             block.base_positions = base_positions
             self.blocks.update({obj_name: block})
+            polygon = Polygon(verts, obj_name, 
+                              np.array([block.init_pose.pose.position.x,
+                                        block.init_pose.pose.position.y,
+                                        block.init_pose.pose.position.z]),
+                              np.array([block.init_pose.pose.orientation.x,
+                                        block.init_pose.pose.orientation.y,
+                                        block.init_pose.pose.orientation.z,
+                                        block.init_pose.pose.orientation.w]))
+            self.polygons.update({obj_name: polygon})
 
     def publish_position_tfs(self):
         for pose_name, pose_stamped in self.poses_dict.items():
@@ -358,6 +372,7 @@ class WorldManager(Node):
                         )
                     )
                 )
+                self.block_poses.update({pose_name: tf_pose})
 
                 self.tf_broadcaster.sendTransform(tf_pose)
                 self.get_logger().debug(f"Published TF for {pose_name} at position "
@@ -449,6 +464,53 @@ class WorldManager(Node):
         )
 
         return pose_name, pose
+
+    def update_loop(self, block_data: Dict):
+        """ This function runs every frame in Polyscope """
+        for block_id, data in block_data.items():
+            # Example: Fetching new pose (Replace with your TF lookup)
+            new_pose = self.block_poses.get(block_id)
+            if not new_pose:
+                continue
+
+            tf_translation_msg = new_pose.transform.translation
+            tf_rotation_msg = new_pose.transform.rotation
+            new_quat = [tf_rotation_msg.x, tf_rotation_msg.y, tf_rotation_msg.z, tf_rotation_msg.w]
+            new_pos = [tf_translation_msg.x, tf_translation_msg.y, tf_translation_msg.z]
+            rotation = R.from_quat(new_quat)
+            rotate_verts = rotation.apply(data['poly'].local_vertices)
+
+            # Update the data object
+            data['poly'].pos = new_pos
+            data['poly'].quat = new_quat
+
+            # Calculate new vertex positions for the GPU
+            new_world_verts = rotate_verts + np.array(new_pos)
+
+            # Update Polyscope mesh
+            data['mesh'].update_vertex_positions(new_world_verts)
+
+    def run_live_scene(self):
+        ps.init()
+        self.block_data = {}
+
+        for b in self.polygons.values():
+            # Initial registration
+            hull = ConvexHull(b.local_vertices)
+            m = ps.register_surface_mesh(b.block_id, b.local_vertices + b.pos, hull.simplices)
+
+            # Store metadata for the update loop
+            self.block_data[b.block_id] = {
+                'poly': b,
+                'mesh': m
+            }
+
+        # Set the callback and open the window
+        ps.set_user_callback(self.ps_update_wrapper)
+
+    def ps_update_wrapper(self):
+        # This is the actual callback Polyscope hits every frame
+        self.update_loop(self.block_data)
 
 def normal_to_quaternion(normal) -> Quaternion:
     normal = normal / np.linalg.norm(normal)
