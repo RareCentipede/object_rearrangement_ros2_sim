@@ -15,7 +15,7 @@ class Polygon:
     def __init__(self, vertices, block_id, world_pos, world_quat):
         self.block_id = block_id
         # Convert vertices to local frame (centered at 0,0,0)
-        self.local_vertices = vertices
+        self.local_vertices = vertices - world_pos
         self.pos = np.array(world_pos)
         self.quat = np.array(world_quat) # [x, y, z, w]
         self.surfaces = self._generate_surfaces()

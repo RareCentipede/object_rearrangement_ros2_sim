@@ -83,7 +83,7 @@ def compute_base_positions(clean_faces, base_offset=0.7) -> Tuple[List[List[floa
         c = centers[i]
 
         # Filter: Only Side Faces (ignore top/bottom)
-        if n[2] > -0.2:
+        if n[2] > -0.2 and np.linalg.norm(n[:2]) > 0.5:  # Mostly horizontal normals
             # Project normal onto XY plane and extend it
             # Base position = center + (normal_xy * offset), then forced to ground (z=0)
             dir_xy = n.copy()
