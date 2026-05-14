@@ -1,6 +1,28 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# Mock plots:
+# Planning strategies:
+# 1. Greedy
+# 2. Multi-bound
+# Heuristics
+# 1. Lazy
+# 2. Diligent
+# 3. Action cost propagation
+# 4. Stability-aware
+# 3 and 4 are for different environments.
+# Planar object rearrangement without stability concerns:
+# 1. Navigation cost vs number of blocks per planner strategy (Greedy-lazy, greedy-diligent, greedy-acp,
+#                                                              multi-bound, multi-bound-acp) (line plot)
+# 2. States explored vs number of blocks per planner strategy (line plot)
+# 3. Time to terminate vs number of blocks per planner strategy (line plot)
+
+# 3D construction with stability concerns:
+# 1. Average stability of the plan vs number of blocks per planner strategy (table)
+# 2. Stability per block placed vs block index per planner strategy (line plot)
+# 3. Time to terminate vs number of blocks per planner strategy (line plot)
+# 4. Navigation cost vs number of blocks per planner strategy (line plot) (no acp for this one)
+
 def main():
     # Mock data for testing
     x = np.linspace(0, 100, 10)
