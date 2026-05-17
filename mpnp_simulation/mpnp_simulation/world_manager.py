@@ -27,7 +27,6 @@ from mpnp_interfaces.msg import Plan, Surface, Block
 from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 
 from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions
-from mpnp_simulation.scripts.generate_structure import Polygon, generate_voronoi_wall_hull
 
 class WorldManager(Node):
     def __init__(self, problem_name: str, execute_plan: bool = True):
@@ -57,7 +56,6 @@ class WorldManager(Node):
         self.blocks = {}
         self.robot_init_pose = PoseStamped()
         self.block_poses = {}
-        self.polygons = {}
 
         self.define_objs_poses_init_blocks()
         self.create_polyhedral_blocks()
@@ -178,67 +176,20 @@ class WorldManager(Node):
 
     def create_polyhedral_blocks(self):
         for obj_name in self.objs:
+            vert_list_msg = []
             surfaces = []
             base_positions = []
 
             verts, _, clean_faces = generate_diced_block(self.box_size/2, 14)
             base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
 
+            for vert in verts:
+                vert_list_msg.append(Vector3(x=vert[0], y=vert[1], z=vert[2]))
+
             block = self.blocks[obj_name]
             for c, n in zip(valid_centers, valid_normals):
                 surfaces.append(Surface(
-                    center=Vector3(
-                        x=c[0],
-                        y=c[1],
-                        z=c[2]
-                    ),
-                    normal=Vector3(
-                        x=n[0],
-                        y=n[1],
-                        z=n[2]
-                    )
-                ))
-            block.surfaces = surfaces
-
-            for base_pos in base_placements:
-                base_pose = PoseStamped(
-                    header=Header(
-                            frame_id=obj_name
-                        ),
-                    pose=Pose(
-                        position=Point(
-                            x=base_pos[0],
-                            y=base_pos[1],
-                            z=base_pos[2]
-                        ),
-                        orientation=block.init_pose.pose.orientation
-                    )
-                )
-                base_positions.append(base_pose)
-
-            block.base_positions = base_positions
-            self.blocks.update({obj_name: block})
-            polygon = Polygon(verts, obj_name, 
-                              np.array([block.init_pose.pose.position.x,
-                                        block.init_pose.pose.position.y,
-                                        block.init_pose.pose.position.z]),
-                              np.array([block.init_pose.pose.orientation.x,
-                                        block.init_pose.pose.orientation.y,
-                                        block.init_pose.pose.orientation.z,
-                                        block.init_pose.pose.orientation.w]))
-            self.polygons.update({obj_name: polygon})
-
-    def create_polyhedral_wall(self):
-        for obj_name in self.objs:
-            surfaces = []
-            base_positions = []
-
-            clean_faces = generate_voronoi_wall_hull(width=1.0, thickness=0.2, height=1.0, num_blocks=10)
-            base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
-    
-            block = self.blocks[obj_name]
-            for c, n in zip(valid_centers, valid_normals):
-                surfaces.append(Surface(
+                    vertices=vert_list_msg,
                     center=Vector3(
                         x=c[0],
                         y=c[1],
@@ -532,28 +483,6 @@ class WorldManager(Node):
 
             # Update Polyscope mesh
             data['mesh'].update_vertex_positions(new_world_verts)
-
-    def run_live_scene(self):
-        ps.init()
-        self.block_data = {}
-
-        for b in self.polygons.values():
-            # Initial registration
-            hull = ConvexHull(b.local_vertices)
-            m = ps.register_surface_mesh(b.block_id, b.local_vertices + b.pos, hull.simplices)
-
-            # Store metadata for the update loop
-            self.block_data[b.block_id] = {
-                'poly': b,
-                'mesh': m
-            }
-
-        # Set the callback and open the window
-        ps.set_user_callback(self.ps_update_wrapper)
-
-    def ps_update_wrapper(self):
-        # This is the actual callback Polyscope hits every frame
-        self.update_loop(self.block_data)
 
 def normal_to_quaternion(normal) -> Quaternion:
     normal = normal / np.linalg.norm(normal)
