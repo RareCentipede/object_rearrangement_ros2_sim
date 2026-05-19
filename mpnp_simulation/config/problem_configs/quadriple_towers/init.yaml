@@ -74,7 +74,7 @@ block15:
   size: [1.0, 1.0, 1.0]
 
 block16:
-  position: [0.0, 3.0, 0.5]
+  position: [0.0, 9.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   size: [1.0, 1.0, 1.0]
 
