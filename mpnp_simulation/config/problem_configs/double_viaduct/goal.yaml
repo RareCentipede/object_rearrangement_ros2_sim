@@ -20,20 +20,20 @@ block4:
   size: [1.0, 1.0, 1.0]
 
 # --- Bridge 1: Overhanging Archway Spans ---
-block5:
-  position: [2.0, 0.0, 2.5]
+block5: 
+  position: [3.0, -1.0, 2.5]
   orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+  size: [2.0, 2.0, 1.0]
 
 block6:
-  position: [2.0, -2.0, 2.5]
+  position: [3.0, 1.0, 2.5]
   orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+  size: [2.0, 2.0, 1.0]
 
-block7:
-  position: [2.0, 2.0, 2.5]
-  orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+# block7:
+#   position: [2.0, 2.0, 2.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   size: [1.0, 1.0, 1.0]
 
 # --- Bridge 2: Pillars ---
 block8:
@@ -57,20 +57,20 @@ block11:
   size: [1.0, 1.0, 1.0]
 
 # --- Bridge 2: Overhanging Archway Spans ---
-block12:
-  position: [4.0, 0.0, 2.5]
-  orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+# block12:
+#   position: [4.0, 0.0, 2.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   size: [1.0, 1.0, 1.0]
 
-block13:
-  position: [4.0, -2.0, 2.5]
-  orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+# block13:
+#   position: [4.0, -2.0, 2.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   size: [1.0, 1.0, 1.0]
 
-block14:
-  position: [4.0, 2.0, 2.5]
-  orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+# block14:
+#   position: [4.0, 2.0, 2.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   size: [1.0, 1.0, 1.0]
 
 # --- Upper Interlocking Layer (Connects Bridge 1 & Bridge 2) ---
 block15:

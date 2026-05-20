@@ -31,21 +31,21 @@ block5:
   position: [-9.0, 4.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   color: [0.2, 0.6, 0.8]
-  size: [1.0, 1.0, 1.0]
+  size: [2.0, 2.0, 1.0]
 
 block6:
   type: "dynamic"
   position: [-6.0, -4.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   color: [0.2, 0.6, 0.8]
-  size: [1.0, 1.0, 1.0]
+  size: [2.0, 2.0, 1.0]
 
-block7:
-  type: "dynamic"
-  position: [-6.0, -2.0, 0.5]
-  orientation: [0.0, 0.0, 0.0]
-  color: [0.2, 0.6, 0.8]
-  size: [1.0, 1.0, 1.0]
+# block7:
+#   type: "dynamic"
+#   position: [-6.0, -2.0, 0.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   color: [0.2, 0.6, 0.8]
+#   size: [1.0, 1.0, 1.0]
 
 block8:
   type: "dynamic"
@@ -75,26 +75,26 @@ block11:
   color: [0.6, 0.3, 0.6]
   size: [1.0, 1.0, 1.0]
 
-block12:
-  type: "dynamic"
-  position: [-3.0, -2.0, 0.5]
-  orientation: [0.0, 0.0, 0.0]
-  color: [0.8, 0.4, 0.3]
-  size: [1.0, 1.0, 1.0]
+# block12:
+#   type: "dynamic"
+#   position: [-3.0, -2.0, 0.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   color: [0.8, 0.4, 0.3]
+#   size: [1.0, 1.0, 1.0]
 
-block13:
-  type: "dynamic"
-  position: [-3.0, 0.0, 0.5]
-  orientation: [0.0, 0.0, 0.0]
-  color: [0.8, 0.4, 0.3]
-  size: [1.0, 1.0, 1.0]
+# block13:
+#   type: "dynamic"
+#   position: [-3.0, 0.0, 0.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   color: [0.8, 0.4, 0.3]
+#   size: [1.0, 1.0, 1.0]
 
-block14:
-  type: "dynamic"
-  position: [-3.0, 2.0, 0.5]
-  orientation: [0.0, 0.0, 0.0]
-  color: [0.8, 0.4, 0.3]
-  size: [1.0, 1.0, 1.0]
+# block14:
+#   type: "dynamic"
+#   position: [-3.0, 2.0, 0.5]
+#   orientation: [0.0, 0.0, 0.0]
+#   color: [0.8, 0.4, 0.3]
+#   size: [1.0, 1.0, 1.0]
 
 block15:
   type: "dynamic"
