@@ -48,21 +48,21 @@ block10:
 block11:
   position: [-1.0, 0.0, 3.0]
   orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+  size: [1.0, 3.0, 1.0]
 block12:
   position: [1.0, 0.0, 3.0]
   orientation: [0.0, 0.0, 0.0]
-  size: [1.0, 1.0, 1.0]
+  size: [1.0, 3.0, 1.0]
 
 # --- Tier 4 Planks Rotated Crosswise Along X-Axis (Z = 3.75) ---
 block13:
-  position: [0.0, -1.0, 3.75]
+  position: [0.0, 0.0, 3.75]
   orientation: [0.0, 0.0, 0.0]
-  size: [3.0, 1.0, 0.5]
-block14:
-  position: [0.0, 1.0, 3.75]
-  orientation: [0.0, 0.0, 0.0]
-  size: [3.0, 1.0, 0.5]
+  size: [3.0, 2.0, 0.5]
+# block14:
+#   position: [0.0, 1.0, 3.75]
+#   orientation: [0.0, 0.0, 0.0]
+#   size: [3.0, 1.0, 0.5]
 
 # --- Tier 5 Core Central Pillars (Z = 4.5, Height = 1.0) ---
 block15:
