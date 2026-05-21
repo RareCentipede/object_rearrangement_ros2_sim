@@ -31,28 +31,28 @@ block5:
   position: [-9.0, 4.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   color: [0.2, 0.6, 0.4]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 
 block6:
   type: "dynamic"
   position: [-6.0, -4.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   color: [0.2, 0.6, 0.4]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 
 block7:
   type: "dynamic"
   position: [-6.0, -2.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   color: [0.2, 0.6, 0.4]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 
 block8:
   type: "dynamic"
   position: [-6.0, 0.0, 0.5]
   orientation: [0.0, 0.0, 0.0]
   color: [0.2, 0.6, 0.4]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 
 block9:
   type: "dynamic"
@@ -137,6 +137,20 @@ block20:
   orientation: [0.0, 0.0, 0.0]
   color: [0.1, 0.1, 0.1]
   size: [1.0, 1.0, 1.0]
+
+block21:
+  type: "dynamic"
+  position: [0.0, 6.0, 0.5]
+  orientation: [0.0, 0.0, 0.0]
+  color: [0.3, 0.7, 0.7]
+  size: [0.5, 0.5, 1.0]
+
+block22:
+  type: "dynamic"
+  position: [0.0, 5.0, 0.5]
+  orientation: [0.0, 0.0, 0.0]
+  color: [0.3, 0.7, 0.7]
+  size: [0.5, 0.5, 1.0]
 
 robot:
   type: "robot"

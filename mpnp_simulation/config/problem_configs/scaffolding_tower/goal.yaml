@@ -20,19 +20,19 @@ block4:
 block5:
   position: [-1.0, -1.0, 1.5]
   orientation: [0.0, 0.0, 0.0]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 block6:
   position: [1.0, -1.0, 1.5]
   orientation: [0.0, 0.0, 0.0]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 block7:
   position: [-1.0, 1.0, 1.5]
   orientation: [0.0, 0.0, 0.0]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 block8:
   position: [1.0, 1.0, 1.5]
   orientation: [0.0, 0.0, 0.0]
-  size: [0.5, 0.5, 1.0]
+  size: [0.8, 0.8, 1.0]
 
 # --- Tier 2 Planks Running Along Y-Axis (Z = 2.25) ---
 block9:
@@ -93,3 +93,13 @@ block20:
   position: [0.0, 0.0, 7.0]
   orientation: [0.0, 0.0, 0.0]
   size: [1.0, 1.0, 1.0]
+
+block21:
+  position: [1.25, 0.0, 4.5]
+  orientation: [0.0, 0.0, 0.0]
+  size: [0.5, 0.5, 1.0]
+
+block22:
+  position: [-1.25, 0.0, 4.5]
+  orientation: [0.0, 0.0, 0.0]
+  size: [0.5, 0.5, 1.0]
