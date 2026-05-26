@@ -27,6 +27,7 @@ from mpnp_interfaces.msg import Plan, Surface, Block
 from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 
 from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions
+from mpnp_simulation.scripts.generate_random_configs import generate_random_tamp_configs
 
 class WorldManager(Node):
     def __init__(self, problem_name: str, execute_plan: bool = True):
@@ -41,9 +42,13 @@ class WorldManager(Node):
         self.box_size = 0.3
 
         self.problem_name = problem_name
-        self.problem_path = f'{self.config_path}/{problem_name}'
-        self.init_config = safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
-        self.goal_config = safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
+        if self.problem_name == 'random':
+            self.get_logger().info(f'Generating random problem configuration...')
+            self.init_config, self.goal_config = generate_random_tamp_configs(num_objects=4)
+        else:
+            self.problem_path = f'{self.config_path}/{problem_name}'
+            self.init_config = safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
+            self.goal_config = safe_load(open(f'{self.problem_path}/goal.yaml', 'r'))
         self.get_logger().info(f'Loaded problem: {problem_name}')
 
         self.execute = execute_plan
