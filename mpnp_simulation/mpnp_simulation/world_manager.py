@@ -44,7 +44,7 @@ class WorldManager(Node):
         self.problem_name = problem_name
         if self.problem_name == 'random':
             self.get_logger().info(f'Generating random problem configuration...')
-            self.init_config, self.goal_config = generate_random_tamp_configs(num_objects=4)
+            self.init_config, self.goal_config = generate_random_tamp_configs(num_objects=5)
         else:
             self.problem_path = f'{self.config_path}/{problem_name}'
             self.init_config = safe_load(open(f'{self.problem_path}/init.yaml', 'r'))

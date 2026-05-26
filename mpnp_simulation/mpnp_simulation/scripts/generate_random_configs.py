@@ -40,7 +40,7 @@ def generate_random_tamp_configs(num_objects: int,
                              f"Increase workspace bounds or decrease min_dist.")
         return [p.tolist() for p in positions]
 
-    # Sample all positions needed for Init state (Objects + 1 Static Block + 1 Robot)
+    # Sample all positions needed for Init state (Objects + 1 Robot)
     init_positions = sample_positions(num_objects + 1)
     # Sample all positions needed for Goal state (Objects)
     goal_positions = sample_positions(num_objects)
