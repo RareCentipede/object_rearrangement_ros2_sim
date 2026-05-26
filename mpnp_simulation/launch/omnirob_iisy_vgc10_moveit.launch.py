@@ -20,6 +20,10 @@ def generate_launch_description():
         "use_gazebo": "true"
     }
 
+    problem_arg = DeclareLaunchArgument('problem', default_value='basic')
+    execute_plan_arg = DeclareLaunchArgument('execute_plan', default_value='true')
+    num_blocks_arg = DeclareLaunchArgument('num_blocks', default_value='5')
+
     # Load the robot configuration
     moveit_config = (
         MoveItConfigsBuilder(
@@ -79,7 +83,12 @@ def generate_launch_description():
             PathJoinSubstitution(
                 [FindPackageShare("mpnp_simulation"), "launch", "omnirob_iisy_vgc10.launch.py"]
             )
-        )
+        ),
+        launch_arguments={
+            'problem': LaunchConfiguration('problem'),
+            'execute_plan': LaunchConfiguration('execute_plan'),
+            'num_blocks': LaunchConfiguration('num_blocks')
+        }.items()
     )
 
     koi_controller_node = Node(
@@ -98,6 +107,9 @@ def generate_launch_description():
             rviz_config_arg,
             rviz_node,
             run_move_group_node,
+            problem_arg,
+            execute_plan_arg,
+            num_blocks_arg,
             omnirob_iisy_vgc10_gz_launch,
             koi_controller_node
         ]

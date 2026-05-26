@@ -13,6 +13,7 @@ from rclpy.time import Time
 from rclpy.duration import Duration
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.utilities import remove_ros_args
 from std_msgs.msg import Header
 from geometry_msgs.msg import Pose, Transform, TransformStamped, Point, Quaternion, Vector3, PoseStamped
 from tf2_geometry_msgs import PoseStamped as TF2PoseStamped
@@ -26,11 +27,11 @@ from gz.msgs10.boolean_pb2 import Boolean #type: ignore
 from mpnp_interfaces.msg import Plan, Surface, Block
 from mpnp_interfaces.srv import PlanConstructionTask, ExecutePlan
 
-from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions
+from mpnp_simulation.scripts.generate_polyhedrals import generate_diced_block, compute_base_positions, visualize_planning_scene
 from mpnp_simulation.scripts.generate_random_configs import generate_random_tamp_configs
 
 class WorldManager(Node):
-    def __init__(self, problem_name: str, execute_plan: bool = True):
+    def __init__(self, problem_name: str, execute_plan: bool = True, num_blocks: int = 5):
         super().__init__('world_manager')
         self.gz_node = GzNode()
 
@@ -44,7 +45,7 @@ class WorldManager(Node):
         self.problem_name = problem_name
         if self.problem_name == 'random':
             self.get_logger().info(f'Generating random problem configuration...')
-            self.init_config, self.goal_config = generate_random_tamp_configs(num_objects=5)
+            self.init_config, self.goal_config = generate_random_tamp_configs(num_objects=num_blocks)
         else:
             self.problem_path = f'{self.config_path}/{problem_name}'
             self.init_config = safe_load(open(f'{self.problem_path}/init.yaml', 'r'))
@@ -180,13 +181,16 @@ class WorldManager(Node):
             self.get_logger().error(f'Failed to spawn {obj_name}: Service call failed')
 
     def create_polyhedral_blocks(self):
+        vis_blocks = []
         for obj_name in self.objs:
             vert_list_msg = []
             surfaces = []
             base_positions = []
 
-            verts, _, clean_faces = generate_diced_block(self.box_size/2, 14)
+            verts, faces, clean_faces = generate_diced_block(self.box_size/2, 14)
             base_placements, valid_centers, valid_normals = compute_base_positions(clean_faces)
+
+            vis_blocks.append((verts, faces, valid_centers, valid_normals, base_placements))
 
             for vert in verts:
                 vert_list_msg.append(Vector3(x=vert[0], y=vert[1], z=vert[2]))
@@ -226,6 +230,7 @@ class WorldManager(Node):
 
             block.base_positions = base_positions
             self.blocks.update({obj_name: block})
+        visualize_planning_scene([vis_blocks[0]])
 
     def publish_position_tfs(self):
         for pose_name, pose_stamped in self.poses_dict.items():
@@ -416,6 +421,8 @@ class WorldManager(Node):
                     self.get_logger().info(f"Execution disabled, not sending execute plan request.")
             else:
                 self.get_logger().error(f"Failed to receive plan: {response.msg}")
+            self.destroy_node()
+            rclpy.shutdown()
         except Exception as e:
             self.get_logger().error(f"Service call failed: {e}")
 
@@ -515,11 +522,15 @@ def rotate_pose_to_target(current_pose: PoseStamped, target_pose: PoseStamped) -
     return quat_msg
 
 def main():
+    args = remove_ros_args(args=sys.argv)
     args = sys.argv[1:]
+    print(f"\nargs: {args}\n")
     rclpy.init()
     problem_name = args[0] if args else 'basic'
     execute = False if args[1] == 'false' and args and len(args) > 1 else True
-    world_manager = WorldManager(problem_name, execute)
+    num_blocks = int(args[2]) if args and len(args) > 2 else 5
+
+    world_manager = WorldManager(problem_name, execute, num_blocks)
     executor = MultiThreadedExecutor()
     executor.add_node(world_manager)
     try:

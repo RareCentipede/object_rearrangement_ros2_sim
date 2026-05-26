@@ -2,10 +2,11 @@ import os
 
 from ament_index_python import get_package_prefix
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, AppendEnvironmentVariable, RegisterEventHandler
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, AppendEnvironmentVariable, RegisterEventHandler, EmitEvent
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
+from launch.events import Shutdown
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
@@ -72,6 +73,9 @@ def generate_launch_description() -> LaunchDescription:
                                                                                                'task planner')
     execute_plan = LaunchConfiguration('execute_plan')
 
+    num_blocks_arg = DeclareLaunchArgument('num_blocks', default_value='5', description='Number of blocks to use in the scenario')
+    num_blocks = LaunchConfiguration('num_blocks')
+
     task_planner_node = Node(
         package="modular_construction_task_planner",
         executable="task_planner",
@@ -84,7 +88,7 @@ def generate_launch_description() -> LaunchDescription:
         executable="world_manager",
         output="screen",
         parameters=[{"use_sim_time": True}],
-        arguments=[problem, execute_plan]
+        arguments=[problem, execute_plan, num_blocks]
     )
 
     tamp_interface_node = Node(
@@ -170,6 +174,15 @@ def generate_launch_description() -> LaunchDescription:
         parameters=[{"use_sim_time": True}]
     )
 
+    shutdown_handler = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=world_manager_node,
+            on_exit=[
+                EmitEvent(event=Shutdown(reason="World Manager node exited, shutting down launch system."))
+            ]
+        )
+    )
+
     ld.add_action(append_gz_env)
     ld.add_action(bridge)
     ld.add_action(ros_gz_sim_launch)
@@ -183,8 +196,10 @@ def generate_launch_description() -> LaunchDescription:
     ld.add_action(omnirob_controller_node)
     ld.add_action(problem_arg)
     ld.add_action(execute_plan_arg)
+    ld.add_action(num_blocks_arg)
     ld.add_action(task_planner_node)
     ld.add_action(tamp_interface_node)
     ld.add_action(world_manager_node)
+    ld.add_action(shutdown_handler)
 
     return ld
